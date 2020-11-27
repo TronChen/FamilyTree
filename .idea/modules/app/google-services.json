@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "602276007993",
+    "firebase_url": "https://familytree-7b7ab.firebaseio.com",
+    "project_id": "familytree-7b7ab",
+    "storage_bucket": "familytree-7b7ab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:602276007993:android:33dd8b1d2f8404f349bde8",
+        "android_client_info": {
+          "package_name": "com.tron.familytree"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "602276007993-4lr3onq93t8gkoafo6u2cck9fhm6i0qt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tron.familytree",
+            "certificate_hash": "39ec2172a71e3a21e383142085921dfd98051020"
+          }
+        },
+        {
+          "client_id": "602276007993-l5qp9i5afdgiks5k3sgogosk33n2ibr5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAuYwqRtHUFFMkukP5k2e2fGjQ7-F2xRI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "602276007993-l5qp9i5afdgiks5k3sgogosk33n2ibr5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
