@@ -1,3 +1,12 @@
 <resources>
-    <string name="app_name">familytree</string>
+    <string name="app_name">FamilyTree</string>
+    <string name="profile">Profile</string>
+    <string name="message">Message</string>
+    <string name="map">Map</string>
+    <string name="branch">Branch</string>
+    <string name="family">Family</string>
+
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>
