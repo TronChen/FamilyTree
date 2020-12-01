@@ -6,15 +6,20 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class User(
-    var name : String = "",
-    var birth : String = "",
-    var id : String = "",
-    var fatherId : String,
-    var motherId : String,
-    var mateId : String,
-    var familyId : String,
-    var episode : List<Episode>,
-    var userImage : String,
-    var gender : String,
-    var alive: String
+    var name: String = "",
+    var birth: String = "",
+    var id: String = "",
+    var fatherId: String? = null,
+    var motherId: String? = null,
+    var mateId: String? = null,
+    var familyId: String? = null,
+    var userImage: String? = null,
+    var gender: String? = null,
+    var alive: String? = null,
+    var spanSize: Int? = 1
 ): Parcelable
+
+@Parcelize
+data class UserEpisode(
+    var episode: List<Episode>? = null
+):Parcelable
