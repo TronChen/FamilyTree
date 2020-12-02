@@ -72,8 +72,10 @@ class BranchFragment : Fragment() {
 //            Log.e("Level1", it[0].toString())
 //            viewModel.addAdapterList()
 
+            viewModel.createMock()
+            viewModel.getChildrenList(2)
             val list = viewModel.getMockUsers()
-            val layoutManager = GridLayoutManager(requireContext(),8)
+            val layoutManager = GridLayoutManager(requireContext(),viewModel.getSpanCount(viewModel.children.size))
             binding.recyclerBranch.layoutManager = layoutManager
             layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
@@ -89,9 +91,22 @@ class BranchFragment : Fragment() {
                         is TreeItem.Children -> {
                             return item.user.spanSize!!
                         }
+                        is TreeItem.ChildrenMid -> {
+                            return item.user.spanSize!!
+                        }
+                        is TreeItem.Empty -> {
+                            return 1
+                        }
+                        is TreeItem.EmptyLine -> {
+                            return 1
+                        }
+                        is TreeItem.EmptyLineBot -> {
+                            return 1
+                        }
                     }
                 }
             }
+
             adapter.submitList(list)
 
 

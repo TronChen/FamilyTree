@@ -124,33 +124,49 @@ class BranchViewModel : ViewModel() {
             }
     }
 
-    fun getMockUsers(): MutableList<TreeItem> {
-        val parents = mutableListOf<TreeItem>()
+
+    val children = mutableListOf<TreeItem>()
+    val parents = mutableListOf<TreeItem>()
+    val meAndMate = mutableListOf<TreeItem>()
+
+    fun getSpanCount(size: Int): Int{
+        return if (size > 4 || size == 4){
+            size
+        } else{
+            5
+        }
+    }
+
+    fun createMock() {
         parents.add(
             TreeItem.Parent(
-                User(name = "DadOfME"),
-                true
+                User(name = "DadOfME", gender = "male"),
+                true,
+                0
             )
         )
         parents.add(
             TreeItem.Parent(
-                User(name = "MomOfME"),
-                true
+                User(name = "MomOfME", gender = "female"),
+                true,
+                1
             )
         )
         parents.add(
             TreeItem.Parent(
-                User(name = "DadOfMATE"),
-                false
+                User(name = "DadOfMATE", gender = "male"),
+                false,
+                2
             )
         )
         parents.add(
             TreeItem.Parent(
-                User(name = "MomOfMATE"),
-                false
+                User(name = "MomOfMATE", gender = "female"),
+                false,
+                3
             )
         )
-        val meAndMate = mutableListOf<TreeItem>()
+
         meAndMate.add(
             TreeItem.Mate(
                 User(name = "ME"),
@@ -164,112 +180,171 @@ class BranchViewModel : ViewModel() {
             )
         )
 
-        val children = mutableListOf<TreeItem>()
+//        for (index in 0..1) {
+//            children.add(
+//                TreeItem.Children(
+//                    User(name = "C$index"),
+//                    index
+//                )
+//            )
+//        }
+    }
 
-        for (index in 0..7) {
-            children.add(
-                TreeItem.Children(
-                    User(name = "C$index"),
-                    index
+    fun getChildrenList(item: Int){
+        if (item < 2){
+            for (index in 0..item) {
+                children.add(
+                    TreeItem.ChildrenMid(
+                        User(name = "C$index"),
+                        index
+                    )
                 )
-            )
+            }
         }
+        else{
+            for (index in 0..item) {
+                children.add(
+                    TreeItem.Children(
+                        User(name = "C$index"),
+                        index
+                    )
+                )
+            }
+        }
+    }
+
 
         val mockList = mutableListOf<TreeItem>()
-        for (parent in parents) {
-            if (children.size > 4) {
+    fun getMockUsers(): MutableList<TreeItem> {
+        //Parent
+        for ((index, parent) in parents.withIndex()) {
+
+            if (children.size < 4) {
+                (parent as TreeItem.Parent).user.spanSize = 1
+                if (index == 2) {
+                        mockList.add(
+                            TreeItem.Empty(-1)
+                        )
+                }
+                mockList.add(parent)
+            }
+
+            if (children.size > 4 || children.size == 4) {
                 (parent as TreeItem.Parent).user.spanSize = children.size / 2 / 2
+
+                if (children.size %2 == 1 && parents.size > 2){
+                    if(parents.size % (index + 1) == 1){
+                        mockList.add(
+                            TreeItem.Empty(-1)
+                        )
+                    }
+                }
+
+                if (index % 2 == 1) {
+                    if (children.size % 4  == 2) {
+                        mockList.add(
+                            TreeItem.EmptyLineBot(-1)
+                        )
+                    }
+                    if (children.size % 4  == 3) {
+                        mockList.add(
+                            TreeItem.EmptyLineBot(-1)
+                        )
+                    }
+                }
+
                 mockList.add(parent)
             }
         }
 
-        for (self in meAndMate) {
-            if (children.size > 4) {
+
+        //MeAndMate
+        for ((index,self) in meAndMate.withIndex()) {
+
+            if (children.size < 4) {
+                (self as TreeItem.Mate).user.spanSize = 2
+                if(index == 1){
+                    mockList.add(
+                        TreeItem.Empty(-1)
+                    )
+                }
+                mockList.add(self)
+            }
+
+            if (children.size > 4 || children.size == 4) {
                 (self as TreeItem.Mate).user.spanSize = children.size / 2
+
+                if (children.size %2 == 1 && meAndMate.size > 2){
+                    if(children.size % (index + 1) == 1){
+                        mockList.add(
+                            TreeItem.Empty(-1)
+                        )
+                    }
+                }
+                if (children.size %2 == 1 && meAndMate.size == 2) {
+                    if (index == 1) {
+                        mockList.add(
+                            TreeItem.Empty(-1)
+                        )
+                    }
+                }
+
                 mockList.add(self)
             }
         }
 
-        for (child in children) {
+
+        //Children
+        for ((index,child) in children.withIndex()) {
+            if (children.size == 1){
+                if (index == 0){
+                    mockList.add(
+                        TreeItem.Empty(-1)
+                    )
+                    mockList.add(
+                        TreeItem.EmptyLine(-1)
+                    )
+                }
+
+                mockList.add(child)
+
+                    mockList.add(
+                        TreeItem.EmptyLine(-1)
+                    )
+                    mockList.add(
+                        TreeItem.Empty(-1)
+                    )
+            }
+
+            if (children.size == 2){
+                if (index == 0){
+                    mockList.add(
+                        TreeItem.Empty(-1)
+                    )
+                }
+                if (index == 1){
+                    mockList.add(
+                        TreeItem.EmptyLine(-1)
+                    )
+                }
+                mockList.add(child)
+            }
+
+            if (children.size == 3){
+                if (index > 0){
+                    mockList.add(
+                        TreeItem.EmptyLine(-1)
+                    )
+                }
+                mockList.add(child)
+            }
+
+            if (children.size > 4 || children.size == 4){
             mockList.add(child)
+          }
         }
 
         return  mockList
-    }
-
-    fun addAdapterList(){
-        val x = 7
-        val a = x * 2
-        val b = x * 3
-        val c = x * 4
-        val d = x * 5
-        val e = x * 6
-        val f = x * 7
-        val g = x * 8
-
-        //User
-        val lv1_1 = listOf(x + 3)
-        val lv1_2 = listOf(x + 1, x + 5)
-        val lv1_3 = listOf(x + 1, x + 3, x + 5)
-        val lv1_4 = listOf(x, x + 2, x + 4, x + 6)
-        val lv1_5 = listOf(x, x + 2, x + 3, x + 4, x + 6)
-        val lv1_6 = listOf(x, x + 1, x + 2, x + 3, x + 4, x + 5)
-        val lv1_7 = listOf(x, x + 1, x + 2, x + 3, x + 4, x + 5, x + 6)
-
-        val lv4_1 = listOf(c + 3)
-        val lv4_2 = listOf(c + 1, c + 5)
-        val lv4_3 = listOf(c + 1, c + 3, c + 5)
-        val lv4_4 = listOf(c, c + 2, c + 4, c + 6)
-        val lv4_5 = listOf(c, c + 2, c + 3, c + 4, c + 6)
-        val lv4_6 = listOf(c, c + 1, c + 2, c + 3, c + 4, c + 5)
-        val lv4_7 = listOf(c, c + 1, c + 2, c + 3, c + 4, c + 5, c + 6)
-
-        val lv7_1 = listOf(f + 3)
-        val lv7_2 = listOf(f + 1, f + 5)
-        val lv7_3 = listOf(f + 1, f + 3, f + 5)
-        val lv7_4 = listOf(f, f + 2, f + 4, f + 6)
-        val lv7_5 = listOf(f, f + 2, f + 3, f + 4, f + 6)
-        val lv7_6 = listOf(f, f + 1, f + 2, f + 4, f + 5, f + 6)
-        val lv7_7 = listOf(f, f + 1, f + 2, f + 3, f + 4, f + 5, f + 6)
-
-        for (index in 0..62){
-
-            //fatherId
-            if(index == 7){
-                adapterList.add(fatherId.value!!)
-            }
-
-            //motherId
-            if(index == 8){
-                adapterList.add(motherId.value!!)
-            }
-
-            //mateFatherId
-            if(index == 9){
-                adapterList.add(mateFatherId.value!!)
-            }
-
-            //mateMotherId
-            if(index == 10){
-                adapterList.add(mateMotherId.value!!)
-            }
-
-            //user
-            if(index == 25){
-                adapterList.add(user.value!!)
-            }
-
-            //mateId
-            if(index == 28){
-                adapterList.add(mateId.value!!)
-            }
-//            if(index == f+1){
-//                adapterList.add(treeChildrenList)
-//            }
-
-             adapterList.add(emptyData)
-            Log.e("adapterList", adapterList.size.toString())
-        }
     }
 
 }
