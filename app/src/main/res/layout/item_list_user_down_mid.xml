@@ -68,7 +68,7 @@
                 android:id="@+id/textViewUser"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="安安"
+                android:text="@{user.name}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

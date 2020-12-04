@@ -16,7 +16,9 @@ data class User(
     var userImage: String? = null,
     var gender: String? = null,
     var alive: String? = null,
-    var spanSize: Int? = 1
+    var birthLocation: String? = null,
+    var spanSize: Int? = 1,
+    var deathDate: String? = null
 ): Parcelable
 
 @Parcelize

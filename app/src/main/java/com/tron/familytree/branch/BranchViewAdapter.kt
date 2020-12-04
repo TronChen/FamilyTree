@@ -12,7 +12,7 @@ import com.tron.familytree.data.User
 import com.tron.familytree.databinding.*
 
 
-class TestAdapter(private val itemClickListener: UserOnItemClickListener)
+class BranchViewAdapter(private val itemClickListener: UserOnItemClickListener, val viewModel : BranchViewModel)
     : ListAdapter<TreeItem, RecyclerView.ViewHolder>(UserDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -43,29 +43,91 @@ class TestAdapter(private val itemClickListener: UserOnItemClickListener)
                 if (user != null) {
                     holder.bind(user, parent, position)
                 }
-                holder.itemView.setOnClickListener{
+                holder.binding.constraintLayout3.setOnClickListener{
                     if (user != null) {
-                        itemClickListener.onItemClicked(user)
+                        itemClickListener.onItemClicked(user!!)
+                        viewModel.itemClick.value = USER_CLICK
+                    }
+                }
+                holder.binding.imageView2.setOnClickListener{
+                    if (user != null) {
+                        itemClickListener.onItemClicked(user!!)
+                        viewModel.itemClick.value = USER_QUERY
                     }
                 }
             }
 
+            is UserMidViewHolder ->{
+                var user: User? = null
+                when (item) {
+                    is TreeItem.Mate -> {
+                        user = item.user
+                    }
+                }
+                if (user != null) {
+                    holder.bind(user)
+                }
+                holder.binding.constraintLayout3.setOnClickListener{
+                    if (user != null) {
+                        itemClickListener.onItemClicked(user!!)
+                        viewModel.itemClick.value = USER_CLICK
+                    }
+                }
+            }
+
+            is UserDownMiddleViewHolder ->{
+                var user: User? = null
+                when (item) {
+                    is TreeItem.ChildrenMid -> {
+                        user = item.user
+                    }
+                }
+                if (user != null) {
+                    holder.bind(user)
+                }
+                holder.binding.imageView2.setOnClickListener{
+                    if (user != null) {
+                        itemClickListener.onItemClicked(user!!)
+                        viewModel.itemClick.value = USER_QUERY
+
+                    }
+                }
+                holder.binding.constraintLayout3.setOnClickListener{
+                    if (user != null) {
+                        itemClickListener.onItemClicked(user!!)
+                        viewModel.itemClick.value = USER_CLICK
+                    }
+                }
+            }
+
+
             is UserDownLeftViewHolder ->{
-//                val user = item as User
+                    var user: User? = null
+                    when (item) {
+                        is TreeItem.Children -> {
+                            user = item.user
+                        }
+                    }
                 when(position){
                 currentList.size -1 -> holder.binding.left.visibility = View.GONE
                 }
-                val children = item as TreeItem.Children
-                holder.bind(children,position)
+                    val children = item as TreeItem.Children
+                    if (user != null) {
+                        holder.bind(user, children, position)
+                    }
+                holder.binding.queryDown.setOnClickListener{
+                    if (user != null) {
+                        itemClickListener.onItemClicked(user!!)
+                        viewModel.itemClick.value = USER_QUERY
+                    }
+                }
+                holder.binding.constraintLayout4.setOnClickListener{
+                    if (user != null) {
+                        itemClickListener.onItemClicked(user!!)
+                        viewModel.itemClick.value = USER_CLICK
+                    }
+                }
             }
-
-//            is EmptyViewHolder ->{
-//                val user = item as User
-//                holder.bind(user)
-//                holder.itemView.setOnClickListener{
-//                    itemClickListener.onItemClicked(item)
-//                }
-//            }
     }
     }
 
@@ -77,12 +139,6 @@ class TestAdapter(private val itemClickListener: UserOnItemClickListener)
             is TreeItem.ChildrenMid -> ITEM_VIEW_TYPE_USER_DOWN_MID
             is TreeItem.EmptyLine -> ITEM_VIEW_TYPE_EMPTY_LINE
             is TreeItem.EmptyLineBot -> ITEM_VIEW_TYPE_EMPTY_LINE_BOTTOM
-//            {
-//                when ((getItem(position) as TreeItem.Children).index) {
-//                    0 -> ITEM_VIEW_TYPE_USER_DOWN_LEFT
-//                    else -> ITEM_VIEW_TYPE_USER_DOWN_MID
-//                }
-//            }
             is TreeItem.Empty -> ITEM_VIEW_TYPE_EMPTY
         }
     }
@@ -101,20 +157,19 @@ class TestAdapter(private val itemClickListener: UserOnItemClickListener)
 
     class UserTopHolder(val binding:ItemListUserTopLeftBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(user: User,item: TreeItem.Parent, allItemCount: Int) {
-            if (item.index == 0) {
-                binding.right.visibility = View.GONE
-            }
-            if (item.index == 1) {
-                binding.left.visibility = View.GONE
-            }
-            if (item.index == 2) {
-                binding.right.visibility = View.GONE
-            }
-            if (item.index == 3) {
-                binding.left.visibility = View.GONE
-            }
 
+            when (item.index) {
+                0, 2 -> {
+                    binding.right.visibility = View.GONE
+                    binding.left.visibility = View.VISIBLE
+                }
+                1, 3 -> {
+                    binding.right.visibility = View.VISIBLE
+                    binding.left.visibility = View.GONE
+                }
+            }
             Log.e("UserViewHolder","$user")
+            Log.e("UserViewHolder","${item.index}")
             binding.user = user
             // This is important, because it forces the data binding to execute immediately,
             // which allows the RecyclerView to make the correct view size measurements
@@ -129,19 +184,23 @@ class TestAdapter(private val itemClickListener: UserOnItemClickListener)
         }
     }
 
-    class UserDownMiddleViewHolder(view: View): RecyclerView.ViewHolder(view) {
+    class UserDownMiddleViewHolder(val binding:ItemListUserDownMidBinding): RecyclerView.ViewHolder(binding.root) {
+        fun bind(user:User) {
+            binding.user = user
+            binding.executePendingBindings()
+        }
         companion object {
             fun from(parent: ViewGroup): UserDownMiddleViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val view = layoutInflater.inflate(R.layout.item_list_user_down_mid, parent, false)
-                return UserDownMiddleViewHolder(view)
+                val binding = ItemListUserDownMidBinding.inflate(layoutInflater, parent, false)
+                return UserDownMiddleViewHolder(binding)
             }
         }
     }
 
     class UserDownLeftViewHolder(val binding:ItemListUserDownLeftBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: TreeItem.Children, allItemCount: Int) {
-//            binding.user = user
+        fun bind(user:User,item: TreeItem.Children, allItemCount: Int) {
+            binding.user = user
             if (item.index == 0) {
                 // background = |''
                 binding.right.visibility = View.GONE
@@ -159,25 +218,22 @@ class TestAdapter(private val itemClickListener: UserOnItemClickListener)
         }
     }
 
-    class UserMidViewHolder(view: View): RecyclerView.ViewHolder(view) {
+    class UserMidViewHolder(val binding:ItemListUserMidLeftBinding): RecyclerView.ViewHolder(binding.root) {
+        fun bind(user:User) {
+            binding.user = user
+            Log.e("adapterPosition", adapterPosition.toString())
+            binding.executePendingBindings()
+        }
         companion object {
             fun from(parent: ViewGroup): UserMidViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val view = layoutInflater.inflate(R.layout.item_list_user_mid_left, parent, false)
-                return UserMidViewHolder(view)
+                val binding = ItemListUserMidLeftBinding.inflate(layoutInflater, parent, false)
+                return UserMidViewHolder(binding)
             }
         }
     }
 
     class EmptyViewHolder(val binding:ItemListEmptyBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(user: User) {
-            Log.e("EmptyViewHolder","$user")
-            binding.user = user
-
-            // This is important, because it forces the data binding to execute immediately,
-            // which allows the RecyclerView to make the correct view size measurements
-            binding.executePendingBindings()
-        }
         companion object {
             fun from(parent: ViewGroup): EmptyViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
@@ -188,14 +244,6 @@ class TestAdapter(private val itemClickListener: UserOnItemClickListener)
     }
 
     class EmptyLineViewHolder(val binding:ItemListEmptyLineBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(user: User) {
-            Log.e("EmptyViewHolder","$user")
-            binding.user = user
-
-            // This is important, because it forces the data binding to execute immediately,
-            // which allows the RecyclerView to make the correct view size measurements
-            binding.executePendingBindings()
-        }
         companion object {
             fun from(parent: ViewGroup): EmptyLineViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
@@ -206,14 +254,6 @@ class TestAdapter(private val itemClickListener: UserOnItemClickListener)
     }
 
     class EmptyLineBottomViewHolder(val binding:ItemListEmptyLineBottomBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(user: User) {
-            Log.e("EmptyViewHolder","$user")
-            binding.user = user
-
-            // This is important, because it forces the data binding to execute immediately,
-            // which allows the RecyclerView to make the correct view size measurements
-            binding.executePendingBindings()
-        }
         companion object {
             fun from(parent: ViewGroup): EmptyLineBottomViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
@@ -237,32 +277,17 @@ class TestAdapter(private val itemClickListener: UserOnItemClickListener)
         const val ITEM_VIEW_TYPE_EMPTY = 4
         const val ITEM_VIEW_TYPE_EMPTY_LINE = 5
         const val ITEM_VIEW_TYPE_EMPTY_LINE_BOTTOM = 6
+        const val USER_CLICK = 100
+        const val USER_QUERY = 200
     }
 }
 
 sealed class TreeItem {
-    data class Parent(val user: User, val isMine: Boolean,  val index: Int): TreeItem() {
-
-    }
-
-    data class Mate(val user: User, val isMe: Boolean): TreeItem() {
-
-    }
-
-    data class Children(val user: User, val index: Int): TreeItem() {
-    }
-
-    data class ChildrenMid(val user: User, val index: Int): TreeItem() {
-    }
-
-    data class Empty(val type: Int): TreeItem() {
-    }
-
-    data class EmptyLine(val type: Int): TreeItem() {
-    }
-
-    data class EmptyLineBot(val type: Int): TreeItem() {
-    }
-
-
+    data class Parent(val user: User, val isMine: Boolean,  val index: Int): TreeItem() {}
+    data class Mate(val user: User, val isMe: Boolean): TreeItem() {}
+    data class Children(val user: User, val index: Int): TreeItem() {}
+    data class ChildrenMid(val user: User, val index: Int): TreeItem() {}
+    data class Empty(val type: Int): TreeItem() {}
+    data class EmptyLine(val type: Int): TreeItem() {}
+    data class EmptyLineBot(val type: Int): TreeItem() {}
 }

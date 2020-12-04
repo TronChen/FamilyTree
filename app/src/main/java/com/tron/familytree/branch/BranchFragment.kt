@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.tron.familytree.databinding.FragmentBranchBinding
 
@@ -30,26 +31,28 @@ class BranchFragment : Fragment() {
 
         binding.viewModel = viewModel
 
-//        val adapter = BranchRecyclerViewAdapter(BranchRecyclerViewAdapter.UserOnItemClickListener {
-//            Log.e("Click", it.toString())
-//        })
-        val adapter = TestAdapter(TestAdapter.UserOnItemClickListener {
+
+
+        val adapter = BranchViewAdapter(BranchViewAdapter.UserOnItemClickListener {
             Log.e("Click", it.toString())
-        })
+            viewModel.itemSelected.value = it
+        }
+        ,viewModel
+        )
 
-//        val adapter426 = BranchAdapter4_2_6(BranchAdapter4_2_6.UserOnItemClickListener {
-//            Log.e("Click", it.toString())
-//        })
-
-//        binding.recyclerBranch.adapter = adapter426
         binding.recyclerBranch.adapter = adapter
+
+
+
+        viewModel.userId.observe(viewLifecycleOwner, Observer {
+            viewModel.getUser()
+        })
 
 
         viewModel.user.observe(viewLifecycleOwner, Observer {
             viewModel.getUserMate()
             viewModel.getUserChildren()
             viewModel.getUserFather()
-            Log.e("User", it.toString())
         })
 
         viewModel.fatherId.observe(viewLifecycleOwner, Observer {
@@ -69,11 +72,6 @@ class BranchFragment : Fragment() {
         })
 
         viewModel.TreeList.observe(viewLifecycleOwner, Observer {
-//            Log.e("Level1", it[0].toString())
-//            viewModel.addAdapterList()
-
-            viewModel.createMock()
-            viewModel.getChildrenList(2)
             val list = viewModel.getMockUsers()
             val layoutManager = GridLayoutManager(requireContext(),viewModel.getSpanCount(viewModel.children.size))
             binding.recyclerBranch.layoutManager = layoutManager
@@ -106,12 +104,26 @@ class BranchFragment : Fragment() {
                     }
                 }
             }
-
             adapter.submitList(list)
-
-
+            adapter.notifyDataSetChanged()
         })
 
+        viewModel.itemClick.observe(viewLifecycleOwner, Observer {
+            Log.e("itemClick", it.toString())
+            if (viewModel.itemClick.value == 100){
+                findNavController().navigate(BranchFragmentDirections.actionGlobalBranchUserDetailDialog(
+                    viewModel.itemSelected.value!!
+                ))
+            }
+            if (viewModel.itemClick.value == 200){
+                viewModel.parents.clear()
+                viewModel.meAndMate.clear()
+                viewModel.children.clear()
+                viewModel.treeFinalList.clear()
+                Log.e("treeFinalList", viewModel.treeFinalList.toString())
+                viewModel.userId.value = viewModel.itemSelected.value!!.name
+            }
+        })
 
 
 

@@ -1,22 +1,24 @@
 package com.tron.familytree
 
 import android.app.Application
-import com.tron.familytree.data.source.FamilyTreeRepository
+import app.appworks.school.publisher.data.source.FamilyTreeRepository
 import com.tron.familytree.util.ServiceLocator
 import kotlin.properties.Delegates
 
-class FamilyTreeApplication : Application(){
+class FamilyTreeApplication : Application() {
 
-        // Depends on the flavor,
-        val familyTreeRepository: FamilyTreeRepository
-            get() = ServiceLocator.provideTasksRepository(this)
+    // Depends on the flavor,
+    val repository: FamilyTreeRepository
+        get() = ServiceLocator.provideRepository(this)
 
-        companion object {
-            var instance: FamilyTreeApplication by Delegates.notNull()
-        }
+    companion object {
+        var INSTANCE: FamilyTreeApplication by Delegates.notNull()
+    }
 
-        override fun onCreate() {
-            super.onCreate()
-            instance = this
-        }
+    override fun onCreate() {
+        super.onCreate()
+        INSTANCE = this
+    }
+
+    fun isLiveDataDesign() = true
 }

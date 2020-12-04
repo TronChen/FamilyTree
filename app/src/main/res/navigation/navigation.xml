@@ -30,4 +30,13 @@
         android:name="com.tron.familytree.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" /><action android:id="@+id/action_global_branchFragment" app:destination="@id/branchFragment"/><action android:id="@+id/action_global_familyFragment" app:destination="@id/familyFragment"/><action android:id="@+id/action_global_mapFragment" app:destination="@id/mapFragment"/><action android:id="@+id/action_global_messageFragment" app:destination="@id/messageFragment"/><action android:id="@+id/action_global_profileFragment" app:destination="@id/profileFragment"/>
+    <dialog
+        android:id="@+id/branchUserDetailDialog"
+        android:name="com.tron.familytree.branch.dialog.BranchUserDetailDialog"
+        android:label="BranchUserDetailDialog" >
+        <argument
+            android:name="userProperties"
+            app:argType="com.tron.familytree.data.User" />
+    </dialog>
+    <action android:id="@+id/action_global_branchUserDetailDialog" app:destination="@id/branchUserDetailDialog" />
 </navigation>

@@ -32,22 +32,22 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
 
             R.id.navigation_branch -> {
-
+                binding.fab.visibility = View.VISIBLE
                 findNavController(R.id.myNavHostFragment).navigate(R.id.action_global_branchFragment)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_map-> {
-
+                binding.fab.visibility = View.VISIBLE
                 findNavController(R.id.myNavHostFragment).navigate(R.id.action_global_mapFragment)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_message -> {
-
+                binding.fab.visibility = View.VISIBLE
                 findNavController(R.id.myNavHostFragment).navigate(R.id.action_global_messageFragment)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_profile -> {
-
+                binding.fab.visibility = View.VISIBLE
                 findNavController(R.id.myNavHostFragment).navigate(R.id.action_global_profileFragment)
                 return@OnNavigationItemSelectedListener true
             }
@@ -60,6 +60,12 @@ class MainActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
+
+        binding.fab.setOnClickListener {
+            binding.fab.visibility = View.GONE
+            val navController = this.findNavController(R.id.myNavHostFragment)
+            navController.navigate(R.id.action_global_familyFragment)
+        }
 
         setupBottomNav()
         setupDrawer()

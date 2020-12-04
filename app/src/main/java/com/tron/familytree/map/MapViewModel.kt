@@ -1,8 +1,10 @@
 package com.tron.familytree.map
 
 import androidx.lifecycle.ViewModel
-import com.tron.familytree.data.source.FamilyTreeRepository
+import app.appworks.school.publisher.data.source.FamilyTreeRepository
 
-class MapViewModel : ViewModel() {
+class MapViewModel(
+    private val repository: FamilyTreeRepository
+) : ViewModel() {
     // TODO: Implement the ViewModel
 }

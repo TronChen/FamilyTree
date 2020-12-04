@@ -10,14 +10,14 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.tron.familytree.R
 import com.tron.familytree.databinding.FragmentMapBinding
+import com.tron.familytree.ext.getVmFactory
+import com.tron.familytree.family.FamilyViewModel
 import com.tron.familytree.message.MessageViewModel
 import com.tron.familytree.profile.ProfileViewModel
 
 class MapFragment : Fragment() {
 
-    private val viewModel: MapViewModel by lazy {
-        ViewModelProvider(this).get(MapViewModel::class.java)
-    }
+    private val viewModel by viewModels<MapViewModel> { getVmFactory() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,7 +27,6 @@ class MapFragment : Fragment() {
         val binding = FragmentMapBinding.inflate(inflater, container, false)
 
         binding.lifecycleOwner = viewLifecycleOwner
-        val viewModel = ViewModelProvider(this).get(MapViewModel::class.java)
         binding.viewModel = viewModel
 
         return binding.root

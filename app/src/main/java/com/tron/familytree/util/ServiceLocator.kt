@@ -2,27 +2,27 @@ package com.tron.familytree.util
 
 import android.content.Context
 import androidx.annotation.VisibleForTesting
-import com.tron.familytree.FamilyTreeApplication
-import com.tron.familytree.data.source.DefaultFamilyTreeRepository
-import com.tron.familytree.data.source.FamilyTreeDataSource
-import com.tron.familytree.data.source.FamilyTreeRepository
-import com.tron.familytree.data.source.local.FamilyTreeLocalDataSource
-import com.tron.familytree.data.source.remote.FamilyTreeRemoteDataSource
+import app.appworks.school.publisher.data.source.DefaultFamilyTreeRepository
+import app.appworks.school.publisher.data.source.FamilyTreeDataSource
+import app.appworks.school.publisher.data.source.FamilyTreeRepository
+import app.appworks.school.publisher.data.source.local.FamilyTreeLocalDataSource
+import app.appworks.school.publisher.data.source.remote.FamilyTreeRemoteDataSource
 
 object ServiceLocator {
+
     @Volatile
-    var familyTreeRepository: FamilyTreeRepository? = null
+    var repository: FamilyTreeRepository? = null
         @VisibleForTesting set
 
-    fun provideTasksRepository(context: Context): FamilyTreeRepository {
+    fun provideRepository(context: Context): FamilyTreeRepository {
         synchronized(this) {
-            return familyTreeRepository
-                ?: this.familyTreeRepository!!
-                ?: createStylishRepository(context)
+            return repository
+                ?: repository
+                ?: createFamilyTreeRepository(context)
         }
     }
 
-    private fun createStylishRepository(context: Context): FamilyTreeRepository {
+    private fun createFamilyTreeRepository(context: Context): FamilyTreeRepository {
         return DefaultFamilyTreeRepository(
             FamilyTreeRemoteDataSource,
             createLocalDataSource(context)

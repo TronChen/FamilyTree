@@ -10,13 +10,14 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.tron.familytree.R
 import com.tron.familytree.databinding.FragmentMessageBinding
+import com.tron.familytree.ext.getVmFactory
+import com.tron.familytree.family.FamilyViewModel
+import com.tron.familytree.map.MapViewModel
 import com.tron.familytree.profile.ProfileViewModel
 
 class MessageFragment : Fragment() {
 
-    private val viewModel: MessageViewModel by lazy {
-        ViewModelProvider(this).get(MessageViewModel::class.java)
-    }
+    private val viewModel by viewModels<MessageViewModel> { getVmFactory() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

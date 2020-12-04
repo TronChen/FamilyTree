@@ -138,4 +138,10 @@ dependencies {
     implementation 'de.blox.treeview:treeview:0.1.3'
     implementation 'de.blox:graphview:0.7.0'
 
+    //custom floating icon
+    implementation 'com.github.clans:fab:1.6.4'
+
+    //CircularImageView
+    implementation 'com.mikhaellopez:circularimageview:4.2.0'
+
 }

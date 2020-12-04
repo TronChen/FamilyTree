@@ -11,36 +11,39 @@ class BranchViewModel : ViewModel() {
 
     val db = Firebase.firestore
 
-    var user = MutableLiveData<com.tron.familytree.data.User>()
-    var userMate = MutableLiveData<com.tron.familytree.data.User>()
-    val userId = "TronChen"
+    var user = MutableLiveData<User>()
+    val userId = MutableLiveData<String>()
 
-    var mateId = MutableLiveData<com.tron.familytree.data.User>()
-    var fatherId = MutableLiveData<com.tron.familytree.data.User>()
-    var motherId = MutableLiveData<com.tron.familytree.data.User>()
-    var mateFatherId = MutableLiveData<com.tron.familytree.data.User>()
-    var mateMotherId = MutableLiveData<com.tron.familytree.data.User>()
+    var mateId = MutableLiveData<User>()
+    var fatherId = MutableLiveData<User>()
+    var motherId = MutableLiveData<User>()
+    var mateFatherId = MutableLiveData<User>()
+    var mateMotherId = MutableLiveData<User>()
 
-    val treeParentsList = mutableListOf<com.tron.familytree.data.User>()
-    val treeMeAndMateList = mutableListOf<com.tron.familytree.data.User>()
-    val treeChildrenList = mutableListOf<com.tron.familytree.data.User>()
-    val treeList = mutableListOf<MutableList<com.tron.familytree.data.User>>()
+    var itemClick = MutableLiveData<Int>()
+    var itemSelected = MutableLiveData<User>()
 
-    val TreeList = MutableLiveData<List<List<com.tron.familytree.data.User>>>()
+    val TreeList = MutableLiveData<Int>()
 
-    val emptyData = User()
-    val adapterList = mutableListOf<User>()
+    val children = mutableListOf<TreeItem>()
+    val parents = mutableListOf<TreeItem>()
+    val meAndMate = mutableListOf<TreeItem>()
+
+    var treeFinalList = mutableListOf<TreeItem>()
 
     init {
-        getUser()
+        userId.value = "Paul"
     }
 
     fun getUser(){
-        db.collection("User").document("$userId")
+        db.collection("User").document("${userId.value}")
             .get()
             .addOnSuccessListener {
-                user.value = it.toObject(com.tron.familytree.data.User::class.java)
-                treeMeAndMateList.add(user.value!!)
+                user.value = it.toObject(User::class.java)
+                meAndMate.add(
+                    TreeItem.Mate( user.value!!,true)
+                )
+                Log.e("Me", meAndMate.toString())
             }
     }
 
@@ -49,85 +52,119 @@ class BranchViewModel : ViewModel() {
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
-                    mateId.value = document.toObject(com.tron.familytree.data.User::class.java)
-                    treeMeAndMateList.add(mateId.value!!)
-                    Log.e("Mate", mateId.value.toString())
-                    Log.e("treeMeAndMateList", treeMeAndMateList.toString())
-//                    Log.e("userMate.value", userMate.value!!.toString())
+                    mateId.value = document.toObject(User::class.java)
+                    meAndMate.add(
+                        TreeItem.Mate((mateId.value!!),false)
+                    )
+                    Log.e("Mate", meAndMate.toString())
                 }
             }
     }
 
     fun getUserChildren(){
-        db.collection("User").whereEqualTo("fatherId", user.value?.name)
-            .get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    treeChildrenList.add(document.toObject(com.tron.familytree.data.User::class.java))
-                    Log.e("Children", treeChildrenList.toString())
+        if (user.value?.gender == "male") {
+            db.collection("User").whereEqualTo("fatherId", user.value?.name)
+                .get()
+                .addOnSuccessListener { result ->
+                    for ((index, document) in result.withIndex()) {
+                        val child = document.toObject(User::class.java)
+                        if (result.size() > 2) {
+                            children.add(
+                                TreeItem.Children(child, index)
+                            )
+                        } else {
+                            children.add(
+                                TreeItem.ChildrenMid(child, index)
+                            )
+                        }
+                    }
+
+                    for (child in children) {
+                        Log.d("treeChildrenList", "child=$child")
+                    }
+
+                    Log.e("treeChildrenList", children.toString())
                 }
-            }
+        }
+
+        if (user.value?.gender == "female") {
+            db.collection("User").whereEqualTo("motherId", user.value?.name)
+                .get()
+                .addOnSuccessListener { result ->
+                    for ((index, document) in result.withIndex()) {
+                        val child = document.toObject(User::class.java)
+                        if (result.size() > 2) {
+                            children.add(
+                                TreeItem.Children(child, index)
+                            )
+                        } else {
+                            children.add(
+                                TreeItem.ChildrenMid(child, index)
+                            )
+                        }
+                    }
+
+                    for (child in children) {
+                        Log.d("treeChildrenList", "child=$child")
+                    }
+
+                    Log.e("treeChildrenList", children.toString())
+                }
+        }
     }
 
     fun getUserFather(){
-        db.collection("User").whereEqualTo("childId", user.value?.name).whereEqualTo("gender","male")
+        db.collection("User").whereEqualTo("name", user.value?.fatherId).whereEqualTo("gender","male")
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
-                    fatherId.value = document.toObject(com.tron.familytree.data.User::class.java)
-                    treeParentsList.add(fatherId.value!!)
-                    Log.e("Father", treeParentsList.toString())
+                    fatherId.value = document.toObject(User::class.java)
+                    parents.add(
+                        TreeItem.Parent(fatherId.value!!,true,0))
+                    Log.e("Father", parents.toString())
                 }
             }
     }
 
     fun getUserMother(){
-        db.collection("User").whereEqualTo("childId", user.value?.name).whereEqualTo("gender","female")
+        db.collection("User").whereEqualTo("name", user.value?.motherId).whereEqualTo("gender","female")
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
-                    motherId.value = document.toObject(com.tron.familytree.data.User::class.java)
-                    treeParentsList.add(motherId.value!!)
-                    Log.e("Mother", motherId.value!!.toString())
+                   motherId.value = document.toObject(User::class.java)
+                    parents.add(
+                        TreeItem.Parent(motherId.value!!,true,1))
+                    Log.e("Mother", parents.toString())
                 }
             }
     }
 
     fun getMateFather(){
-        db.collection("User").whereEqualTo("childId", user.value?.mateId).whereEqualTo("gender","male")
+        db.collection("User").whereEqualTo("name", mateId.value?.fatherId).whereEqualTo("gender","male")
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
-                    mateFatherId.value = document.toObject(com.tron.familytree.data.User::class.java)
-                    treeParentsList.add(mateFatherId.value!!)
-                    Log.e("mateFather", mateFatherId.value!!.toString())
+                    mateFatherId.value = document.toObject(User::class.java)
+                    parents.add(
+                        TreeItem.Parent(mateFatherId.value!!,false,2))
+                    Log.e("mateFather", parents.toString())
                 }
             }
     }
 
         fun getMateMother(){
-        db.collection("User").whereEqualTo("childId", user.value?.mateId).whereEqualTo("gender","female")
+        db.collection("User").whereEqualTo("name", mateId.value?.motherId).whereEqualTo("gender","female")
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
-                    mateMotherId.value = document.toObject(com.tron.familytree.data.User::class.java)
-                    treeParentsList.add(mateMotherId.value!!)
-
-                    treeList.add(treeParentsList)
-                    treeList.add(treeMeAndMateList)
-                    treeList.add(treeChildrenList)
-                    TreeList.value = treeList
-                    Log.e("treeList", treeList.toString())
-                    Log.e("mateMother", mateMotherId.value!!.toString())
-                    Log.e("treeParentsList", treeParentsList.toString())
+                    mateMotherId.value = document.toObject(User::class.java)
+                    parents.add(
+                        TreeItem.Parent(mateMotherId.value!!,false,3))
+                    Log.e("MateMother", parents.toString())
+                    TreeList.value = 100
                 }
             }
     }
-
-
-    val children = mutableListOf<TreeItem>()
-    val parents = mutableListOf<TreeItem>()
-    val meAndMate = mutableListOf<TreeItem>()
 
     fun getSpanCount(size: Int): Int{
         return if (size > 4 || size == 4){
@@ -137,84 +174,7 @@ class BranchViewModel : ViewModel() {
         }
     }
 
-    fun createMock() {
-        parents.add(
-            TreeItem.Parent(
-                User(name = "DadOfME", gender = "male"),
-                true,
-                0
-            )
-        )
-        parents.add(
-            TreeItem.Parent(
-                User(name = "MomOfME", gender = "female"),
-                true,
-                1
-            )
-        )
-        parents.add(
-            TreeItem.Parent(
-                User(name = "DadOfMATE", gender = "male"),
-                false,
-                2
-            )
-        )
-        parents.add(
-            TreeItem.Parent(
-                User(name = "MomOfMATE", gender = "female"),
-                false,
-                3
-            )
-        )
 
-        meAndMate.add(
-            TreeItem.Mate(
-                User(name = "ME"),
-                true
-            )
-        )
-        meAndMate.add(
-            TreeItem.Mate(
-                User(name = "MATE"),
-                false
-            )
-        )
-
-//        for (index in 0..1) {
-//            children.add(
-//                TreeItem.Children(
-//                    User(name = "C$index"),
-//                    index
-//                )
-//            )
-//        }
-    }
-
-    fun getChildrenList(item: Int){
-        if (item < 2){
-            for (index in 0..item) {
-                children.add(
-                    TreeItem.ChildrenMid(
-                        User(name = "C$index"),
-                        index
-                    )
-                )
-            }
-        }
-        else{
-            for (index in 0..item) {
-                children.add(
-                    TreeItem.Children(
-                        User(name = "C$index"),
-                        index
-                    )
-                )
-            }
-        }
-    }
-
-
-        val mockList = mutableListOf<TreeItem>()
     fun getMockUsers(): MutableList<TreeItem> {
         //Parent
         for ((index, parent) in parents.withIndex()) {
@@ -222,11 +182,11 @@ class BranchViewModel : ViewModel() {
             if (children.size < 4) {
                 (parent as TreeItem.Parent).user.spanSize = 1
                 if (index == 2) {
-                        mockList.add(
+                        treeFinalList.add(
                             TreeItem.Empty(-1)
                         )
                 }
-                mockList.add(parent)
+                treeFinalList.add(parent)
             }
 
             if (children.size > 4 || children.size == 4) {
@@ -234,7 +194,7 @@ class BranchViewModel : ViewModel() {
 
                 if (children.size %2 == 1 && parents.size > 2){
                     if(parents.size % (index + 1) == 1){
-                        mockList.add(
+                        treeFinalList.add(
                             TreeItem.Empty(-1)
                         )
                     }
@@ -242,18 +202,18 @@ class BranchViewModel : ViewModel() {
 
                 if (index % 2 == 1) {
                     if (children.size % 4  == 2) {
-                        mockList.add(
+                        treeFinalList.add(
                             TreeItem.EmptyLineBot(-1)
                         )
                     }
                     if (children.size % 4  == 3) {
-                        mockList.add(
+                        treeFinalList.add(
                             TreeItem.EmptyLineBot(-1)
                         )
                     }
                 }
 
-                mockList.add(parent)
+                treeFinalList.add(parent)
             }
         }
 
@@ -264,11 +224,11 @@ class BranchViewModel : ViewModel() {
             if (children.size < 4) {
                 (self as TreeItem.Mate).user.spanSize = 2
                 if(index == 1){
-                    mockList.add(
+                    treeFinalList.add(
                         TreeItem.Empty(-1)
                     )
                 }
-                mockList.add(self)
+                treeFinalList.add(self)
             }
 
             if (children.size > 4 || children.size == 4) {
@@ -276,20 +236,20 @@ class BranchViewModel : ViewModel() {
 
                 if (children.size %2 == 1 && meAndMate.size > 2){
                     if(children.size % (index + 1) == 1){
-                        mockList.add(
+                        treeFinalList.add(
                             TreeItem.Empty(-1)
                         )
                     }
                 }
                 if (children.size %2 == 1 && meAndMate.size == 2) {
                     if (index == 1) {
-                        mockList.add(
+                        treeFinalList.add(
                             TreeItem.Empty(-1)
                         )
                     }
                 }
 
-                mockList.add(self)
+                treeFinalList.add(self)
             }
         }
 
@@ -298,53 +258,53 @@ class BranchViewModel : ViewModel() {
         for ((index,child) in children.withIndex()) {
             if (children.size == 1){
                 if (index == 0){
-                    mockList.add(
+                    treeFinalList.add(
                         TreeItem.Empty(-1)
                     )
-                    mockList.add(
+                    treeFinalList.add(
                         TreeItem.EmptyLine(-1)
                     )
                 }
 
-                mockList.add(child)
+                treeFinalList.add(child)
 
-                    mockList.add(
+                    treeFinalList.add(
                         TreeItem.EmptyLine(-1)
                     )
-                    mockList.add(
+                    treeFinalList.add(
                         TreeItem.Empty(-1)
                     )
             }
 
             if (children.size == 2){
                 if (index == 0){
-                    mockList.add(
+                    treeFinalList.add(
                         TreeItem.Empty(-1)
                     )
                 }
                 if (index == 1){
-                    mockList.add(
+                    treeFinalList.add(
                         TreeItem.EmptyLine(-1)
                     )
                 }
-                mockList.add(child)
+                treeFinalList.add(child)
             }
 
             if (children.size == 3){
                 if (index > 0){
-                    mockList.add(
+                    treeFinalList.add(
                         TreeItem.EmptyLine(-1)
                     )
                 }
-                mockList.add(child)
+                treeFinalList.add(child)
             }
 
             if (children.size > 4 || children.size == 4){
-            mockList.add(child)
+            treeFinalList.add(child)
           }
         }
 
-        return  mockList
+        return  treeFinalList
     }
 
 }
