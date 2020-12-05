@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import com.tron.familytree.R
 import com.tron.familytree.branch.BranchViewModel
@@ -41,6 +42,10 @@ class ProfileFragment : Fragment() {
                 else -> null
             }
         }.attach()
+
+        binding.imageEdit.setOnClickListener {
+            findNavController().navigate(R.id.action_global_editUserFragment)
+        }
 
 
         return binding.root

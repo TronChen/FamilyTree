@@ -277,16 +277,25 @@ class BranchViewModel : ViewModel() {
             }
 
             if (children.size == 2){
-                if (index == 0){
-                    treeFinalList.add(
+                when(index){
+                    0 -> treeFinalList.add(
                         TreeItem.Empty(-1)
                     )
-                }
-                if (index == 1){
-                    treeFinalList.add(
+
+                    1 ->  treeFinalList.add(
                         TreeItem.EmptyLine(-1)
                     )
                 }
+//                if (index == 0){
+//                    treeFinalList.add(
+//                        TreeItem.Empty(-1)
+//                    )
+//                }
+//                if (index == 1){
+//                    treeFinalList.add(
+//                        TreeItem.EmptyLine(-1)
+//                    )
+//                }
                 treeFinalList.add(child)
             }
 

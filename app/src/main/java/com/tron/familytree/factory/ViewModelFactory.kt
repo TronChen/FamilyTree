@@ -7,6 +7,8 @@ import com.tron.familytree.family.FamilyViewModel
 import com.tron.familytree.map.MapViewModel
 import com.tron.familytree.message.MessageViewModel
 import com.tron.familytree.profile.ProfileViewModel
+import com.tron.familytree.profile.editepisode.EditEpisodeViewModel
+import com.tron.familytree.profile.edituser.EditUserViewModel
 
 @Suppress("UNCHECKED_CAST")
 class ViewModelFactory constructor(
@@ -27,6 +29,12 @@ class ViewModelFactory constructor(
 
                 isAssignableFrom(FamilyViewModel::class.java) ->
                     FamilyViewModel(repository)
+
+                isAssignableFrom(EditUserViewModel::class.java) ->
+                    EditUserViewModel(repository)
+
+                isAssignableFrom(EditEpisodeViewModel::class.java) ->
+                    EditEpisodeViewModel(repository)
 
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
