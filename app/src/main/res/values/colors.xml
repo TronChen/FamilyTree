@@ -9,4 +9,8 @@
     <color name="lightGrey">#F8F8F8</color>
     <color name="black">#000000</color>
     <color name="transparent">#00000000</color>
+    <color name="deep_yellow">#FDBB2C</color>
+    <color name="deep_blue">#166BAD</color>
+    <color name="deep_dark_yellow">#CF9312</color>
+    <color name="trans_grey">#90C4C4C4</color>
 </resources>

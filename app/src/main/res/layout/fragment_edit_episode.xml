@@ -18,10 +18,6 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
             android:background="@android:color/transparent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -69,7 +65,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
                 <EditText
-                    android:id="@+id/editTextTextPersonName"
+                    android:id="@+id/editTextTitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -79,7 +75,6 @@
                     android:ems="10"
                     android:fontFamily="@font/noto_sans"
                     android:gravity="top"
-                    android:text="@={viewModel.editTitle}"
                     android:hint="輸入地點"
                     android:inputType="textPersonName"
                     android:lines="5"
@@ -87,6 +82,7 @@
                     android:paddingTop="12dp"
                     android:paddingEnd="12dp"
                     android:paddingBottom="12dp"
+                    android:text="@={viewModel.editTitle}"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -99,8 +95,8 @@
                     android:layout_height="24dp"
                     android:layout_marginTop="24dp"
                     android:src="@drawable/clock"
-                    app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName"
-                    app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+                    app:layout_constraintStart_toStartOf="@+id/editTextTitle"
+                    app:layout_constraintTop_toBottomOf="@+id/editTextTitle" />
 
                 <TextView
                     android:id="@+id/textTime"
@@ -121,8 +117,8 @@
                     android:layout_height="24dp"
                     android:layout_marginTop="24dp"
                     android:src="@drawable/mappinline"
-                    app:layout_constraintStart_toStartOf="@+id/constraintLayout10"
-                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout10" />
+                    app:layout_constraintStart_toStartOf="@+id/conTIme"
+                    app:layout_constraintTop_toBottomOf="@+id/conTIme" />
 
                 <TextView
                     android:id="@+id/textView16"
@@ -138,7 +134,7 @@
                     app:layout_constraintTop_toTopOf="@+id/imageView9" />
 
                 <EditText
-                    android:id="@+id/editTextTextPersonName2"
+                    android:id="@+id/editTextLocation"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -170,14 +166,14 @@
                     android:text="事蹟內容"
                     android:textColor="@color/black"
                     android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName2"
-                    app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
+                    app:layout_constraintStart_toStartOf="@+id/editTextLocation"
+                    app:layout_constraintTop_toBottomOf="@+id/editTextLocation" />
 
-<!--                <com.google.android.material.textfield.TextInputLayout-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content">-->
+                <!--                <com.google.android.material.textfield.TextInputLayout-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content">-->
 
-<!--                </com.google.android.material.textfield.TextInputLayout>-->
+                <!--                </com.google.android.material.textfield.TextInputLayout>-->
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/conConfirm"
@@ -206,7 +202,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraintLayout10"
+                    android:id="@+id/conTIme"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_marginTop="8dp"
@@ -217,7 +213,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/imageClock">
 
                     <TextView
-                        android:id="@+id/textView10"
+                        android:id="@+id/textSelectedTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/noto_sans"
@@ -237,14 +233,14 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="8dp"
-                    android:hint="輸入事蹟內容"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp"
-                    android:paddingTop="12dp"
-                    android:paddingBottom="12dp"
-                    android:lines="5"
-                    android:gravity="top"
                     android:background="@drawable/rounded_light_grey_radius_24"
+                    android:gravity="top"
+                    android:hint="輸入事蹟內容"
+                    android:lines="5"
+                    android:paddingStart="12dp"
+                    android:paddingTop="12dp"
+                    android:paddingEnd="12dp"
+                    android:paddingBottom="12dp"
                     app:layout_constraintBottom_toTopOf="@+id/conConfirm"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

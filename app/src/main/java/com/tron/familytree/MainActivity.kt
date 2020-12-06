@@ -1,5 +1,6 @@
 package com.tron.familytree
 
+import android.Manifest
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
+import app.appworks.school.publisher.data.source.FamilyTreeRepository
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -38,7 +40,7 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.navigation_map-> {
                 binding.fab.visibility = View.VISIBLE
-                findNavController(R.id.myNavHostFragment).navigate(R.id.action_global_mapFragment)
+                findNavController(R.id.myNavHostFragment).navigate(R.id.action_global_mapsFragment)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_message -> {
@@ -61,10 +63,18 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
 
+        val navController = this.findNavController(R.id.myNavHostFragment)
         binding.fab.setOnClickListener {
-            binding.fab.visibility = View.GONE
-            val navController = this.findNavController(R.id.myNavHostFragment)
+            binding.fab.visibility = View.INVISIBLE
             navController.navigate(R.id.action_global_familyFragment)
+        }
+
+        binding.menuEvent.setOnClickListener {
+            navController.navigate(R.id.action_global_createEventDialog)
+        }
+
+        binding.menuAlbum.setOnClickListener {
+            navController.navigate(R.id.action_global_createAlbumDialog)
         }
 
         setupBottomNav()
@@ -178,3 +188,4 @@ class MainActivity : AppCompatActivity() {
 //        })
     }
 }
+

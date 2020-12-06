@@ -49,4 +49,19 @@
         android:id="@+id/editEpisodeDialog"
         android:name="com.tron.familytree.profile.editepisode.EditEpisodeDialog"
         android:label="EditEpisodeDialog" /><action android:id="@+id/action_global_editEpisodeDialog" app:destination="@id/editEpisodeDialog"/>
+    <dialog
+        android:id="@+id/createEventDialog"
+        android:name="com.tron.familytree.family.create_event.CreateEventDialog"
+        android:label="CreateEventDialog" />
+    <action android:id="@+id/action_global_createEventDialog" app:destination="@id/createEventDialog" />
+    <dialog
+        android:id="@+id/createAlbumDialog"
+        android:name="com.tron.familytree.family.create_album.CreateAlbumDialog"
+        android:label="CreateAlbumDialog" />
+    <action android:id="@+id/action_global_createAlbumDialog" app:destination="@id/createAlbumDialog" />
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.tron.familytree.map.MapsFragment"
+        android:label="fragment_maps"
+        tools:layout="@layout/fragment_maps" /><action android:id="@+id/action_global_mapsFragment" app:destination="@id/mapsFragment"/>
 </navigation>

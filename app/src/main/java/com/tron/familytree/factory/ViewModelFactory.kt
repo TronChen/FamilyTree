@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import app.appworks.school.publisher.data.source.FamilyTreeRepository
 import com.tron.familytree.family.FamilyViewModel
+import com.tron.familytree.family.create_album.CreateAlbumViewModel
+import com.tron.familytree.family.create_event.CreateEventViewModel
 import com.tron.familytree.map.MapViewModel
 import com.tron.familytree.message.MessageViewModel
 import com.tron.familytree.profile.ProfileViewModel
@@ -35,6 +37,12 @@ class ViewModelFactory constructor(
 
                 isAssignableFrom(EditEpisodeViewModel::class.java) ->
                     EditEpisodeViewModel(repository)
+
+                isAssignableFrom(CreateEventViewModel::class.java) ->
+                    CreateEventViewModel(repository)
+
+                isAssignableFrom(CreateAlbumViewModel::class.java) ->
+                    CreateAlbumViewModel(repository)
 
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")

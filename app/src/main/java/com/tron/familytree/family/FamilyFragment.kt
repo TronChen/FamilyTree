@@ -8,10 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.tabs.TabLayoutMediator
 import com.tron.familytree.R
 import com.tron.familytree.databinding.FragmentFamilyBinding
 import com.tron.familytree.ext.getVmFactory
+import com.tron.familytree.family.viewpager.FamilyViewPagerAdapter
 import com.tron.familytree.map.MapViewModel
+import com.tron.familytree.profile.viewpager.ProfilePagerAdapter
 
 class FamilyFragment : Fragment() {
 
@@ -26,6 +29,21 @@ class FamilyFragment : Fragment() {
 
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
+
+
+
+        val tabLayout = binding.tabs
+        val viewPager = binding.viewpager
+        viewPager.adapter = FamilyViewPagerAdapter(this)
+
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.text = when(position){
+                0 -> "活動"
+                1 -> "相簿"
+                else -> null
+            }
+        }.attach()
+
 
         return binding.root
     }
