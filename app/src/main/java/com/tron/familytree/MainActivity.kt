@@ -35,21 +35,33 @@ class MainActivity : AppCompatActivity() {
 
             R.id.navigation_branch -> {
                 binding.fab.visibility = View.VISIBLE
+                binding.imageSearch.visibility = View.VISIBLE
+                binding.imageCalendar.visibility = View.INVISIBLE
+                binding.imageScan.visibility = View.INVISIBLE
                 findNavController(R.id.myNavHostFragment).navigate(R.id.action_global_branchFragment)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_map-> {
                 binding.fab.visibility = View.VISIBLE
+                binding.imageSearch.visibility = View.INVISIBLE
+                binding.imageCalendar.visibility = View.INVISIBLE
+                binding.imageScan.visibility = View.INVISIBLE
                 findNavController(R.id.myNavHostFragment).navigate(R.id.action_global_mapsFragment)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_message -> {
                 binding.fab.visibility = View.VISIBLE
+                binding.imageSearch.visibility = View.INVISIBLE
+                binding.imageCalendar.visibility = View.INVISIBLE
+                binding.imageScan.visibility = View.INVISIBLE
                 findNavController(R.id.myNavHostFragment).navigate(R.id.action_global_messageFragment)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_profile -> {
                 binding.fab.visibility = View.VISIBLE
+                binding.imageSearch.visibility = View.INVISIBLE
+                binding.imageCalendar.visibility = View.INVISIBLE
+                binding.imageScan.visibility = View.VISIBLE
                 findNavController(R.id.myNavHostFragment).navigate(R.id.action_global_profileFragment)
                 return@OnNavigationItemSelectedListener true
             }
@@ -66,15 +78,32 @@ class MainActivity : AppCompatActivity() {
         val navController = this.findNavController(R.id.myNavHostFragment)
         binding.fab.setOnClickListener {
             binding.fab.visibility = View.INVISIBLE
+            binding.imageSearch.visibility = View.INVISIBLE
+            binding.imageCalendar.visibility = View.VISIBLE
+            binding.imageScan.visibility = View.INVISIBLE
             navController.navigate(R.id.action_global_familyFragment)
         }
 
         binding.menuEvent.setOnClickListener {
+            binding.imageSearch.visibility = View.INVISIBLE
+            binding.imageCalendar.visibility = View.VISIBLE
+            binding.imageScan.visibility = View.INVISIBLE
             navController.navigate(R.id.action_global_createEventDialog)
         }
 
         binding.menuAlbum.setOnClickListener {
+            binding.imageSearch.visibility = View.INVISIBLE
+            binding.imageCalendar.visibility = View.VISIBLE
+            binding.imageScan.visibility = View.INVISIBLE
             navController.navigate(R.id.action_global_createAlbumDialog)
+        }
+
+        binding.imageCalendar.setOnClickListener {
+            navController.navigate(R.id.action_global_calendarDialog)
+        }
+
+        binding.imageScan.setOnClickListener {
+            navController.navigate(R.id.action_global_qrCodeFragment)
         }
 
         setupBottomNav()

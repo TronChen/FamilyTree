@@ -63,5 +63,15 @@
         android:id="@+id/mapsFragment"
         android:name="com.tron.familytree.map.MapsFragment"
         android:label="fragment_maps"
-        tools:layout="@layout/fragment_maps" /><action android:id="@+id/action_global_mapsFragment" app:destination="@id/mapsFragment"/>
+        tools:layout="@layout/fragment_maps" />
+    <action android:id="@+id/action_global_mapsFragment" app:destination="@id/mapsFragment" />
+    <fragment
+        android:id="@+id/calendarDialog"
+        android:name="com.tron.familytree.family.calendar.CalendarFragment"
+        android:label="CalendarDialog" />
+    <action android:id="@+id/action_global_calendarDialog" app:destination="@id/calendarDialog" />
+    <fragment
+        android:id="@+id/qrCodeFragment"
+        android:name="com.tron.familytree.profile.qrcode.QrCodeFragment"
+        android:label="QrCodeFragment" /><action android:id="@+id/action_global_qrCodeFragment" app:destination="@id/qrCodeFragment"/>
 </navigation>

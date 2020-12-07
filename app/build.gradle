@@ -151,4 +151,12 @@ dependencies {
     // google location
     implementation 'com.google.android.gms:play-services-location:17.1.0'
 
+    //Calendar View
+    implementation "com.github.prolificinteractive:material-calendarview:2.0.0"
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.0'
+
+    //QR code
+    implementation 'com.google.zxing:core:3.3.3'
+    implementation('com.journeyapps:zxing-android-embedded:3.6.0') { transitive = false }
+
 }

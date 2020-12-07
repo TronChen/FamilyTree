@@ -54,21 +54,24 @@ class CreateEventDialog : DialogFragment() {
         }
 
         binding.conDate.setOnClickListener {
-            val builder = datePicker()
-            val picker = builder.build()
             val calendar = Calendar.getInstance()
             val year = calendar.get(Calendar.YEAR)
             val month = calendar.get(Calendar.MONTH)
             val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
-            DatePickerDialog(requireContext(),{_, year, month, dayOfMonth -> binding.textDate.text = "$year/$month/$dayOfMonth"
+            DatePickerDialog(requireContext(),{_, year, month, day ->
+                binding.textDate.text ="${setDateFormat(year, month, day)}"
+                Log.e("DatePicker","$year,$month,$day}")
             },year,month,dayOfMonth).show()
-            picker.addOnPositiveButtonClickListener { Log.e("DatePicker","$it}")}
-            picker.addOnNegativeButtonClickListener { dismiss() }
+            DatePickerDialog.OnDateSetListener { _, _, _, _ ->
+            }
+
         }
-
-
-
         return binding.root
     }
+
+    private fun setDateFormat(year: Int, month: Int, day: Int): String {
+        return "$year-${month + 1}-$day"
+    }
+
 
 }

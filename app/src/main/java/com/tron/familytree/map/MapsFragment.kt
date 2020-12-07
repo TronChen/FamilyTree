@@ -111,20 +111,16 @@ class MapsFragment : Fragment() {
     }
 
 
-    val MY_PERMISSIONS_REQUEST_LOCATION = 0
-
-
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), MY_PERMISSIONS_REQUEST_LOCATION)
-        }
+//        if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION)
+//            != PackageManager.PERMISSION_GRANTED){
+//            ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), MY_PERMISSIONS_REQUEST_LOCATION)
+//        }
 
 
 
@@ -138,17 +134,6 @@ class MapsFragment : Fragment() {
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
     }
-
-//    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray){
-//        if (requestCode == MY_PERMISSIONS_REQUEST_LOCATION) {
-//            if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
-//                findNavController().navigate(R.id.action_global_mapsFragment)
-//
-//            } else {
-//                Toast.makeText(requireContext(), "需要定位功能", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-//    }
 
 
     private fun getLocationPermission() {
