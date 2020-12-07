@@ -1,4 +1,9 @@
 package com.tron.familytree.family.album
 
-class AlbumViewModel {
+import androidx.lifecycle.ViewModel
+import app.appworks.school.publisher.data.source.FamilyTreeRepository
+
+class AlbumViewModel(
+    private val repository: FamilyTreeRepository
+) : ViewModel(){
 }

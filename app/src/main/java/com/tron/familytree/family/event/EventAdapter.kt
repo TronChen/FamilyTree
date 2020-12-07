@@ -14,8 +14,8 @@ import com.tron.familytree.data.User
 import com.tron.familytree.databinding.ItemListEmptyBinding
 import com.tron.familytree.databinding.ItemListEventBinding
 
-class EventAdapter
-    : ListAdapter<Event, RecyclerView.ViewHolder>(EventAdapter.UserDiffCallback()) {
+class EventAdapter(private val itemClickListener: EventOnItemClickListener)
+    : ListAdapter<Event, RecyclerView.ViewHolder>(UserDiffCallback()) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -23,20 +23,17 @@ class EventAdapter
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-//        val item = getItem(position)
-//        when (holder) {
-//            is EventViewHolder ->{
-//                val event = item as Event
-//                if (event != null) {
-//                    holder.bind(event)
-//                }
-//            }
-//        }
+        val item = getItem(position)
+        when (holder) {
+            is EventViewHolder ->{
+                val event = item as Event
+                holder.bind(event)
+                holder.binding.constraintLayout12.setOnClickListener {
+                    itemClickListener.onItemClicked(event)
+                }
+            }
+        }
 
-    }
-
-    override fun getItemCount(): Int {
-        return 10
     }
 
     class UserDiffCallback : DiffUtil.ItemCallback<Event>() {
@@ -63,5 +60,9 @@ class EventAdapter
                 return EventViewHolder(binding)
             }
         }
+    }
+
+    class EventOnItemClickListener(val clickListener: (event: Event) -> Unit ){
+        fun onItemClicked(event: Event) = clickListener(event)
     }
 }

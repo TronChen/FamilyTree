@@ -73,6 +73,17 @@
                         app:navGraph="@navigation/navigation" />
 
                     <ImageView
+                        android:id="@+id/imageEdit"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:visibility="invisible"
+                        app:layout_constraintEnd_toStartOf="@+id/imageCalendar"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/edit" />
+
+                    <ImageView
                         android:id="@+id/imageCalendar"
                         android:layout_width="24dp"
                         android:layout_height="24dp"

@@ -4,10 +4,11 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class Event (
-    var publisher : String = "",
-    var title : String = "",
-    var time : Long = 0L,
-    var attender : List<String>,
-    var content : String = ""
+data class Event(
+    var publisher: String = "",
+    var title: String = "",
+    var time: String = "",
+    var attender: List<String>? = null,
+    var content: String = "",
+    var location: String = ""
 ):Parcelable

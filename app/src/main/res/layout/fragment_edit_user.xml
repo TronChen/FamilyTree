@@ -24,7 +24,7 @@
             android:layout_height="135dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:src="@drawable/branch_click"
+            android:src="@drawable/pikachu"
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:fontFamily="@font/noto_sans_bold"
+            android:fontFamily="@font/noto_sans"
             android:text="姓"
             android:textColor="@color/black"
             android:textSize="18sp"
@@ -47,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:fontFamily="@font/noto_sans_bold"
+            android:fontFamily="@font/noto_sans"
             android:textSize="18sp"
             android:textColor="@color/black"
             android:text="名"
@@ -91,12 +91,27 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
-            android:text="Birth"
             android:fontFamily="@font/noto_sans"
-            android:textSize="24sp"
+            android:text="Birth"
             android:textColor="@color/black"
+            android:letterSpacing="0.2"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/conImage" />
+
+        <TextView
+            android:id="@+id/textView27"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:fontFamily="@font/noto_sans"
+            android:text="日期"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:letterSpacing="0.2"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView20"
+            app:layout_constraintStart_toEndOf="@+id/imageView20"
+            app:layout_constraintTop_toTopOf="@+id/imageView20" />
 
         <TextView
             android:id="@+id/textView12"
@@ -117,12 +132,45 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
-            android:fontFamily="@font/noto_sans_bold"
+            android:fontFamily="@font/noto_sans"
             android:text="生平事蹟"
+            android:letterSpacing="0.2"
             android:textColor="@color/black"
-            android:textSize="24sp"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/conBirth" />
+            app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+
+        <ImageView
+            android:id="@+id/imageView20"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@+id/textBirth"
+            app:layout_constraintTop_toBottomOf="@+id/textBirth"
+            app:srcCompat="@drawable/calendarbirth" />
+
+        <ImageView
+            android:id="@+id/imageView21"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@+id/conBirth"
+            app:layout_constraintTop_toBottomOf="@+id/conBirth"
+            app:srcCompat="@drawable/mappinclear" />
+
+        <TextView
+            android:id="@+id/textView28"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:fontFamily="@font/noto_sans"
+            android:text="地點"
+            android:textColor="@color/black"
+            android:letterSpacing="0.2"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView21"
+            app:layout_constraintStart_toEndOf="@+id/imageView21"
+            app:layout_constraintTop_toTopOf="@+id/imageView21" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/conComplete"
@@ -152,18 +200,19 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerEditEpisode"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@+id/conComplete"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView13"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_list_episode_edit"/>
+            tools:listitem="@layout/item_list_episode_edit" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/conAddEpisode"
@@ -227,12 +276,12 @@
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/rounded_light_grey_radius_24"
             app:layout_constraintEnd_toStartOf="@+id/conDeath"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textBirth">
+            app:layout_constraintTop_toBottomOf="@+id/textView27">
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -288,6 +337,22 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <EditText
+            android:id="@+id/editTextTextPersonName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:fontFamily="@font/noto_sans"
+            android:textColor="@color/black"
+            android:letterSpacing="0.2"
+            android:hint="輸入出生地點"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/imageView21"
+            app:layout_constraintTop_toBottomOf="@+id/textView28" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -43,11 +43,6 @@ class ProfileFragment : Fragment() {
             }
         }.attach()
 
-        binding.imageEdit.setOnClickListener {
-            findNavController().navigate(R.id.action_global_editUserFragment)
-        }
-
-
         return binding.root
     }
 }

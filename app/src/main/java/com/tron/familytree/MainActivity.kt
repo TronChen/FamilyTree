@@ -3,6 +3,7 @@ package com.tron.familytree
 import android.Manifest
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -38,6 +39,7 @@ class MainActivity : AppCompatActivity() {
                 binding.imageSearch.visibility = View.VISIBLE
                 binding.imageCalendar.visibility = View.INVISIBLE
                 binding.imageScan.visibility = View.INVISIBLE
+                binding.imageEdit.visibility = View.INVISIBLE
                 findNavController(R.id.myNavHostFragment).navigate(R.id.action_global_branchFragment)
                 return@OnNavigationItemSelectedListener true
             }
@@ -46,6 +48,7 @@ class MainActivity : AppCompatActivity() {
                 binding.imageSearch.visibility = View.INVISIBLE
                 binding.imageCalendar.visibility = View.INVISIBLE
                 binding.imageScan.visibility = View.INVISIBLE
+                binding.imageEdit.visibility = View.INVISIBLE
                 findNavController(R.id.myNavHostFragment).navigate(R.id.action_global_mapsFragment)
                 return@OnNavigationItemSelectedListener true
             }
@@ -54,6 +57,7 @@ class MainActivity : AppCompatActivity() {
                 binding.imageSearch.visibility = View.INVISIBLE
                 binding.imageCalendar.visibility = View.INVISIBLE
                 binding.imageScan.visibility = View.INVISIBLE
+                binding.imageEdit.visibility = View.INVISIBLE
                 findNavController(R.id.myNavHostFragment).navigate(R.id.action_global_messageFragment)
                 return@OnNavigationItemSelectedListener true
             }
@@ -62,6 +66,7 @@ class MainActivity : AppCompatActivity() {
                 binding.imageSearch.visibility = View.INVISIBLE
                 binding.imageCalendar.visibility = View.INVISIBLE
                 binding.imageScan.visibility = View.VISIBLE
+                binding.imageEdit.visibility = View.VISIBLE
                 findNavController(R.id.myNavHostFragment).navigate(R.id.action_global_profileFragment)
                 return@OnNavigationItemSelectedListener true
             }
@@ -81,6 +86,7 @@ class MainActivity : AppCompatActivity() {
             binding.imageSearch.visibility = View.INVISIBLE
             binding.imageCalendar.visibility = View.VISIBLE
             binding.imageScan.visibility = View.INVISIBLE
+            binding.imageEdit.visibility = View.INVISIBLE
             navController.navigate(R.id.action_global_familyFragment)
         }
 
@@ -88,6 +94,7 @@ class MainActivity : AppCompatActivity() {
             binding.imageSearch.visibility = View.INVISIBLE
             binding.imageCalendar.visibility = View.VISIBLE
             binding.imageScan.visibility = View.INVISIBLE
+            binding.imageEdit.visibility = View.INVISIBLE
             navController.navigate(R.id.action_global_createEventDialog)
         }
 
@@ -95,6 +102,7 @@ class MainActivity : AppCompatActivity() {
             binding.imageSearch.visibility = View.INVISIBLE
             binding.imageCalendar.visibility = View.VISIBLE
             binding.imageScan.visibility = View.INVISIBLE
+            binding.imageEdit.visibility = View.INVISIBLE
             navController.navigate(R.id.action_global_createAlbumDialog)
         }
 
@@ -103,12 +111,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.imageScan.setOnClickListener {
-            navController.navigate(R.id.action_global_qrCodeFragment)
+            navController.navigate(R.id.action_global_qrCodeReaderFragment)
+        }
+
+        binding.imageEdit.setOnClickListener {
+            navController.navigate(R.id.action_global_editUserFragment)
         }
 
         setupBottomNav()
         setupDrawer()
     }
+
+
 
     private fun setupBottomNav() {
         binding.bottomNavigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
