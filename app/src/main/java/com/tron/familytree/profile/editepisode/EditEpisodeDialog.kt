@@ -47,16 +47,12 @@ class EditEpisodeDialog : DialogFragment() {
         })
 
         binding.conTIme.setOnClickListener {
-            val builder = MaterialDatePicker.Builder.datePicker()
-//            val picker = builder.build()
             val calendar = Calendar.getInstance()
             val year = calendar.get(Calendar.YEAR)
             val month = calendar.get(Calendar.MONTH)
             val day = calendar.get(Calendar.DAY_OF_MONTH)
             DatePickerDialog(requireContext(),{_, year, month, day -> binding.textSelectedTime.text ="${setDateFormat(year, month, day)}"
             },year,month,day).show()
-//            picker.addOnPositiveButtonClickListener { Log.e("DatePicker","$it}")}
-//            picker.addOnNegativeButtonClickListener { dismiss() }
         }
 
 

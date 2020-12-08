@@ -9,8 +9,9 @@ import com.tron.familytree.data.Event
 import com.tron.familytree.data.Photo
 import com.tron.familytree.databinding.ItemListAlbumBinding
 import com.tron.familytree.databinding.ItemListEventBinding
+import com.tron.familytree.family.event.EventAdapter
 
-class AlbumAdapter
+class AlbumAdapter(private val itemClickListener: AlbumOnItemClickListener)
     : androidx.recyclerview.widget.ListAdapter<Photo, RecyclerView.ViewHolder>(PhotoDiffCallback()) {
 
 
@@ -19,20 +20,17 @@ class AlbumAdapter
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-//        val item = getItem(position)
-//        when (holder) {
-//            is PhotoViewHolder ->{
-//                val photo = item as Photo
-//                if (photo != null) {
-//                    holder.bind(photo)
-//                }
-//            }
-//        }
+        val item = getItem(position)
+        when (holder) {
+            is PhotoViewHolder ->{
+                val photo = item as Photo
+                holder.bind(photo)
+                holder.binding.imageView11.setOnClickListener {
+                    itemClickListener.onItemClicked(photo)
+                }
+            }
+        }
 
-    }
-
-    override fun getItemCount(): Int {
-        return 10
     }
 
     class PhotoDiffCallback : DiffUtil.ItemCallback<Photo>() {
@@ -61,7 +59,7 @@ class AlbumAdapter
         }
     }
 
-    class EventOnItemClickListener(val clickListener: (event: Event) -> Unit ){
-        fun onItemClicked(event: Event) = clickListener(event)
+    class AlbumOnItemClickListener(val clickListener: (photo: Photo) -> Unit ){
+        fun onItemClicked(photo: Photo) = clickListener(photo)
     }
 }

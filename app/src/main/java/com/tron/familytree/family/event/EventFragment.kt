@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.tron.familytree.R
+import com.tron.familytree.data.Episode
 import com.tron.familytree.data.Event
 import com.tron.familytree.databinding.FragmentEventBinding
 import com.tron.familytree.ext.getVmFactory

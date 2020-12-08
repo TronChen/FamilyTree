@@ -33,6 +33,8 @@ class BranchFragment : Fragment() {
 
 
 
+
+
         val adapter = BranchViewAdapter(BranchViewAdapter.UserOnItemClickListener {
             Log.e("Click", it.toString())
             viewModel.itemSelected.value = it

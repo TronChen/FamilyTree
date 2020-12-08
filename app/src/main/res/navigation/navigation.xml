@@ -85,4 +85,15 @@
         android:name="com.tron.familytree.profile.qrcode.QrCodeReaderFragment"
         android:label="fragment_qr_code_reader"
         tools:layout="@layout/fragment_qr_code_reader" /><action android:id="@+id/action_global_qrCodeReaderFragment" app:destination="@id/qrCodeReaderFragment"/>
+    <fragment
+        android:id="@+id/albumDetailFragment"
+        android:name="com.tron.familytree.family.albumdetail.AlbumDetailFragment"
+        android:label="fragment_album_detail"
+        tools:layout="@layout/fragment_album_detail" />
+    <action android:id="@+id/action_global_albumDetailFragment" app:destination="@id/albumDetailFragment" />
+    <fragment
+        android:id="@+id/chatRoomFragment"
+        android:name="com.tron.familytree.message.ChatRoomFragment"
+        android:label="fragment_chat_room"
+        tools:layout="@layout/fragment_chat_room" /><action android:id="@+id/action_global_chatRoomFragment" app:destination="@id/chatRoomFragment"/>
 </navigation>

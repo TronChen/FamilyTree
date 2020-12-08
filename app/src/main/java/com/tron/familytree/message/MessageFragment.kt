@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import com.tron.familytree.MainActivity
 import com.tron.familytree.R
 import com.tron.familytree.databinding.FragmentMessageBinding
 import com.tron.familytree.ext.getVmFactory
@@ -28,6 +30,10 @@ class MessageFragment : Fragment() {
 
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
+
+        binding.conChatRoom.setOnClickListener {
+            findNavController().navigate(R.id.action_global_chatRoomFragment)
+        }
 
         return binding.root
     }

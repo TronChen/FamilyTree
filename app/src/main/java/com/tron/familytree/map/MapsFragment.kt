@@ -194,7 +194,7 @@ class MapsFragment : Fragment() {
                                     .position(LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude))
                                     .title("It's ME!!")
                                     .snippet("${lastKnownLocation!!.latitude}, ${lastKnownLocation!!.longitude}")
-                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.circle)))
+                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.people)))
 
                                 moveCamera(
                                     CameraUpdateFactory.newLatLngZoom(
