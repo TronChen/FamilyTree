@@ -34,7 +34,6 @@ class BranchFragment : Fragment() {
 
 
 
-
         val adapter = BranchViewAdapter(BranchViewAdapter.UserOnItemClickListener {
             Log.e("Click", it.toString())
             viewModel.itemSelected.value = it
@@ -51,62 +50,48 @@ class BranchFragment : Fragment() {
         })
 
 
-        viewModel.user.observe(viewLifecycleOwner, Observer {
-            viewModel.getUserMate()
-            viewModel.getUserChildren()
-            viewModel.getUserFather()
-        })
-
-        viewModel.fatherId.observe(viewLifecycleOwner, Observer {
-            viewModel.getUserMother()
-        })
-
-        viewModel.motherId.observe(viewLifecycleOwner, Observer {
-            viewModel.getMateFather()
-        })
-
-        viewModel.mateFatherId.observe(viewLifecycleOwner, Observer {
-            viewModel.getMateMother()
-        })
-
-        viewModel.mateMotherId.observe(viewLifecycleOwner, Observer {
-
-        })
-
         viewModel.TreeList.observe(viewLifecycleOwner, Observer {
-            val list = viewModel.getMockUsers()
             val layoutManager = GridLayoutManager(requireContext(),viewModel.getSpanCount(viewModel.children.size))
             binding.recyclerBranch.layoutManager = layoutManager
             layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
 
-                    val item = list[position]
-                    when (item) {
+                    val item = it[position]
+                    return when (item) {
                         is TreeItem.Parent -> {
-                            return item.user.spanSize!!
+                            item.user.spanSize!!
                         }
                         is TreeItem.Mate -> {
-                            return item.user.spanSize!!
+                            item.user.spanSize!!
                         }
                         is TreeItem.Children -> {
-                            return item.user.spanSize!!
+                            item.user.spanSize!!
                         }
                         is TreeItem.ChildrenMid -> {
-                            return item.user.spanSize!!
+                            item.user.spanSize!!
+                        }
+                        is TreeItem.ParentAdd -> {
+                            item.user.spanSize!!
+                        }
+                        is TreeItem.MateAdd -> {
+                            item.user.spanSize!!
+                        }
+                        is TreeItem.ChildrenAdd -> {
+                            item.user.spanSize!!
                         }
                         is TreeItem.Empty -> {
-                            return 1
+                            1
                         }
                         is TreeItem.EmptyLine -> {
-                            return 1
+                            1
                         }
                         is TreeItem.EmptyLineBot -> {
-                            return 1
+                            1
                         }
                     }
                 }
             }
-            adapter.submitList(list)
+            adapter.submitList(it)
             adapter.notifyDataSetChanged()
         })
 
@@ -118,10 +103,7 @@ class BranchFragment : Fragment() {
                 ))
             }
             if (viewModel.itemClick.value == 200){
-                viewModel.parents.clear()
-                viewModel.meAndMate.clear()
-                viewModel.children.clear()
-                viewModel.treeFinalList.clear()
+               viewModel.reQuery()
                 Log.e("treeFinalList", viewModel.treeFinalList.toString())
                 viewModel.userId.value = viewModel.itemSelected.value!!.name
             }

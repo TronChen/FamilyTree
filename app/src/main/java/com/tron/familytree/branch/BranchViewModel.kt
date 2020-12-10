@@ -23,16 +23,17 @@ class BranchViewModel : ViewModel() {
     var itemClick = MutableLiveData<Int>()
     var itemSelected = MutableLiveData<User>()
 
-    val TreeList = MutableLiveData<Int>()
+    val TreeList = MutableLiveData<List<TreeItem>>()
 
     val children = mutableListOf<TreeItem>()
     val parents = mutableListOf<TreeItem>()
     val meAndMate = mutableListOf<TreeItem>()
+    val onlyMate = mutableListOf<TreeItem>()
 
     var treeFinalList = mutableListOf<TreeItem>()
 
     init {
-        userId.value = "Paul"
+        userId.value = "TronTron"
     }
 
     fun getUser(){
@@ -40,14 +41,23 @@ class BranchViewModel : ViewModel() {
             .get()
             .addOnSuccessListener {
                 user.value = it.toObject(User::class.java)
+                if (user.value!!.mateId != null){
+                getUserFather()
+                getUserMate()
                 meAndMate.add(
                     TreeItem.Mate( user.value!!,true)
                 )
-                Log.e("Me", meAndMate.toString())
+                }else{
+                    getUserFather()
+                    meAndMate.add(
+                        TreeItem.Mate( user.value!!,true)
+                    )
+                }
             }
     }
 
     fun getUserMate(){
+        Log.e("user.value?.mateId", user.value?.mateId.toString())
         db.collection("User").whereEqualTo("name", user.value?.mateId)
             .get()
             .addOnSuccessListener { result ->
@@ -57,6 +67,7 @@ class BranchViewModel : ViewModel() {
                         TreeItem.Mate((mateId.value!!),false)
                     )
                     Log.e("Mate", meAndMate.toString())
+                    getUserChildren()
                 }
             }
     }
@@ -78,12 +89,11 @@ class BranchViewModel : ViewModel() {
                             )
                         }
                     }
-
-                    for (child in children) {
-                        Log.d("treeChildrenList", "child=$child")
+                    if (result.isEmpty){
+                        children.add(
+                            TreeItem.ChildrenAdd(User(name = "No child"), 0)
+                        )
                     }
-
-                    Log.e("treeChildrenList", children.toString())
                 }
         }
 
@@ -103,11 +113,11 @@ class BranchViewModel : ViewModel() {
                             )
                         }
                     }
-
-                    for (child in children) {
-                        Log.d("treeChildrenList", "child=$child")
+                    if (result.isEmpty){
+                        children.add(
+                            TreeItem.ChildrenAdd(User(name = "No child"), 0)
+                        )
                     }
-
                     Log.e("treeChildrenList", children.toString())
                 }
         }
@@ -118,11 +128,20 @@ class BranchViewModel : ViewModel() {
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
-                    fatherId.value = document.toObject(User::class.java)
-                    parents.add(
-                        TreeItem.Parent(fatherId.value!!,true,0))
-                    Log.e("Father", parents.toString())
+                        fatherId.value = document.toObject(User::class.java)
+                        parents.add(
+                            TreeItem.Parent(fatherId.value!!, true, 0)
+                        )
+                        Log.e("Father", parents.toString())
+                        getUserMother()
+
                 }
+                    if (result.isEmpty){
+                        parents.add(
+                        TreeItem.ParentAdd(User(name = "No father"),true,0)
+                        )
+                        getUserMother()
+                    }
             }
     }
 
@@ -131,24 +150,69 @@ class BranchViewModel : ViewModel() {
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
-                   motherId.value = document.toObject(User::class.java)
-                    parents.add(
-                        TreeItem.Parent(motherId.value!!,true,1))
-                    Log.e("Mother", parents.toString())
+                    //有媽媽 有配偶
+                    if (user.value?.mateId != null) {
+                        motherId.value = document.toObject(User::class.java)
+                        parents.add(
+                            TreeItem.Parent(motherId.value!!, true, 1)
+                        )
+                        getMateFather()
+                        Log.e("Mother", parents.toString())
+                    //有媽媽 沒配偶
+                    } else {
+                        motherId.value = document.toObject(User::class.java)
+                        parents.add(
+                            TreeItem.Parent(motherId.value!!, true, 1)
+                        )
+                        onlyMate.add(
+                            TreeItem.MateAdd(User(name = "No mate"), false)
+                        )
+                        getMockUsers()
+                    }
                 }
+                    //沒媽媽 有配偶
+                    if (result.isEmpty && user.value?.mateId != null){
+                        parents.add(
+                            TreeItem.ParentAdd(User(name = "No mother"), true, 1)
+                        )
+                        getMateFather()
+                    }
+                    //有媽媽 沒配偶
+                    if (result.isEmpty && user.value?.mateId == null){
+                        parents.add(
+                            TreeItem.ParentAdd(User(name = "No mother"), true, 1)
+                        )
+
+                        onlyMate.add(
+                            TreeItem.MateAdd(User(name = "No mate"), false)
+                        )
+                        getMockUsers()
+                    }
             }
     }
 
     fun getMateFather(){
+        mateId.value?.let { Log.e("MateID", it.toString()) }
         db.collection("User").whereEqualTo("name", mateId.value?.fatherId).whereEqualTo("gender","male")
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
-                    mateFatherId.value = document.toObject(User::class.java)
-                    parents.add(
-                        TreeItem.Parent(mateFatherId.value!!,false,2))
-                    Log.e("mateFather", parents.toString())
+
+                        mateFatherId.value = document.toObject(User::class.java)
+                        parents.add(
+                            TreeItem.Parent(mateFatherId.value!!, false, 2)
+                        )
+                        getMateMother()
+
                 }
+                    if (result.isEmpty){
+                        if (mateId.value != null){
+                            parents.add(
+                                TreeItem.ParentAdd(User(name = "No mateFather"),false,4)
+                            )
+                        }
+                        getMateMother()
+                    }
             }
     }
 
@@ -157,18 +221,30 @@ class BranchViewModel : ViewModel() {
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
-                    mateMotherId.value = document.toObject(User::class.java)
-                    parents.add(
-                        TreeItem.Parent(mateMotherId.value!!,false,3))
-                    Log.e("MateMother", parents.toString())
-                    TreeList.value = 100
+
+                        mateMotherId.value = document.toObject(User::class.java)
+                        parents.add(
+                            TreeItem.Parent(mateMotherId.value!!, false, 3)
+                        )
+                        Log.e("MateMother", parents.toString())
+                        Log.e("MateMother", mateMotherId.value.toString())
+                        getMockUsers()
+
                 }
+                    if (result.isEmpty){
+                        if (mateId.value != null) {
+                            parents.add(
+                                TreeItem.ParentAdd(User(name = "No mateMother"), false, 5)
+                            )
+                        }
+                        getMockUsers()
+                    }
             }
     }
 
     fun getSpanCount(size: Int): Int{
-        return if (size > 4 || size == 4){
-            size
+        return if (size > 4){
+            size + 1
         } else{
             5
         }
@@ -176,144 +252,238 @@ class BranchViewModel : ViewModel() {
 
 
     fun getMockUsers(): MutableList<TreeItem> {
-        //Parent
-        for ((index, parent) in parents.withIndex()) {
 
-            if (children.size < 4) {
-                (parent as TreeItem.Parent).user.spanSize = 1
-                if (index == 2) {
-                        treeFinalList.add(
-                            TreeItem.Empty(-1)
-                        )
+            //Parent
+            for ((index, parent) in parents.withIndex()) {
+
+                if (parents.size == 2){
+//                    (parent as TreeItem.Parent).user.spanSize = 1
+                    treeFinalList.add(parent)
                 }
-                treeFinalList.add(parent)
+
+                if (parents.size == 4) {
+
+                    if (children.size < 4 || children.size == 4) {
+//                        (parent as TreeItem.Parent).user.spanSize = 1
+                        if (index == 2) {
+                            treeFinalList.add(
+                                TreeItem.Empty(-1)
+                            )
+                        }
+                        treeFinalList.add(parent)
+                    }
+
+                    if (children.size > 4 ) {
+                        when(index){
+                            0,1 -> (parent as TreeItem.Parent).user.spanSize = (children.size+1) / 2 / 2
+                            2 -> {
+                                if (mateId.value?.fatherId != null) {
+                                    (parent as TreeItem.Parent).user.spanSize =
+                                        (children.size+1) / 2 / 2
+                                }else{
+                                    (parent as TreeItem.ParentAdd).user.spanSize =
+                                        (children.size+1) / 2 / 2
+                                }
+                            }
+                            3 ->{
+                                if (mateId.value?.motherId != null) {
+                                    (parent as TreeItem.Parent).user.spanSize =
+                                        (children.size+1) / 2 / 2
+                                }else{
+                                    (parent as TreeItem.ParentAdd).user.spanSize =
+                                        (children.size+1) / 2 / 2
+                                }
+                            }
+                        }
+
+                            if ((children.size+1) % 2 == 1 && parents.size > 2) {
+                                if (parents.size % (index + 1) == 1) {
+                                    treeFinalList.add(
+                                        TreeItem.Empty(-1)
+                                    )
+                                }
+                            }
+
+                        if (index % 2 == 1) {
+                            if ((children.size+1) % 4 == 2) {
+                                treeFinalList.add(
+                                    TreeItem.EmptyLineBot(-1)
+                                )
+                            }
+                            if ((children.size+1) % 4 == 3) {
+                                treeFinalList.add(
+                                    TreeItem.EmptyLineBot(-1)
+                                )
+                            }
+                        }
+
+                        treeFinalList.add(parent)
+
+                    }
+                }
             }
-
-            if (children.size > 4 || children.size == 4) {
-                (parent as TreeItem.Parent).user.spanSize = children.size / 2 / 2
-
-                if (children.size %2 == 1 && parents.size > 2){
-                    if(parents.size % (index + 1) == 1){
-                        treeFinalList.add(
-                            TreeItem.Empty(-1)
-                        )
-                    }
-                }
-
-                if (index % 2 == 1) {
-                    if (children.size % 4  == 2) {
-                        treeFinalList.add(
-                            TreeItem.EmptyLineBot(-1)
-                        )
-                    }
-                    if (children.size % 4  == 3) {
-                        treeFinalList.add(
-                            TreeItem.EmptyLineBot(-1)
-                        )
-                    }
-                }
-
-                treeFinalList.add(parent)
-            }
+        if (parents.size == 2){
+            treeFinalList.add(TreeItem.Empty(-1))
+            treeFinalList.add(TreeItem.Empty(-1))
         }
 
 
-        //MeAndMate
-        for ((index,self) in meAndMate.withIndex()) {
+            //MeAndMate
+            // 有配偶
+                if (mateId.value != null) {
+            for ((index, self) in meAndMate.withIndex()) {
+                    if (children.size < 4 || children.size == 4) {
+                        (self as TreeItem.Mate).user.spanSize = 2
+                        if (index == 1) {
+                            treeFinalList.add(
+                                TreeItem.Empty(-1)
+                            )
+                        }
+                        treeFinalList.add(self)
+                    }
 
-            if (children.size < 4) {
-                (self as TreeItem.Mate).user.spanSize = 2
-                if(index == 1){
-                    treeFinalList.add(
-                        TreeItem.Empty(-1)
-                    )
-                }
-                treeFinalList.add(self)
-            }
+                    if (children.size > 4 ) {
+                        (self as TreeItem.Mate).user.spanSize = (children.size+1) / 2
 
-            if (children.size > 4 || children.size == 4) {
-                (self as TreeItem.Mate).user.spanSize = children.size / 2
+                        if ((children.size+1) % 2 == 1 && meAndMate.size > 2) {
+                            if (children.size % (index + 1) == 1) {
+                                treeFinalList.add(
+                                    TreeItem.Empty(-1)
+                                )
+                            }
+                        }
+                        if ((children.size+1) % 2 == 1 && meAndMate.size == 2) {
+                            if (index == 1) {
+                                treeFinalList.add(
+                                    TreeItem.Empty(-1)
+                                )
+                            }
+                        }
 
-                if (children.size %2 == 1 && meAndMate.size > 2){
-                    if(children.size % (index + 1) == 1){
-                        treeFinalList.add(
-                            TreeItem.Empty(-1)
-                        )
+                        treeFinalList.add(self)
                     }
                 }
-                if (children.size %2 == 1 && meAndMate.size == 2) {
-                    if (index == 1) {
-                        treeFinalList.add(
-                            TreeItem.Empty(-1)
-                        )
-                    }
-                }
-
-                treeFinalList.add(self)
             }
+        //沒配偶
+        if (mateId.value == null){
+            for (index in meAndMate){
+                (index as TreeItem.Mate).user.spanSize = 2
+                treeFinalList.add(index)
+            }
+            treeFinalList.add(
+                TreeItem.Empty(-1)
+            )
+            for (index in onlyMate){
+                (index as TreeItem.MateAdd).user.spanSize = 2
+                treeFinalList.add(index)
+            }
+            treeFinalList.add(
+                TreeItem.Empty(-1)
+            )
+            treeFinalList.add(
+                TreeItem.EmptyLine(-1)
+            )
+            treeFinalList.add(
+                TreeItem.EmptyLine(-1)
+            )
+            treeFinalList.add(
+                TreeItem.EmptyLine(-1)
+            )
+            treeFinalList.add(
+                TreeItem.Empty(-1)
+            )
         }
 
 
-        //Children
-        for ((index,child) in children.withIndex()) {
-            if (children.size == 1){
-                if (index == 0){
-                    treeFinalList.add(
-                        TreeItem.Empty(-1)
-                    )
+            //Children
+            for ((index, child) in children.withIndex()) {
+                if (children.size == 1) {
+                    when (index) {
+                        0 -> treeFinalList.add(
+                            TreeItem.Empty(-1)
+                        )
+                    }
+                    treeFinalList.add(child)
                     treeFinalList.add(
                         TreeItem.EmptyLine(-1)
                     )
+                    treeFinalList.add(
+                        TreeItem.ChildrenAdd(User(name = "No child"), 1)
+                    )
                 }
 
+//                if (children.size == 3) {
+//                    if (index > 0) {
+//                        treeFinalList.add(
+//                            TreeItem.EmptyLine(-1)
+//                        )
+//                    }
+//                    treeFinalList.add(child)
+//                }
+//
+//                if (children.size > 4 || children.size == 4) {
+//                    treeFinalList.add(child)
+//                }
+            }
+        if (children.size == 2){
+            treeFinalList.add(TreeItem.Empty(-1))
+            for (child in children){
                 treeFinalList.add(child)
-
-                    treeFinalList.add(
-                        TreeItem.EmptyLine(-1)
-                    )
-                    treeFinalList.add(
-                        TreeItem.Empty(-1)
-                    )
             }
+            treeFinalList.add(
+                TreeItem.ChildrenAdd(User(name = "No child"), 1)
+            )
+        }
 
-            if (children.size == 2){
-                when(index){
-                    0 -> treeFinalList.add(
-                        TreeItem.Empty(-1)
-                    )
+        if (children.size == 3) {
+            for (child in children) {
+                treeFinalList.add(child)
+            }
+            treeFinalList.add(
+                TreeItem.ChildrenAdd(User(name = "No child"), 3)
+            )
+        }
 
-                    1 ->  treeFinalList.add(
-                        TreeItem.EmptyLine(-1)
-                    )
-                }
-//                if (index == 0){
+        if (children.size > 4 || children.size == 4) {
+            for (child in children) {
+                treeFinalList.add(child)
+            }
+            treeFinalList.add(
+                TreeItem.ChildrenAdd(User(name = "No child"), 10000)
+            )
+        }
+
+
+//        else {
+//            for ((index, parent) in parents.withIndex()) {
+//                (parent as TreeItem.Parent).user.spanSize = 1
+//                if (index == 2) {
 //                    treeFinalList.add(
 //                        TreeItem.Empty(-1)
 //                    )
 //                }
-//                if (index == 1){
-//                    treeFinalList.add(
-//                        TreeItem.EmptyLine(-1)
-//                    )
-//                }
-                treeFinalList.add(child)
-            }
+//                treeFinalList.add(parent)
+//            }
+//        }
 
-            if (children.size == 3){
-                if (index > 0){
-                    treeFinalList.add(
-                        TreeItem.EmptyLine(-1)
-                    )
-                }
-                treeFinalList.add(child)
-            }
-
-            if (children.size > 4 || children.size == 4){
-            treeFinalList.add(child)
-          }
-        }
-
+        Log.e("treeFinalList", treeFinalList.toString())
+       TreeList.value = treeFinalList
         return  treeFinalList
+
+    }
+
+
+    fun reQuery(){
+        parents.clear()
+        meAndMate.clear()
+        children.clear()
+        treeFinalList.clear()
+        onlyMate.clear()
+        mateId.value = null
+        fatherId.value = null
+        motherId.value = null
+        mateFatherId.value = null
+        mateMotherId.value = null
     }
 
 }

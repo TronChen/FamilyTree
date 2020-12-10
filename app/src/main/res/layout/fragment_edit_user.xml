@@ -138,7 +138,7 @@
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+            app:layout_constraintTop_toBottomOf="@+id/editBirthLocation" />
 
         <ImageView
             android:id="@+id/imageView20"
@@ -159,7 +159,7 @@
             app:srcCompat="@drawable/mappinclear" />
 
         <TextView
-            android:id="@+id/textView28"
+            android:id="@+id/textBirthLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
@@ -339,7 +339,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <EditText
-            android:id="@+id/editTextTextPersonName"
+            android:id="@+id/editBirthLocation"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -352,7 +352,7 @@
             android:hint="輸入出生地點"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/imageView21"
-            app:layout_constraintTop_toBottomOf="@+id/textView28" />
+            app:layout_constraintTop_toBottomOf="@+id/textBirthLocation" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

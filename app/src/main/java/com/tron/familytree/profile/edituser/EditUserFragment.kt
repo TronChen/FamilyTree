@@ -34,7 +34,6 @@ class EditUserFragment : Fragment() {
             })
 
         binding.recyclerEditEpisode.adapter = adapter
-
         adapter.submitList(createMock())
 
 

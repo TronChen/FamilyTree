@@ -13,59 +13,59 @@
         android:layout_height="wrap_content">
 
 
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="@+id/constraintLayout3"
-            app:layout_constraintStart_toStartOf="@+id/constraintLayout3"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout3"
-            app:srcCompat="@drawable/query_down" />
-
         <View
-            android:id="@+id/view3"
+            android:id="@+id/viewStraight"
             android:layout_width="4dp"
             android:layout_height="0dp"
             android:background="@color/orange"
-            app:layout_constraintBottom_toTopOf="@+id/constraintLayout3"
-            app:layout_constraintEnd_toEndOf="@+id/constraintLayout3"
-            app:layout_constraintStart_toStartOf="@+id/constraintLayout3"
+            app:layout_constraintBottom_toTopOf="@+id/constraintLayout4"
+            app:layout_constraintEnd_toEndOf="@+id/constraintLayout4"
+            app:layout_constraintStart_toStartOf="@+id/constraintLayout4"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <View
-            android:id="@+id/middle"
-            android:layout_width="0dp"
-            android:layout_height="4dp"
-            android:background="@color/orange"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
         <View
             android:id="@+id/left"
             android:layout_width="0dp"
             android:layout_height="4dp"
             android:background="@color/orange"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/view3"
+            app:layout_constraintStart_toEndOf="@+id/viewStraight"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.mikhaellopez.circularimageview.CircularImageView
-            android:id="@+id/constraintLayout3"
+        <View
+            android:id="@+id/right"
+            android:layout_width="0dp"
+            android:layout_height="4dp"
+            android:background="@color/orange"
+            app:layout_constraintEnd_toStartOf="@+id/viewStraight"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout4"
             android:layout_width="93dp"
             android:layout_height="93dp"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="36dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginBottom="36dp"
             android:background="@drawable/rounded_orange_radius65"
-            mainImage="@{user.userImage}"
             app:civ_border_color="@color/orange"
-            android:foregroundGravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-        </com.mikhaellopez.circularimageview.CircularImageView>
+
+            <ImageView
+                android:id="@+id/imageView30"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/plus" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </layout>

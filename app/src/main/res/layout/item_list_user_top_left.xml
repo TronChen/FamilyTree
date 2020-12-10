@@ -23,7 +23,7 @@
             app:srcCompat="@drawable/query_up" />
 
         <View
-            android:id="@+id/view5"
+            android:id="@+id/viewBot"
             android:layout_width="4dp"
             android:layout_height="0dp"
             android:background="@color/orange"
@@ -39,7 +39,7 @@
             android:background="@color/orange"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/view5" />
+            app:layout_constraintStart_toStartOf="@+id/viewBot" />
 
         <View
             android:id="@+id/right"
@@ -47,30 +47,23 @@
             android:layout_height="4dp"
             android:background="@color/orange"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/view5"
+            app:layout_constraintEnd_toEndOf="@+id/viewBot"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/constraintLayout3"
-            android:layout_width="82dp"
+            android:layout_width="93dp"
             android:layout_height="93dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:background="@drawable/rounded_orange_radius65"
-            android:paddingStart="4dp"
-            android:paddingEnd="4dp"
+            mainImage="@{user.userImage}"
+            app:civ_border_color="@color/orange"
+            android:foregroundGravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:id="@+id/textViewUser"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{user.name}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.mikhaellopez.circularimageview.CircularImageView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
