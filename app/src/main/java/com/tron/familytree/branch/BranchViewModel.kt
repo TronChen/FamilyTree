@@ -91,7 +91,7 @@ class BranchViewModel : ViewModel() {
                     }
                     if (result.isEmpty){
                         children.add(
-                            TreeItem.ChildrenAdd(User(name = "No child"), 0)
+                            TreeItem.ChildrenAdd(User(name = "No child",fatherId = user.value?.name , motherId = mateId.value?.name), 0)
                         )
                     }
                 }
@@ -115,7 +115,7 @@ class BranchViewModel : ViewModel() {
                     }
                     if (result.isEmpty){
                         children.add(
-                            TreeItem.ChildrenAdd(User(name = "No child"), 0)
+                            TreeItem.ChildrenAdd(User(name = "No child" ,motherId = user.value?.name , fatherId = mateId.value?.name), 0)
                         )
                     }
                     Log.e("treeChildrenList", children.toString())
@@ -138,7 +138,7 @@ class BranchViewModel : ViewModel() {
                 }
                     if (result.isEmpty){
                         parents.add(
-                        TreeItem.ParentAdd(User(name = "No father"),true,0)
+                        TreeItem.ParentAdd(User(name = "No father",fatherId = user.value?.name),true,0)
                         )
                         getUserMother()
                     }
@@ -165,7 +165,7 @@ class BranchViewModel : ViewModel() {
                             TreeItem.Parent(motherId.value!!, true, 1)
                         )
                         onlyMate.add(
-                            TreeItem.MateAdd(User(name = "No mate"), false)
+                            TreeItem.MateAdd(User(name = "No mate",mateId = user.value?.name), false)
                         )
                         getMockUsers()
                     }
@@ -173,18 +173,18 @@ class BranchViewModel : ViewModel() {
                     //沒媽媽 有配偶
                     if (result.isEmpty && user.value?.mateId != null){
                         parents.add(
-                            TreeItem.ParentAdd(User(name = "No mother"), true, 1)
+                            TreeItem.ParentAdd(User(name = "No mother", motherId = user.value?.name), true, 1)
                         )
                         getMateFather()
                     }
                     //有媽媽 沒配偶
                     if (result.isEmpty && user.value?.mateId == null){
                         parents.add(
-                            TreeItem.ParentAdd(User(name = "No mother"), true, 1)
+                            TreeItem.ParentAdd(User(name = "No mother", motherId = user.value?.name), true, 1)
                         )
 
                         onlyMate.add(
-                            TreeItem.MateAdd(User(name = "No mate"), false)
+                            TreeItem.MateAdd(User(name = "No mate",mateId = user.value?.name), false)
                         )
                         getMockUsers()
                     }
@@ -208,7 +208,7 @@ class BranchViewModel : ViewModel() {
                     if (result.isEmpty){
                         if (mateId.value != null){
                             parents.add(
-                                TreeItem.ParentAdd(User(name = "No mateFather"),false,4)
+                                TreeItem.ParentAdd(User(name = "No mateFather", fatherId = mateId.value?.name),false,4)
                             )
                         }
                         getMateMother()
@@ -234,7 +234,7 @@ class BranchViewModel : ViewModel() {
                     if (result.isEmpty){
                         if (mateId.value != null) {
                             parents.add(
-                                TreeItem.ParentAdd(User(name = "No mateMother"), false, 5)
+                                TreeItem.ParentAdd(User(name = "No mateMother", motherId = mateId.value?.name), false, 5)
                             )
                         }
                         getMockUsers()
@@ -407,9 +407,16 @@ class BranchViewModel : ViewModel() {
                     treeFinalList.add(
                         TreeItem.EmptyLine(-1)
                     )
-                    treeFinalList.add(
-                        TreeItem.ChildrenAdd(User(name = "No child"), 1)
-                    )
+                    if (user.value?.gender == "male"){
+                        treeFinalList.add(
+                            TreeItem.ChildrenAdd(User(name = "No child", fatherId = user.value?.name , motherId = mateId.value?.name), 1)
+                        )
+                    }
+                    if (user.value?.gender == "female"){
+                        treeFinalList.add(
+                            TreeItem.ChildrenAdd(User(name = "No child", motherId = user.value?.name , fatherId = mateId.value?.name), 1)
+                        )
+                    }
                 }
 
 //                if (children.size == 3) {
@@ -430,27 +437,49 @@ class BranchViewModel : ViewModel() {
             for (child in children){
                 treeFinalList.add(child)
             }
+                if (user.value?.gender == "male"){
             treeFinalList.add(
-                TreeItem.ChildrenAdd(User(name = "No child"), 1)
+                TreeItem.ChildrenAdd(User(name = "No child", fatherId = user.value?.name , motherId = mateId.value?.name), 1)
             )
+                }
+            if (user.value?.gender == "female"){
+                treeFinalList.add(
+                    TreeItem.ChildrenAdd(User(name = "No child", motherId = user.value?.name , fatherId = mateId.value?.name), 1)
+                )
+            }
+
         }
 
         if (children.size == 3) {
             for (child in children) {
                 treeFinalList.add(child)
             }
-            treeFinalList.add(
-                TreeItem.ChildrenAdd(User(name = "No child"), 3)
-            )
+            if (user.value?.gender == "male"){
+                treeFinalList.add(
+                    TreeItem.ChildrenAdd(User(name = "No child", fatherId = user.value?.name , motherId = mateId.value?.name), 3)
+                )
+            }
+            if (user.value?.gender == "female"){
+                treeFinalList.add(
+                    TreeItem.ChildrenAdd(User(name = "No child", motherId = user.value?.name , fatherId = mateId.value?.name), 3)
+                )
+            }
         }
 
         if (children.size > 4 || children.size == 4) {
             for (child in children) {
                 treeFinalList.add(child)
             }
-            treeFinalList.add(
-                TreeItem.ChildrenAdd(User(name = "No child"), 10000)
-            )
+            if (user.value?.gender == "male"){
+                treeFinalList.add(
+                    TreeItem.ChildrenAdd(User(name = "No child", fatherId = user.value?.name , motherId = mateId.value?.name), 10000)
+                )
+            }
+            if (user.value?.gender == "female"){
+                treeFinalList.add(
+                    TreeItem.ChildrenAdd(User(name = "No child", motherId = user.value?.name , fatherId = mateId.value?.name), 10000)
+                )
+            }
         }
 
 

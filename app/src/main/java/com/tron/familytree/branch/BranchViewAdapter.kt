@@ -73,7 +73,7 @@ class BranchViewAdapter(private val itemClickListener: UserOnItemClickListener, 
                 holder.binding.constraintLayout3.setOnClickListener{
                     if (user != null) {
                         itemClickListener.onItemClicked(user!!)
-//                        viewModel.itemClick.value = USER_CLICK
+                        viewModel.itemClick.value = ADD_MEMBER
                     }
                 }
             }
@@ -110,7 +110,7 @@ class BranchViewAdapter(private val itemClickListener: UserOnItemClickListener, 
                 holder.binding.constraintLayout3.setOnClickListener{
                     if (user != null) {
                         itemClickListener.onItemClicked(user!!)
-//                        viewModel.itemClick.value = USER_CLICK
+                        viewModel.itemClick.value = ADD_MEMBER
                     }
                 }
             }
@@ -186,7 +186,7 @@ class BranchViewAdapter(private val itemClickListener: UserOnItemClickListener, 
                 holder.binding.constraintLayout4.setOnClickListener{
                     if (user != null) {
                         itemClickListener.onItemClicked(user!!)
-//                        viewModel.itemClick.value = USER_CLICK
+                        viewModel.itemClick.value = ADD_MEMBER
                     }
                 }
             }
@@ -301,12 +301,12 @@ class BranchViewAdapter(private val itemClickListener: UserOnItemClickListener, 
     class UserTopAddViewHolder(val binding:ItemListUserAddTopBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(user: User,item: TreeItem.ParentAdd, allItemCount: Int) {
             when (item.index) {
-                4 -> {
+                0,4 -> {
                     binding.right.visibility = View.GONE
                     binding.left.visibility = View.VISIBLE
 
                 }
-                5 -> {
+                1,5 -> {
                     binding.right.visibility = View.VISIBLE
                     binding.left.visibility = View.GONE
                 }
@@ -419,6 +419,7 @@ class BranchViewAdapter(private val itemClickListener: UserOnItemClickListener, 
         const val ITEM_VIEW_TYPE_USER_ADD_BOT = 9
         const val USER_CLICK = 100
         const val USER_QUERY = 200
+        const val ADD_MEMBER = 300
     }
 }
 

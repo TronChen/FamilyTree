@@ -1,22 +1,30 @@
 package com.tron.familytree
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import app.appworks.school.publisher.data.source.FamilyTreeRepository
+import com.bumptech.glide.Glide
+import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -26,6 +34,8 @@ import java.util.Observer
 
 
 class MainActivity : AppCompatActivity() {
+
+    var imgPath = MutableLiveData<String>()
 
     private lateinit var binding: ActivityMainBinding
     private var actionBarDrawerToggle: ActionBarDrawerToggle? = null
@@ -229,6 +239,28 @@ class MainActivity : AppCompatActivity() {
 //                }
 //            }
 //        })
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (resultCode) {
+            Activity.RESULT_OK -> {
+                val filePath: String = ImagePicker.getFilePath(data) ?: ""
+                if (data != null) {
+                    if (filePath.isNotEmpty()) {
+                        imgPath.value = filePath
+                        Log.e("data", data.toString())
+                        Toast.makeText(this@MainActivity, imgPath.value, Toast.LENGTH_SHORT).show()
+                    }
+                }
+                else {
+                    Toast.makeText(this@MainActivity, "load_img_fail", Toast.LENGTH_SHORT).show()
+                }
+            }
+            ImagePicker.RESULT_ERROR -> Toast.makeText(this, ImagePicker.getError(data), Toast.LENGTH_SHORT).show()
+            else -> Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show()
+        }
     }
 }
 

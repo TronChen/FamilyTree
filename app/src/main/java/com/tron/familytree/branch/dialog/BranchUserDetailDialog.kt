@@ -14,15 +14,16 @@ import com.tron.familytree.profile.episode.EpisodeAdapter
 
 class BranchUserDetailDialog : BottomSheetDialogFragment() {
 
+    private val viewModel by viewModels<BranchUserDetailDialogViewModel> {  getVmFactory(
+        BranchUserDetailDialogArgs.fromBundle(
+            requireArguments()
+        ).userProperties)}
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         (view?.parent as View).setBackgroundColor(android.graphics.Color.TRANSPARENT)
     }
 
-    private val viewModel by viewModels<BranchUserDetailDialogViewModel> {  getVmFactory(
-        BranchUserDetailDialogArgs.fromBundle(
-            requireArguments()
-        ).userProperties)}
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,13 +33,13 @@ class BranchUserDetailDialog : BottomSheetDialogFragment() {
         val binding = DialogBranchUserDetailBinding.inflate(inflater,container,false)
         binding.lifecycleOwner = this
 
-        val user = BranchUserDetailDialogArgs.fromBundle(
-            requireArguments()
-        ).userProperties
-        Log.e(
-            "userProperties",
-            "BranchUserDetailDialogArgs.fromBundle(requireArguments()).userProperties = $user"
-        )
+//        val user = BranchUserDetailDialogArgs.fromBundle(
+//            requireArguments()
+//        ).userProperties
+//        Log.e(
+//            "userProperties",
+//            "BranchUserDetailDialogArgs.fromBundle(requireArguments()).userProperties = $user"
+//        )
 
         binding.viewModel = viewModel
 

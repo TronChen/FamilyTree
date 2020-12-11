@@ -13,4 +13,6 @@
     <color name="deep_blue">#166BAD</color>
     <color name="deep_dark_yellow">#CF9312</color>
     <color name="trans_grey">#90C4C4C4</color>
+    <color name="light_blue">#82ACFF</color>
+    <color name="light_red">#FFE9E9</color>
 </resources>

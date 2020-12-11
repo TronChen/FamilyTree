@@ -96,4 +96,14 @@
         android:name="com.tron.familytree.message.ChatRoomFragment"
         android:label="fragment_chat_room"
         tools:layout="@layout/fragment_chat_room" /><action android:id="@+id/action_global_chatRoomFragment" app:destination="@id/chatRoomFragment"/>
+    <dialog
+        android:id="@+id/addPeopleDialog"
+        android:name="com.tron.familytree.branch.add_people_dialog.AddPeopleDialog"
+        android:label="dialog_add_people"
+        tools:layout="@layout/dialog_add_people" >
+        <argument
+            android:name="userProperties"
+            app:argType="com.tron.familytree.data.User" />
+    </dialog>
+    <action android:id="@+id/action_global_addPeopleDialog" app:destination="@id/addPeopleDialog" />
 </navigation>
