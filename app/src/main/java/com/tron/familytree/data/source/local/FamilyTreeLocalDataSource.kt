@@ -13,29 +13,28 @@ import com.tron.familytree.data.User
  */
 class FamilyTreeLocalDataSource(val context: Context) : FamilyTreeDataSource {
 
-//    override suspend fun login(id: String): AppResult<User> {
-//        return when (id) {
-//            "waynechen323" -> AppResult.Success((User(
-//                id,
-//                "AKA小安老師",
-//                "wayne@school.appworks.tw"
-//            )))
-//            "dlwlrma" -> AppResult.Success((User(
-//                id,
-//                "IU",
-//                "dlwlrma@school.appworks.tw"
-//            )))
-//            //TODO add your profile here
-//            else -> AppResult.Fail("You have to add $id info in local data source")
-//        }
-//    }
-
     override suspend fun getArticles(): AppResult<List<User>> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun getLiveArticles(): MutableLiveData<List<User>> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override suspend fun uploadImage(path: String): AppResult<String> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun addMember(user: User): AppResult<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun updateMemberMotherId(user: User, newMember: User): AppResult<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun updateMemberFatherId(user: User, newMember: User): AppResult<Boolean> {
+        TODO("Not yet implemented")
     }
 
 }

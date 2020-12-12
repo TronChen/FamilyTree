@@ -57,50 +57,6 @@ class AddPeopleDialog : DialogFragment() {
 
         val activity = activity as MainActivity
 
-        activity.imgPath.observe(viewLifecycleOwner, Observer {
-            viewModel._updateImg.value = it
-            Log.e("filePath", it)
-
-            val file = Uri.fromFile(File(it))
-            file.lastPathSegment?.let { it1 -> Log.e("fileName", it1) }
-            val mStorageRef = FirebaseStorage.getInstance().reference
-        val metadata = StorageMetadata.Builder()
-            .setContentDisposition("universe")
-            .setContentType("image/jpg")
-            .build()
-        val riversRef = mStorageRef?.child(file.lastPathSegment ?: "")
-        val uploadTask = riversRef?.putFile(file, metadata)
-        uploadTask?.addOnFailureListener { exception ->
-//            upload_info_text.text = exception.message
-        }?.addOnSuccessListener {
-//            upload_info_text.setText(R.string.upload_success)
-        }?.addOnProgressListener { taskSnapshot ->
-            val progress = (100.0 * taskSnapshot.bytesTransferred / taskSnapshot.totalByteCount).toInt()
-//            upload_progress.progress = progress
-            if (progress >= 100) {
-//                upload_progress.visibility = View.GONE
-            }
-        }
-
-        })
-
-            FirebaseStorage.getInstance().reference.child("IMG_20201211_002556209.jpg")
-                .downloadUrl
-                .addOnSuccessListener {
-                    Log.e("URL", it.toString())
-                }
-
-        fun downloadImg(ref: StorageReference?) {
-            ref?.downloadUrl?.addOnSuccessListener {
-                Log.e("downloadUrl", it.toString())
-            }
-        }
-
-
-//        downloadImg(FirebaseStorage.getInstance().reference)
-
-
-
             binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
 
@@ -110,6 +66,13 @@ class AddPeopleDialog : DialogFragment() {
             Log.e("AddMember", it.toString())
         })
 
+        viewModel._userEditName.observe(viewLifecycleOwner, Observer {
+            viewModel.userEditName = it
+        })
+
+        viewModel._userBirthLocation.observe(viewLifecycleOwner, Observer {
+            viewModel.userBirthLocation = it
+        })
 
 
 
@@ -118,8 +81,9 @@ class AddPeopleDialog : DialogFragment() {
             val year = calendar.get(Calendar.YEAR)
             val month = calendar.get(Calendar.MONTH)
             val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
-            DatePickerDialog(requireContext(),{_, year, month, dayOfMonth
-                -> binding.textDate.text = "${setDateFormat(year,month,dayOfMonth)}"
+            DatePickerDialog(requireContext(),{_, year, month, dayOfMonth ->
+                binding.textDate.text = "${setDateFormat(year,month,dayOfMonth)}"
+                viewModel.birthDate = "${setDateFormat(year,month,dayOfMonth)}"
             },year,month,dayOfMonth).show()
         }
 
@@ -128,9 +92,17 @@ class AddPeopleDialog : DialogFragment() {
             val year = calendar.get(Calendar.YEAR)
             val month = calendar.get(Calendar.MONTH)
             val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
-            DatePickerDialog(requireContext(),{_, year, month, dayOfMonth
-                -> binding.textDeath.text = "${setDateFormat(year,month,dayOfMonth)}"
+            DatePickerDialog(requireContext(),{_, year, month, dayOfMonth ->
+                binding.textDeath.text = "${setDateFormat(year,month,dayOfMonth)}"
+                viewModel.deathDate = "${setDateFormat(year,month,dayOfMonth)}"
             },year,month,dayOfMonth).show()
+        }
+
+        binding.radioGender.setOnCheckedChangeListener { _, checkedId ->
+            when(checkedId){
+                R.id.radioMale -> viewModel.gender = "male"
+                R.id.radioFemale -> viewModel.gender = "female"
+            }
         }
 
         binding.textSelectPic.setOnClickListener {
@@ -138,8 +110,50 @@ class AddPeopleDialog : DialogFragment() {
                 .crop()                    //Crop image(Optional), Check Customization for more option
                 .compress(1024)            //Final image size will be less than 1 MB(Optional)
                 .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
-                .start()
+                .start(1)
         }
+
+
+        viewModel.userEditName = binding.editName.text.toString()
+        viewModel.userBirthLocation = binding.editBirthLocation.text.toString()
+
+        binding.conConfirm.setOnClickListener {
+            //判斷 加入的類別
+            when (viewModel.selectedProperty.value?.name){
+                "No father" -> {
+                    viewModel.updateMemberFatherId(viewModel.selectedProperty.value!!, viewModel.setNewMember())
+                    viewModel.addMember(viewModel.setNewMember())
+                }
+                "No mother" -> {
+                    viewModel.updateMemberMotherId(viewModel.selectedProperty.value!!, viewModel.setNewMember())
+                    viewModel.addMember(viewModel.setNewMember())
+                }
+                "No mateFather" -> {
+                    viewModel.updateMemberFatherId(viewModel.selectedProperty.value!!, viewModel.setNewMember())
+                    viewModel.addMember(viewModel.setNewMember())
+                }
+                "No mateMother" -> {
+                    viewModel.updateMemberMotherId(viewModel.selectedProperty.value!!, viewModel.setNewMember())
+                    viewModel.addMember(viewModel.setNewMember())
+                }
+                "No child" -> viewModel.addMember(viewModel.setChild())
+
+            }
+        }
+
+
+        //得到選擇圖片的路徑upload到fire storage
+        activity.imgPath.observe(viewLifecycleOwner, Observer {
+            viewModel._updateImg.value = it
+            Log.e("filePath", it)
+            viewModel.uploadImage(it)
+        })
+
+        viewModel._userImage.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                Log.e("URLLL", it)
+            }
+        })
 
 
 
@@ -152,27 +166,16 @@ class AddPeopleDialog : DialogFragment() {
         return binding.root
     }
 
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        when (resultCode) {
-//            Activity.RESULT_OK -> {
-//                val filePath: String = ImagePicker.getFilePath(data) ?: ""
-//                if (filePath.isNotEmpty()) {
-//                   val  imgPath = filePath
-//                    Toast.makeText(requireContext(), imgPath, Toast.LENGTH_LONG).show()
-//                    mImageview?.let { Glide.with(requireContext()).load(filePath).into(it.value!!)
-//                        Log.e("AddPic", mImageview.toString())
-//                    }
-//                } else {
-////                    Toast.makeText(requireContext(), R.string.load_img_fail, Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//            ImagePicker.RESULT_ERROR -> Toast.makeText(requireContext(), ImagePicker.getError(data), Toast.LENGTH_SHORT).show()
-//            else -> Toast.makeText(requireContext(), "Task Cancelled", Toast.LENGTH_SHORT).show()
-//        }
-//    }
-
     private fun setDateFormat(year: Int, month: Int, day: Int): String {
         return "$year/${month + 1}/$day"
     }
+
+//    private fun downloadImg(ref: String) {
+//        FirebaseStorage.getInstance().reference.child(ref)
+//            .downloadUrl
+//            .addOnSuccessListener {
+//                viewModel._userImage.value = it.toString()
+//                Log.e("URL", it.toString())
+//            }
+//    }
 }

@@ -27,20 +27,20 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
     }
 }
 
-@BindingAdapter("userImage")
-fun userImage(imgView: ImageView, imgUrl: String? = "") {
-    imgUrl?.let {
-        Log.d("AnAn","imgUrl = ${it}")
-        val imgUri = imgUrl.toUri().buildUpon().scheme("gs").build()
-        Glide.with(imgView.context)
-            .load(imgUri)
-            .apply(
-                RequestOptions()
-                    .placeholder(R.drawable.album)
-                    .error(R.drawable.circle))
-            .into(imgView)
-    }
-}
+//@BindingAdapter("userImage")
+//fun userImage(imgView: ImageView, imgUrl: String? = "") {
+//    imgUrl?.let {
+//        Log.d("AnAn","imgUrl = ${it}")
+//        val imgUri = imgUrl.toUri().buildUpon().scheme("gs").build()
+//        Glide.with(imgView.context)
+//            .load(imgUri)
+//            .apply(
+//                RequestOptions()
+//                    .placeholder(R.drawable.album)
+//                    .error(R.drawable.circle))
+//            .into(imgView)
+//    }
+//}
 
 @BindingAdapter("updateImage")
 fun updateImage(imgView: ImageView, filePath: String?) {
@@ -55,6 +55,9 @@ fun bindAddTitle(text : TextView, user: User) {
     user?.let {
         if (user.name == "No child"){
             text.text =  "${user.fatherId} 與 ${user.motherId} 的 孩子"
+        }
+        if (user.name == "No mate"){
+            text.text =  "${user.mateId} 的 配偶"
         }
         if (user.name == "No father"){
             text.text = "${user.fatherId} 的 父親"

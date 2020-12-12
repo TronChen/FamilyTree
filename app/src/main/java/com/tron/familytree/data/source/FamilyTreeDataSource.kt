@@ -9,9 +9,15 @@ import kotlin.coroutines.Continuation
 
 interface FamilyTreeDataSource {
 
-//    suspend fun login(id: String): AppResult<User>
-
     suspend fun getArticles(): AppResult<List<User>>
 
     fun getLiveArticles(): MutableLiveData<List<User>>
+
+    suspend fun uploadImage(path: String) : AppResult<String>
+
+    suspend fun addMember(user: User) : AppResult<Boolean>
+
+    suspend fun updateMemberMotherId(user: User, newMember : User): AppResult<Boolean>
+
+    suspend fun updateMemberFatherId(user: User, newMember : User): AppResult<Boolean>
 }

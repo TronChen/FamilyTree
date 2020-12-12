@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:drawable="@drawable/rounded_light_blue_radius65"
+        android:state_checked="false"
+        android:state_enabled="true">
+    </item>
+
+    <item
+        android:drawable="@drawable/rouned_drak_blue_radiu65"
+        android:state_checked="true"
+        android:state_enabled="true">
+    </item>
+
+</selector>

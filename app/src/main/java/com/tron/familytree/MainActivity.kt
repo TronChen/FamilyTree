@@ -244,23 +244,30 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        when (resultCode) {
-            Activity.RESULT_OK -> {
-                val filePath: String = ImagePicker.getFilePath(data) ?: ""
-                if (data != null) {
-                    if (filePath.isNotEmpty()) {
-                        imgPath.value = filePath
-                        Log.e("data", data.toString())
-                        Toast.makeText(this@MainActivity, imgPath.value, Toast.LENGTH_SHORT).show()
+            when (resultCode) {
+                Activity.RESULT_OK -> {
+                    val filePath: String = ImagePicker.getFilePath(data) ?: ""
+                    if (data != null) {
+                        if (filePath.isNotEmpty()) {
+                            imgPath.value = filePath
+                            Log.e("data", data.toString())
+                            Log.e("rqeCode", requestCode.toString())
+                            Toast.makeText(this@MainActivity, imgPath.value, Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    } else {
+                        Toast.makeText(this@MainActivity, "load_img_fail", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
-                else {
-                    Toast.makeText(this@MainActivity, "load_img_fail", Toast.LENGTH_SHORT).show()
-                }
+                ImagePicker.RESULT_ERROR -> Toast.makeText(
+                    this,
+                    ImagePicker.getError(data),
+                    Toast.LENGTH_SHORT
+                ).show()
+                else -> Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show()
             }
-            ImagePicker.RESULT_ERROR -> Toast.makeText(this, ImagePicker.getError(data), Toast.LENGTH_SHORT).show()
-            else -> Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show()
         }
-    }
+
 }
 

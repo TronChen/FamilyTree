@@ -37,21 +37,25 @@ class BranchViewModel : ViewModel() {
     }
 
     fun getUser(){
-        db.collection("User").document("${userId.value}")
+        db.collection("User")
+//            .document("${userId.value}")
+            .whereEqualTo("name","${userId.value}")
             .get()
             .addOnSuccessListener {
-                user.value = it.toObject(User::class.java)
-                if (user.value!!.mateId != null){
-                getUserFather()
-                getUserMate()
-                meAndMate.add(
-                    TreeItem.Mate( user.value!!,true)
-                )
-                }else{
-                    getUserFather()
-                    meAndMate.add(
-                        TreeItem.Mate( user.value!!,true)
-                    )
+                for (index in it) {
+                    user.value = index.toObject(User::class.java)
+                    if (user.value!!.mateId != null) {
+                        getUserFather()
+                        getUserMate()
+                        meAndMate.add(
+                            TreeItem.Mate(user.value!!, true)
+                        )
+                    } else {
+                        getUserFather()
+                        meAndMate.add(
+                            TreeItem.Mate(user.value!!, true)
+                        )
+                    }
                 }
             }
     }

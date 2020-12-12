@@ -191,7 +191,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:background="@drawable/rounded_orange_radius65"
                 android:scaleType="centerCrop"
-                userImage="@{viewModel.selectedProperty.userImage}"
+                mainImage="@{viewModel.selectedProperty.userImage}"
                 app:civ_border_color="@color/orange"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

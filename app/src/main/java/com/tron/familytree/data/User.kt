@@ -15,7 +15,7 @@ data class User(
     var familyId: String? = null,
     var userImage: String? = null,
     var gender: String? = null,
-    var alive: String? = null,
+//    var alive: String? = null,
     var birthLocation: String? = null,
     var spanSize: Int? = 1,
     var deathDate: String? = null

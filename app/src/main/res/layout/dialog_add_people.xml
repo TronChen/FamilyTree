@@ -19,6 +19,44 @@
             android:layout_height="match_parent"
             android:background="@drawable/rounded_white_radius65">
 
+            <RadioGroup
+                android:id="@+id/radioGender"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/textSelectPic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/editName">
+
+                <RadioButton
+                    android:id="@+id/radioMale"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/rounded_light_blue_radius65"
+                    android:drawableStart="@drawable/ic_mars"
+                    android:drawablePadding="4dp"
+                    android:fontFamily="@font/noto_sans"
+                    android:paddingEnd="16dp"
+                    android:text="男性"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/radioFemale"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/round_light_red_radius65"
+                    android:drawableStart="@drawable/ic_femenine"
+                    android:drawablePadding="4dp"
+                    android:fontFamily="@font/noto_sans"
+                    android:paddingEnd="16dp"
+                    android:text="女性"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+
+            </RadioGroup>
+
             <TextView
                 android:id="@+id/textView7"
                 android:layout_width="wrap_content"
@@ -66,13 +104,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:ems="10"
                 android:hint="請輸入姓名"
+                android:text="@={viewModel._userEditName}"
                 android:inputType="textPersonName"
-                app:layout_constraintBottom_toBottomOf="@+id/imageMember"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageMember" />
+                app:layout_constraintStart_toEndOf="@+id/imageMember"
+                app:layout_constraintTop_toBottomOf="@+id/textView48" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/conScan"
@@ -175,13 +215,12 @@
                 android:id="@+id/textView48"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
                 android:fontFamily="@font/noto_sans"
                 android:text="姓名"
                 android:textColor="@color/black"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toTopOf="@+id/editName"
-                app:layout_constraintStart_toStartOf="@+id/editName" />
+                app:layout_constraintStart_toStartOf="@+id/editName"
+                app:layout_constraintTop_toTopOf="@+id/imageMember" />
 
             <TextView
                 android:id="@+id/textBirth"
@@ -316,94 +355,10 @@
                 android:fontFamily="@font/noto_sans"
                 android:textColor="@color/black"
                 android:hint="輸入出生地點"
+                android:text="@={viewModel._userBirthLocation}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/imageView21"
                 app:layout_constraintTop_toBottomOf="@+id/textBirthLocation" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/conMale"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_marginEnd="4dp"
-                android:background="@drawable/rounded_light_blue_radius65"
-                app:layout_constraintBottom_toBottomOf="@+id/textSelectPic"
-                app:layout_constraintEnd_toStartOf="@+id/conFemale"
-                app:layout_constraintStart_toStartOf="@+id/editName"
-                app:layout_constraintTop_toTopOf="@+id/textSelectPic">
-
-                <ImageView
-                    android:id="@+id/imageView32"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_marginStart="16dp"
-                    android:src="@drawable/male"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView50"
-                    app:layout_constraintEnd_toStartOf="@+id/textView50"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintHorizontal_chainStyle="packed"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textView50" />
-
-                <TextView
-                    android:id="@+id/textView50"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="8dp"
-                    android:fontFamily="@font/noto_sans"
-                    android:text="男性"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/imageView32"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/conFemale"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_marginStart="4dp"
-                android:background="@drawable/round_light_red_radius65"
-                app:layout_constraintBottom_toBottomOf="@+id/conMale"
-                app:layout_constraintEnd_toEndOf="@+id/editName"
-                app:layout_constraintStart_toEndOf="@+id/conMale"
-                app:layout_constraintTop_toTopOf="@+id/conMale">
-
-                <ImageView
-                    android:id="@+id/imageView33"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_marginStart="16dp"
-                    android:src="@drawable/female"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView51"
-                    app:layout_constraintEnd_toStartOf="@+id/textView51"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintHorizontal_chainStyle="packed"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textView51" />
-
-                <TextView
-                    android:id="@+id/textView51"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="8dp"
-                    android:fontFamily="@font/noto_sans"
-                    android:text="女性"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/imageView33"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
