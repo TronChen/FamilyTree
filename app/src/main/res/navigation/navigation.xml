@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/branchFragment">
+    app:startDestination="@id/logInFragment">
 
     <fragment
         android:id="@+id/branchFragment"
@@ -106,4 +106,13 @@
             app:argType="com.tron.familytree.data.User" />
     </dialog>
     <action android:id="@+id/action_global_addPeopleDialog" app:destination="@id/addPeopleDialog" />
+    <fragment
+        android:id="@+id/logInFragment"
+        android:name="com.tron.familytree.login.LogInFragment"
+        android:label="LogInFragment" />
+    <action android:id="@+id/action_global_logInFragment" app:destination="@id/logInFragment" />
+    <fragment
+        android:id="@+id/albumFragment"
+        android:name="com.tron.familytree.family.album.AlbumFragment"
+        android:label="AlbumFragment" /><action android:id="@+id/action_global_albumFragment" app:destination="@id/albumFragment"/>
 </navigation>

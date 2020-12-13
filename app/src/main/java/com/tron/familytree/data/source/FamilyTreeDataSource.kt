@@ -20,4 +20,6 @@ interface FamilyTreeDataSource {
     suspend fun updateMemberMotherId(user: User, newMember : User): AppResult<Boolean>
 
     suspend fun updateMemberFatherId(user: User, newMember : User): AppResult<Boolean>
+
+    suspend fun addUserToFirebase(user: User): AppResult<Boolean>
 }

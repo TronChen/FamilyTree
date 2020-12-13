@@ -94,9 +94,7 @@ class AddPeopleViewModel(
         viewModelJob.cancel()
     }
 
-    /**
-     * Call getArticlesResult() on init so we can display status immediately.
-     */
+
     init {
         _selectedProperty.value = user
     }

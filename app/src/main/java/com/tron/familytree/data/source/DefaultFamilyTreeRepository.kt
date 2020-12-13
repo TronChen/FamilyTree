@@ -32,4 +32,8 @@ class DefaultFamilyTreeRepository(private val remoteDataSource: FamilyTreeDataSo
     override suspend fun updateMemberFatherId(user: User, newMember : User): AppResult<Boolean>{
         return remoteDataSource.updateMemberFatherId(user , newMember)
     }
+
+    override suspend fun addUserToFirebase(user: User): AppResult<Boolean>{
+        return remoteDataSource.addUserToFirebase(user)
+    }
 }

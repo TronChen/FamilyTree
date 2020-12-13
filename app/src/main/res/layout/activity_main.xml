@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="com.tron.familytree.util.CurrentFragmentType"/>
+        <import type="android.view.View"/>
         <variable
             name="viewModel"
             type="com.tron.familytree.MainActivityViewModel" />
@@ -54,7 +56,10 @@
                             android:elevation="4dp"
                             android:minHeight="?attr/actionBarSize"
                             android:theme="?attr/actionBarTheme"
+                            android:visibility="@{viewModel.currentFragmentType == CurrentFragmentType.LOGIN ? View.GONE : View.VISIBLE}"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -109,7 +114,7 @@
                         android:id="@+id/imageSearch"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:visibility="visible"
+                        android:visibility="@{viewModel.currentFragmentType == CurrentFragmentType.LOGIN ? View.GONE : View.VISIBLE}"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -120,6 +125,7 @@
                         android:id="@+id/constraintLayout"
                         android:layout_width="match_parent"
                         android:layout_height="58dp"
+                        android:visibility="@{viewModel.currentFragmentType == CurrentFragmentType.LOGIN || viewModel.currentFragmentType == CurrentFragmentType.CHATROOM ? View.GONE : View.VISIBLE}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent">
@@ -150,6 +156,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:background="@android:color/transparent"
+            android:visibility="@{viewModel.currentFragmentType == CurrentFragmentType.LOGIN ? View.GONE : View.VISIBLE}"
             android:clickable="false"
             app:contentInsetStart="0dp"
             app:contentInsetStartWithNavigation="0dp"
@@ -160,6 +167,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="58dp"
                 android:background="@android:color/transparent"
+                android:visibility="@{viewModel.currentFragmentType == CurrentFragmentType.LOGIN ? View.GONE : View.VISIBLE}"
                 android:outlineAmbientShadowColor="@android:color/transparent"
                 android:outlineSpotShadowColor="@android:color/transparent"
                 app:itemTextColor="@color/orange"
@@ -176,6 +184,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="28dp"
             android:src="@drawable/family"
+            android:visibility="@{viewModel.currentFragmentType == CurrentFragmentType.LOGIN || viewModel.currentFragmentType == CurrentFragmentType.CHATROOM ? View.GONE : View.VISIBLE}"
             app:fabCustomSize="60dp"
             app:layout_anchor="@id/bottom_bar"
             app:maxImageSize="50dp" />
@@ -183,6 +192,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="@{viewModel.currentFragmentType == CurrentFragmentType.LOGIN || viewModel.currentFragmentType == CurrentFragmentType.CHATROOM ? View.GONE : View.VISIBLE}"
             android:background="@android:color/transparent">
 
             <com.github.clans.fab.FloatingActionMenu
@@ -191,6 +201,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="24dp"
+                android:visibility="@{viewModel.currentFragmentType == CurrentFragmentType.LOGIN || viewModel.currentFragmentType == CurrentFragmentType.CHATROOM ? View.GONE : View.VISIBLE}"
                 app:menu_backgroundColor="@android:color/transparent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -205,7 +216,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/calendar_1"
+                    android:src="@drawable/ic_calendar_orange"
                     app:fabCustomSize="60dp"
                     app:fab_colorNormal="@color/orange"
                     app:fab_colorPressed="@color/orange"
@@ -216,7 +227,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/album_1"
+                    android:src="@drawable/ic_album_orange"
                     app:fab_colorNormal="@color/orange"
                     app:fab_colorPressed="@color/orange"
                     app:maxImageSize="50dp" />

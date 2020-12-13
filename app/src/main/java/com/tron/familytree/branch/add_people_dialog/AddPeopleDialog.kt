@@ -51,6 +51,7 @@ class AddPeopleDialog : DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+
         dialog!!.window?.setBackgroundDrawableResource(R.drawable.rounded_white_radius65)
 
         val binding = DialogAddPeopleBinding.inflate(inflater, container, false)

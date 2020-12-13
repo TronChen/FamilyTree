@@ -17,6 +17,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.observe
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
@@ -30,12 +31,17 @@ import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.tron.familytree.databinding.ActivityMainBinding
 import com.tron.familytree.databinding.NavHeaderDrawerBinding
+import com.tron.familytree.ext.getVmFactory
+import com.tron.familytree.util.CurrentFragmentType
 import java.util.Observer
+import java.util.logging.Logger
 
 
 class MainActivity : AppCompatActivity() {
 
     var imgPath = MutableLiveData<String>()
+
+    val viewModel by viewModels<MainActivityViewModel> { getVmFactory() }
 
     private lateinit var binding: ActivityMainBinding
     private var actionBarDrawerToggle: ActionBarDrawerToggle? = null
@@ -89,6 +95,7 @@ class MainActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
+        binding.viewModel = viewModel
 
         val navController = this.findNavController(R.id.myNavHostFragment)
         binding.fab.setOnClickListener {
@@ -128,8 +135,39 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(R.id.action_global_editUserFragment)
         }
 
+        // observe current fragment change, only for show info
+        viewModel.currentFragmentType.observe(this, androidx.lifecycle.Observer {
+            Log.i("Tron","~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+            Log.i("Tron","[${viewModel.currentFragmentType.value}]")
+            Log.i("Tron","~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        })
+
         setupBottomNav()
         setupDrawer()
+        setupNavController()
+    }
+
+    private fun setupNavController(){
+        findNavController(R.id.myNavHostFragment).addOnDestinationChangedListener{ navController: NavController, _: NavDestination, _: Bundle? ->
+            viewModel.currentFragmentType.value = when(navController.currentDestination?.id) {
+                R.id.branchFragment -> CurrentFragmentType.BRANCH
+                R.id.familyFragment -> CurrentFragmentType.FAMILY
+                R.id.mapsFragment -> CurrentFragmentType.MAPS
+                R.id.messageFragment -> CurrentFragmentType.MESSAGE
+                R.id.profileFragment -> CurrentFragmentType.PROFILE
+                R.id.editUserFragment -> CurrentFragmentType.PROFILE_USER_EDIT
+                R.id.calendarDialog -> CurrentFragmentType.CALENDAR
+                R.id.eventDialog -> CurrentFragmentType.FAMILY_EVENT
+                R.id.albumDetailFragment -> CurrentFragmentType.FAMILY_ALBUM
+                R.id.qrCodeFragment -> CurrentFragmentType.QR_CODE
+                R.id.qrCodeReaderFragment -> CurrentFragmentType.QR_CODE_SCAN
+                R.id.chatRoomFragment -> CurrentFragmentType.CHATROOM
+                R.id.logInFragment -> CurrentFragmentType.LOGIN
+                R.id.albumFragment -> CurrentFragmentType.FAMILY_ALBUM
+
+                else -> viewModel.currentFragmentType.value
+            }
+        }
     }
 
 

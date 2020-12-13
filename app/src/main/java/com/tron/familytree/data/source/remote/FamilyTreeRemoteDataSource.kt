@@ -30,6 +30,30 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
 //        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
 //    }
 
+    override suspend fun addUserToFirebase(user: User): AppResult<Boolean> = suspendCoroutine { continuation ->
+            val userCollection = FirebaseFirestore.getInstance().collection(PATH_USER)
+            val document = userCollection.document(user.id)
+            document
+                .set(user)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.d("addUserToFirebase", "addUserToFirebase: $user")
+                        continuation.resume(AppResult.Success(true))
+                    } else {
+                        task.exception?.let {
+                            Log.d(
+                                "add_user_exception",
+                                "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                            )
+                            continuation.resume(AppResult.Error(it))
+                            return@addOnCompleteListener
+                        }
+                        continuation.resume(AppResult.Fail(FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)))
+                    }
+                }
+        }
+
+
     override suspend fun uploadImage(path: String): AppResult<String> = suspendCoroutine { continuation ->
         val file = Uri.fromFile(File(path))
         val fileName = file.lastPathSegment
