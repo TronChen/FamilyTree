@@ -99,6 +99,7 @@ class LogInFragment : Fragment() {
                         userImage = user.photoUrl.toString()
                     )
                     com.tron.familytree.util.UserManager.name = user.displayName
+                    com.tron.familytree.util.UserManager.email = user.email
                     viewModel.addUserToFirebase(currentUser)
                 }
                 Log.d("google", "${user?.email}, ${user?.displayName}, ${user?.photoUrl} ")

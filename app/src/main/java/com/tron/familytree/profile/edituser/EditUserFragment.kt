@@ -42,13 +42,15 @@ class EditUserFragment : Fragment() {
         val adapter = EditEpisodeAdapter(
             EditEpisodeAdapter.EditEpisodeOnItemClickListener {
                 Log.e("EditEpisodeClick", it.toString())
+                findNavController().navigate(EditUserFragmentDirections.actionGlobalEditEpisodeDialog(it))
             })
 
         binding.recyclerEditEpisode.adapter = adapter
-        adapter.submitList(createMock())
+
 
         binding.conAddEpisode.setOnClickListener {
-            findNavController().navigate(EditUserFragmentDirections.actionGlobalEditEpisodeDialog(viewModel.selectedProperty.value!!))
+            findNavController().navigate(EditUserFragmentDirections.actionGlobalEditEpisodeDialog(
+                Episode(title = "",time = "請選擇時間",location = "",content = "")))
         }
 
         binding.conBirth.setOnClickListener {
@@ -105,6 +107,11 @@ class EditUserFragment : Fragment() {
             viewModel.uploadImage(it)
         })
 
+
+        viewModel.liveEpisodes.observe(viewLifecycleOwner, Observer {
+            Log.e("Episodes", it.toString())
+            adapter.submitList(it)
+        })
 
         return binding.root
     }

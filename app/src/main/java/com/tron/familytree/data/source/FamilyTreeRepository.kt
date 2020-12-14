@@ -3,6 +3,7 @@ package app.appworks.school.publisher.data.source
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.tron.familytree.data.AppResult
+import com.tron.familytree.data.Episode
 import com.tron.familytree.data.User
 
 interface FamilyTreeRepository {
@@ -24,4 +25,10 @@ interface FamilyTreeRepository {
     suspend fun findUser(name: String): AppResult<User>
 
     suspend fun updateMember(user: User): AppResult<Boolean>
+
+    suspend fun addUserEpisode(episode: Episode): AppResult<Boolean>
+
+    fun getLiveEpisode(): MutableLiveData<List<Episode>>
+
+    suspend fun getEpisode(): AppResult<List<Episode>>
 }

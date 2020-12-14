@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.tron.familytree.R
 import com.tron.familytree.data.Episode
@@ -42,7 +43,10 @@ class EpisodeFragment() : Fragment() {
         })
         binding.recyclerEpisode.adapter = adapter
 
-        adapter.submitList(createMock())
+        viewModel.liveEpisodes.observe(viewLifecycleOwner, Observer {
+            Log.e("Episodes", it.toString())
+        adapter.submitList(it)
+        })
 
 
 

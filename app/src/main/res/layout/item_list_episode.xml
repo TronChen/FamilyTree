@@ -35,25 +35,22 @@
                 android:textColor="@color/black"
                 android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="安安" />
 
             <TextView
                 android:id="@+id/textContent"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="32dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="8dp"
                 android:fontFamily="@font/noto_sans"
                 android:text="@{episode.content}"
                 android:textColor="@color/black"
                 android:textSize="14sp"
-                android:paddingStart="32dp"
-                android:paddingEnd="32dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/textTime"
+                app:layout_constraintStart_toStartOf="@+id/textTitle"
                 app:layout_constraintTop_toBottomOf="@+id/textTitle"
                 tools:text="當個快樂的博士生，每天睏霸上學當個快樂的博士生，每天睏霸上學當個快樂的博士生，每天睏霸上學當個快樂的博士生，每天睏霸上學當個快樂的博士生，每天睏霸上學當個快樂的博士生，每天睏霸上學當個快樂的博士生，每天睏霸上學" />
 
@@ -61,40 +58,14 @@
                 android:id="@+id/textTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
                 android:fontFamily="@font/noto_sans"
                 android:text="@{episode.time}"
                 android:textColor="@color/black"
-                android:textSize="24sp"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/textTitle"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-            <!--                android:layout_width="0dp"-->
-            <!--                android:layout_height="22dp"-->
-            <!--                android:layout_marginStart="16dp"-->
-            <!--                android:layout_marginEnd="32dp"-->
-            <!--                android:background="@drawable/rouned_grey_radius65"-->
-            <!--                app:layout_constraintBottom_toBottomOf="@+id/textContent"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toEndOf="@+id/textContent"-->
-            <!--                app:layout_constraintTop_toTopOf="@+id/textContent">-->
-
-            <!--                <TextView-->
-            <!--                    android:id="@+id/textView21"-->
-            <!--                    android:layout_width="wrap_content"-->
-            <!--                    android:layout_height="wrap_content"-->
-            <!--                    android:layout_marginBottom="3dp"-->
-            <!--                    android:fontFamily="@font/noto_sans"-->
-            <!--                    android:text="...see more"-->
-            <!--                    android:textColor="@color/white"-->
-            <!--                    android:textSize="14sp"-->
-            <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-            <!--                    app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                    app:layout_constraintStart_toStartOf="parent"-->
-            <!--                    app:layout_constraintTop_toTopOf="parent" />-->
-            <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
+                tools:text="2020-01-23" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

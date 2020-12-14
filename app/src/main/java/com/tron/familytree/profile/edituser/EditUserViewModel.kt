@@ -8,6 +8,7 @@ import app.appworks.school.publisher.data.source.FamilyTreeRepository
 import com.tron.familytree.FamilyTreeApplication
 import com.tron.familytree.R
 import com.tron.familytree.data.AppResult
+import com.tron.familytree.data.Episode
 import com.tron.familytree.data.User
 import com.tron.familytree.network.LoadApiStatus
 import kotlinx.coroutines.CoroutineScope
@@ -23,6 +24,12 @@ class EditUserViewModel(
     // The external LiveData for the SelectedProperty
     val selectedProperty: LiveData<User>
         get() = _selectedProperty
+
+    var liveEpisodes = MutableLiveData<List<Episode>>()
+
+    val _episodes = MutableLiveData<List<Episode>>()
+    val episodes: LiveData<List<Episode>>
+        get() = _episodes
 
     val userName = MutableLiveData<String>()
     val userImage = MutableLiveData<String>()
@@ -89,6 +96,53 @@ class EditUserViewModel(
         }else{
             userDeath.value = user.deathDate
         }
+
+
+        if (FamilyTreeApplication.INSTANCE.isLiveDataDesign()) {
+            getLiveEpisode()
+        } else {
+            getEpisode()
+        }
+    }
+
+    fun getEpisode() {
+
+        coroutineScope.launch {
+
+            _status.value = LoadApiStatus.LOADING
+
+            val result = repository.getEpisode()
+
+            _episodes.value = when (result) {
+                is AppResult.Success -> {
+                    _error.value = null
+                    _status.value = LoadApiStatus.DONE
+                    result.data
+                }
+                is AppResult.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                    null
+                }
+                is AppResult.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                    null
+                }
+                else -> {
+                    _error.value = FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)
+                    _status.value = LoadApiStatus.ERROR
+                    null
+                }
+            }
+            _refreshStatus.value = false
+        }
+    }
+
+    fun getLiveEpisode() {
+        liveEpisodes = repository.getLiveEpisode()
+        _status.value = LoadApiStatus.DONE
+        _refreshStatus.value = false
     }
 
 

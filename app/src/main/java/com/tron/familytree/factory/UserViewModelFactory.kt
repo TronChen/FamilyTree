@@ -44,14 +44,7 @@ class UserViewModelFactory(
             } as T
         }
 
-        if (modelClass.isAssignableFrom(EditEpisodeViewModel::class.java)) {
-            return user?.let {
-                EditEpisodeViewModel(
-                    repository,
-                    it
-                )
-            } as T
-        }
+
 
         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
     }

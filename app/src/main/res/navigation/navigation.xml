@@ -54,8 +54,8 @@
         android:name="com.tron.familytree.profile.editepisode.EditEpisodeDialog"
         android:label="EditEpisodeDialog" >
         <argument
-            android:name="userProperties"
-            app:argType="com.tron.familytree.data.User" />
+            android:name="episodeProperties"
+            app:argType="com.tron.familytree.data.Episode" />
     </dialog><action android:id="@+id/action_global_editEpisodeDialog" app:destination="@id/editEpisodeDialog"/>
     <dialog
         android:id="@+id/createEventDialog"

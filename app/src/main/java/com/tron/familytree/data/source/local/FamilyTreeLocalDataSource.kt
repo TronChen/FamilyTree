@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import app.appworks.school.publisher.data.source.FamilyTreeDataSource
 import com.tron.familytree.data.AppResult
+import com.tron.familytree.data.Episode
 import com.tron.familytree.data.User
 
 /**
@@ -49,4 +50,15 @@ class FamilyTreeLocalDataSource(val context: Context) : FamilyTreeDataSource {
         TODO("Not yet implemented")
     }
 
+    override suspend fun addUserEpisode(episode: Episode): AppResult<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getLiveEpisode(): MutableLiveData<List<Episode>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getEpisode(): AppResult<List<Episode>> {
+        TODO("Not yet implemented")
+    }
 }

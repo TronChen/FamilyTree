@@ -4,18 +4,31 @@ import com.tron.familytree.FamilyTreeApplication
 
 object UserManager {
 
-    const val SHARED_PREF_KEY = "userInfo"
-    const val ACCESS_TOKEN_KEY = "access_token"
+    const val NAME = "name"
+    const val NAME_VALUE = "name_value"
+    const val EMAIL = "email"
+    const val EMAIL_VALUE = "email_value"
+
 
 
     // get(), set()實現拿、放access_token功能
     var name: String?
         get() {
-            return FamilyTreeApplication.INSTANCE.getSharedPreferences(SHARED_PREF_KEY, 0)
-                .getString(ACCESS_TOKEN_KEY,null)
+            return FamilyTreeApplication.INSTANCE.getSharedPreferences(NAME, 0)
+                .getString(NAME_VALUE,null)
         }
         set(value) {
-            FamilyTreeApplication.INSTANCE.getSharedPreferences(SHARED_PREF_KEY,0).edit()
-                .putString(ACCESS_TOKEN_KEY, value).apply()
+            FamilyTreeApplication.INSTANCE.getSharedPreferences(NAME,0).edit()
+                .putString(NAME_VALUE, value).apply()
+        }
+
+    var email: String?
+        get() {
+            return FamilyTreeApplication.INSTANCE.getSharedPreferences(EMAIL, 0)
+                .getString(EMAIL_VALUE,null)
+        }
+        set(value) {
+            FamilyTreeApplication.INSTANCE.getSharedPreferences(EMAIL,0).edit()
+                .putString(EMAIL_VALUE, value).apply()
         }
 }

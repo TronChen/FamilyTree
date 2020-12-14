@@ -7,6 +7,7 @@ import app.appworks.school.publisher.data.source.FamilyTreeRepository
 import com.tron.familytree.FamilyTreeApplication
 import com.tron.familytree.R
 import com.tron.familytree.data.AppResult
+import com.tron.familytree.data.Episode
 import com.tron.familytree.data.User
 import com.tron.familytree.network.LoadApiStatus
 import com.tron.familytree.util.UserManager
@@ -23,10 +24,6 @@ class ProfileViewModel(
     val _user = MutableLiveData<User>()
     val user : LiveData<User>
     get() = _user
-
-
-
-
 
 
     // status: The internal MutableLiveData that stores the status of the most recent request
@@ -100,6 +97,5 @@ class ProfileViewModel(
             }
         }
     }
-
 
 }

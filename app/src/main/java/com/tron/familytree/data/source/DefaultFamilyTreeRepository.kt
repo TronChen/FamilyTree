@@ -2,6 +2,7 @@ package app.appworks.school.publisher.data.source
 
 import androidx.lifecycle.MutableLiveData
 import com.tron.familytree.data.AppResult
+import com.tron.familytree.data.Episode
 import com.tron.familytree.data.User
 
 
@@ -44,4 +45,17 @@ class DefaultFamilyTreeRepository(private val remoteDataSource: FamilyTreeDataSo
     override suspend fun updateMember(user: User): AppResult<Boolean>{
         return remoteDataSource.updateMember(user)
     }
+
+    override suspend fun addUserEpisode(episode: Episode): AppResult<Boolean>{
+        return remoteDataSource.addUserEpisode(episode)
+    }
+
+    override fun getLiveEpisode(): MutableLiveData<List<Episode>>{
+        return remoteDataSource.getLiveEpisode()
+    }
+
+    override suspend fun getEpisode(): AppResult<List<Episode>>{
+        return remoteDataSource.getEpisode()
+    }
+
 }
