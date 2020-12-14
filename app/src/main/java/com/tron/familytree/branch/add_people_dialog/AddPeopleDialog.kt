@@ -1,38 +1,26 @@
 package com.tron.familytree.branch.add_people_dialog
 
-import android.app.Activity
 import android.app.DatePickerDialog
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.bumptech.glide.Glide
 import com.github.dhaval2404.imagepicker.ImagePicker
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageMetadata
-import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.ktx.storageMetadata
-import com.mikhaellopez.circularimageview.CircularImageView
 import com.tron.familytree.MainActivity
 import com.tron.familytree.R
 import com.tron.familytree.databinding.DialogAddPeopleBinding
 import com.tron.familytree.ext.getVmFactory
-import java.io.File
 import java.util.*
 
+const val ADD_USER = 111
 
 class AddPeopleDialog : DialogFragment() {
-
-    var mImageview = MutableLiveData<ImageView>()
 
     private val viewModel by viewModels<AddPeopleViewModel> {  getVmFactory(
         AddPeopleDialogArgs.fromBundle(
@@ -111,7 +99,7 @@ class AddPeopleDialog : DialogFragment() {
                 .crop()                    //Crop image(Optional), Check Customization for more option
                 .compress(1024)            //Final image size will be less than 1 MB(Optional)
                 .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
-                .start(1)
+                .start(ADD_USER)
         }
 
 
@@ -144,7 +132,7 @@ class AddPeopleDialog : DialogFragment() {
 
 
         //得到選擇圖片的路徑upload到fire storage
-        activity.imgPath.observe(viewLifecycleOwner, Observer {
+        activity.viewModel.addUserImgPath.observe(viewLifecycleOwner, Observer {
             viewModel._updateImg.value = it
             Log.e("filePath", it)
             viewModel.uploadImage(it)

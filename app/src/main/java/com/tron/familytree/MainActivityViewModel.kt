@@ -11,4 +11,7 @@ class MainActivityViewModel(
 
     val currentFragmentType = MutableLiveData<CurrentFragmentType>()
 
+    var addUserImgPath = MutableLiveData<String>()
+    var editUserImgPath = MutableLiveData<String>()
+
 }

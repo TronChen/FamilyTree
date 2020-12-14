@@ -9,7 +9,7 @@ object UserManager {
 
 
     // get(), set()實現拿、放access_token功能
-    var email: String?
+    var name: String?
         get() {
             return FamilyTreeApplication.INSTANCE.getSharedPreferences(SHARED_PREF_KEY, 0)
                 .getString(ACCESS_TOKEN_KEY,null)

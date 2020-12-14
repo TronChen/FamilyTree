@@ -14,8 +14,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 class AddPeopleViewModel(
     private val repository: FamilyTreeRepository
@@ -43,7 +41,7 @@ class AddPeopleViewModel(
         get() = _userImage
 
     var birthDate : String = ""
-    var deathDate : String = "Alive"
+    var deathDate : String = "現在"
     var gender : String = ""
 
     var userEditName : String = ""

@@ -2,7 +2,6 @@ package com.tron.familytree.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.UserManager
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -21,9 +20,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.tron.familytree.R
 import com.tron.familytree.data.User
 import com.tron.familytree.databinding.FragmentLogInBinding
-import com.tron.familytree.databinding.FragmentProfileBinding
 import com.tron.familytree.ext.getVmFactory
-import com.tron.familytree.profile.ProfileViewModel
 
 
 class LogInFragment : Fragment() {
@@ -101,7 +98,7 @@ class LogInFragment : Fragment() {
                         id = user.email!!,
                         userImage = user.photoUrl.toString()
                     )
-                    com.tron.familytree.util.UserManager.email = user.email
+                    com.tron.familytree.util.UserManager.name = user.displayName
                     viewModel.addUserToFirebase(currentUser)
                 }
                 Log.d("google", "${user?.email}, ${user?.displayName}, ${user?.photoUrl} ")

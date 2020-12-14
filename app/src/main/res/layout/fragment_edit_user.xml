@@ -20,81 +20,103 @@
 
         <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/circularImageView"
+            mainImage="@{viewModel.userImage}"
             android:layout_width="135dp"
             android:layout_height="135dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:src="@drawable/pikachu"
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/conFamily" />
 
         <TextView
             android:id="@+id/fistName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:fontFamily="@font/noto_sans"
-            android:text="姓"
+            android:text="姓名"
             android:textColor="@color/black"
             android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/lastName"
             app:layout_constraintStart_toEndOf="@+id/circularImageView"
-            app:layout_constraintTop_toTopOf="@+id/circularImageView" />
-
-        <TextView
-            android:id="@+id/lastName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:fontFamily="@font/noto_sans"
-            android:textSize="18sp"
-            android:textColor="@color/black"
-            android:text="名"
-            app:layout_constraintBottom_toBottomOf="@+id/circularImageView"
-            app:layout_constraintStart_toEndOf="@+id/circularImageView"
-            app:layout_constraintTop_toBottomOf="@+id/fistName" />
+            app:layout_constraintTop_toBottomOf="@+id/conFamily" />
 
         <EditText
             android:id="@+id/editTextＦistName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:ems="10"
-            android:hint="輸入姓氏"
+            android:hint="輸入姓名"
             android:inputType="textPersonName"
-            android:letterSpacing="0.2"
-            app:layout_constraintBottom_toBottomOf="@+id/fistName"
+            android:letterSpacing="0.1"
+            android:text="@={viewModel.userName}"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/fistName"
-            app:layout_constraintTop_toTopOf="@+id/fistName" />
-
-        <EditText
-            android:id="@+id/editTextLastName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:ems="10"
-            android:hint="輸入名字"
-            android:inputType="textPersonName"
-            android:letterSpacing="0.2"
-            app:layout_constraintBottom_toBottomOf="@+id/lastName"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/lastName"
-            app:layout_constraintTop_toTopOf="@+id/lastName" />
+            app:layout_constraintStart_toStartOf="@+id/fistName"
+            app:layout_constraintTop_toBottomOf="@+id/fistName" />
 
         <TextView
-            android:id="@+id/textBirth"
+            android:id="@+id/textView50"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/noto_sans"
+            android:text="性別"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/radioGender"
+            app:layout_constraintStart_toStartOf="@+id/editTextＦistName"
+            app:layout_constraintTop_toBottomOf="@+id/editTextＦistName" />
+
+        <RadioGroup
+            android:id="@+id/radioGender"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/conImage"
+            app:layout_constraintEnd_toEndOf="@+id/editTextＦistName"
+            app:layout_constraintStart_toStartOf="@+id/editTextＦistName">
+
+            <RadioButton
+                android:id="@+id/radioMale"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/rounded_light_blue_radius65"
+                android:drawableStart="@drawable/ic_mars"
+                android:drawablePadding="4dp"
+                android:fontFamily="@font/noto_sans"
+                android:paddingEnd="16dp"
+                android:text="男性"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <RadioButton
+                android:id="@+id/radioFemale"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_light_red_radius65"
+                android:drawableStart="@drawable/ic_femenine"
+                android:drawablePadding="4dp"
+                android:fontFamily="@font/noto_sans"
+                android:paddingEnd="16dp"
+                android:text="女性"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/Birth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:fontFamily="@font/noto_sans"
-            android:text="Birth"
+            android:letterSpacing="0.1"
+            android:text="出生日期"
             android:textColor="@color/black"
-            android:letterSpacing="0.2"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/conImage" />
@@ -134,7 +156,7 @@
             android:layout_marginTop="24dp"
             android:fontFamily="@font/noto_sans"
             android:text="生平事蹟"
-            android:letterSpacing="0.2"
+            android:letterSpacing="0.1"
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -145,8 +167,8 @@
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="@+id/textBirth"
-            app:layout_constraintTop_toBottomOf="@+id/textBirth"
+            app:layout_constraintStart_toStartOf="@+id/Birth"
+            app:layout_constraintTop_toBottomOf="@+id/Birth"
             app:srcCompat="@drawable/calendarbirth" />
 
         <ImageView
@@ -204,7 +226,7 @@
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -269,6 +291,18 @@
             app:layout_constraintStart_toEndOf="@+id/conBirth"
             app:layout_constraintTop_toTopOf="@+id/conBirth">
 
+            <TextView
+                android:id="@+id/textDeath"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.userDeath}"
+                android:fontFamily="@font/noto_sans"
+                android:textSize="12sp"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -283,28 +317,41 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView27">
 
+            <TextView
+                android:id="@+id/textBirth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.userBirth}"
+                android:fontFamily="@font/noto_sans"
+                android:textSize="12sp"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/conFamily"
             android:layout_width="0dp"
             android:layout_height="40dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/rounded_light_grey_radius_24"
-            app:layout_constraintBottom_toBottomOf="@+id/conImage"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/lastName"
-            app:layout_constraintTop_toTopOf="@+id/conImage">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/textFamily"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="選擇家族"
                 android:fontFamily="@font/noto_sans"
-                android:textSize="14sp"
-                android:textColor="@color/black"
                 android:letterSpacing="0.2"
+                android:text="選擇家族"
+                android:textColor="@color/black"
+                android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -317,9 +364,8 @@
             android:layout_height="40dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
             android:background="@drawable/rounded_orange_radius65"
-            app:layout_constraintEnd_toStartOf="@+id/conFamily"
+            app:layout_constraintEnd_toEndOf="@+id/circularImageView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/circularImageView">
 
@@ -327,11 +373,11 @@
                 android:id="@+id/textView11"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="選擇頭貼"
-                android:letterSpacing="0.2"
                 android:fontFamily="@font/noto_sans"
-                android:textSize="14sp"
+                android:letterSpacing="0.2"
+                android:text="選擇頭貼"
                 android:textColor="@color/white"
+                android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -348,7 +394,8 @@
             android:inputType="textPersonName"
             android:fontFamily="@font/noto_sans"
             android:textColor="@color/black"
-            android:letterSpacing="0.2"
+            android:letterSpacing="0.1"
+            android:text="@={viewModel.userBirthLocation}"
             android:hint="輸入出生地點"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/imageView21"

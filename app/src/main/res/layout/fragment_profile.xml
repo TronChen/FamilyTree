@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View"/>
         <variable
             name="viewModel"
             type="com.tron.familytree.profile.ProfileViewModel" />
@@ -46,7 +47,7 @@
             android:layout_marginTop="50dp"
             android:background="@drawable/rounded_orange_radius65"
             android:scaleType="centerCrop"
-            android:src="@drawable/pikachu"
+            mainImage="@{viewModel.user.userImage}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -72,7 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="陳大川"
+            android:text="@{viewModel.user.name}"
             android:fontFamily="@font/noto_sans_bold"
             android:textSize="18sp"
             android:textColor="@color/black"
@@ -86,7 +87,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="1993/12/30"
+            android:text="@{viewModel.user.birth}"
+            android:visibility="@{viewModel.user.birth == null ? View.GONE : View.VISIBLE}"
             android:fontFamily="@font/noto_sans_bold"
             android:textSize="18sp"
             android:textColor="@color/black"
@@ -99,7 +101,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="台灣 新竹"
+            android:text="@{viewModel.user.birthLocation}"
+            android:visibility="@{viewModel.user.birthLocation == null ? View.GONE : View.VISIBLE}"
             android:fontFamily="@font/noto_sans_bold"
             android:textSize="18sp"
             android:textColor="@color/black"

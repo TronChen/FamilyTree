@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.tron.familytree.data.User
+import com.tron.familytree.util.UserManager
 
 class BranchViewModel : ViewModel() {
 
@@ -33,7 +34,7 @@ class BranchViewModel : ViewModel() {
     var treeFinalList = mutableListOf<TreeItem>()
 
     init {
-        userId.value = "TronTron"
+        userId.value = UserManager.name
     }
 
     fun getUser(){
@@ -95,7 +96,9 @@ class BranchViewModel : ViewModel() {
                     }
                     if (result.isEmpty){
                         children.add(
-                            TreeItem.ChildrenAdd(User(name = "No child",fatherId = user.value?.name , motherId = mateId.value?.name), 0)
+                            TreeItem.ChildrenAdd(User(
+                                name = "No child",
+                                fatherId = user.value?.name , motherId = mateId.value?.name), 0)
                         )
                     }
                 }
@@ -119,7 +122,9 @@ class BranchViewModel : ViewModel() {
                     }
                     if (result.isEmpty){
                         children.add(
-                            TreeItem.ChildrenAdd(User(name = "No child" ,motherId = user.value?.name , fatherId = mateId.value?.name), 0)
+                            TreeItem.ChildrenAdd(User(
+                                name = "No child" ,
+                                motherId = user.value?.name , fatherId = mateId.value?.name), 0)
                         )
                     }
                     Log.e("treeChildrenList", children.toString())
@@ -142,7 +147,7 @@ class BranchViewModel : ViewModel() {
                 }
                     if (result.isEmpty){
                         parents.add(
-                        TreeItem.ParentAdd(User(name = "No father",fatherId = user.value?.name),true,0)
+                        TreeItem.ParentAdd(User(name = "No father", fatherId = user.value?.name),true,0)
                         )
                         getUserMother()
                     }
@@ -169,7 +174,7 @@ class BranchViewModel : ViewModel() {
                             TreeItem.Parent(motherId.value!!, true, 1)
                         )
                         onlyMate.add(
-                            TreeItem.MateAdd(User(name = "No mate",mateId = user.value?.name), false)
+                            TreeItem.MateAdd(User(name = "No mate", mateId = user.value?.name), false)
                         )
                         getMockUsers()
                     }
@@ -188,7 +193,7 @@ class BranchViewModel : ViewModel() {
                         )
 
                         onlyMate.add(
-                            TreeItem.MateAdd(User(name = "No mate",mateId = user.value?.name), false)
+                            TreeItem.MateAdd(User(name = "No mate", mateId = user.value?.name), false)
                         )
                         getMockUsers()
                     }

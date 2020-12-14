@@ -1,45 +1,33 @@
 package com.tron.familytree
 
-import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.View
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.observe
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
-import app.appworks.school.publisher.data.source.FamilyTreeRepository
-import com.bumptech.glide.Glide
 import com.github.dhaval2404.imagepicker.ImagePicker
-import com.google.android.material.bottomnavigation.BottomNavigationItemView
-import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.tron.familytree.databinding.ActivityMainBinding
 import com.tron.familytree.databinding.NavHeaderDrawerBinding
 import com.tron.familytree.ext.getVmFactory
 import com.tron.familytree.util.CurrentFragmentType
-import java.util.Observer
-import java.util.logging.Logger
 
-
+const val ADD_USER = 111
+const val EDIT_USER = 222
 class MainActivity : AppCompatActivity() {
-
-    var imgPath = MutableLiveData<String>()
 
     val viewModel by viewModels<MainActivityViewModel> { getVmFactory() }
 
@@ -131,9 +119,9 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(R.id.action_global_qrCodeReaderFragment)
         }
 
-        binding.imageEdit.setOnClickListener {
-            navController.navigate(R.id.action_global_editUserFragment)
-        }
+//        binding.imageEdit.setOnClickListener {
+//            navController.navigate(R.id.action_global_editUserFragment)
+//        }
 
         // observe current fragment change, only for show info
         viewModel.currentFragmentType.observe(this, androidx.lifecycle.Observer {
@@ -285,18 +273,37 @@ class MainActivity : AppCompatActivity() {
             when (resultCode) {
                 Activity.RESULT_OK -> {
                     val filePath: String = ImagePicker.getFilePath(data) ?: ""
-                    if (data != null) {
-                        if (filePath.isNotEmpty()) {
-                            imgPath.value = filePath
-                            Log.e("data", data.toString())
-                            Log.e("rqeCode", requestCode.toString())
-                            Toast.makeText(this@MainActivity, imgPath.value, Toast.LENGTH_SHORT)
-                                .show()
+                    when(requestCode and 0x0000ffff){
+                        ADD_USER ->{
+                            if (data != null) {
+                                if (filePath.isNotEmpty()) {
+                                    viewModel.addUserImgPath.value = filePath
+                                    Log.e("data", data.toString())
+                                    Log.e("reqCode", requestCode.toString())
+                                    Log.e("rstCode", resultCode.toString())
+                                    Toast.makeText(this@MainActivity, viewModel.addUserImgPath.value, Toast.LENGTH_SHORT)
+                                        .show()
+                                }
+                            }
                         }
-                    } else {
-                        Toast.makeText(this@MainActivity, "load_img_fail", Toast.LENGTH_SHORT)
-                            .show()
+                        EDIT_USER ->{
+                            if (data != null) {
+                                if (filePath.isNotEmpty()) {
+                                    viewModel.editUserImgPath.value = filePath
+                                    Log.e("data", data.toString())
+                                    Log.e("reqCode", requestCode.toString())
+                                    Log.e("rstCode", resultCode.toString())
+                                    Toast.makeText(this@MainActivity, viewModel.addUserImgPath.value, Toast.LENGTH_SHORT)
+                                        .show()
+                                }
+                            }
+
+                        }
                     }
+//                     else {
+//                        Toast.makeText(this@MainActivity, "load_img_fail", Toast.LENGTH_SHORT)
+//                            .show()
+//                    }
                 }
                 ImagePicker.RESULT_ERROR -> Toast.makeText(
                     this,

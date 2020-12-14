@@ -43,12 +43,20 @@
         android:id="@+id/editUserFragment"
         android:name="com.tron.familytree.profile.edituser.EditUserFragment"
         android:label="fragment_edit_user"
-        tools:layout="@layout/fragment_edit_user" />
+        tools:layout="@layout/fragment_edit_user" >
+        <argument
+            android:name="userProperties"
+            app:argType="com.tron.familytree.data.User" />
+    </fragment>
     <action android:id="@+id/action_global_editUserFragment" app:destination="@id/editUserFragment" />
     <dialog
         android:id="@+id/editEpisodeDialog"
         android:name="com.tron.familytree.profile.editepisode.EditEpisodeDialog"
-        android:label="EditEpisodeDialog" /><action android:id="@+id/action_global_editEpisodeDialog" app:destination="@id/editEpisodeDialog"/>
+        android:label="EditEpisodeDialog" >
+        <argument
+            android:name="userProperties"
+            app:argType="com.tron.familytree.data.User" />
+    </dialog><action android:id="@+id/action_global_editEpisodeDialog" app:destination="@id/editEpisodeDialog"/>
     <dialog
         android:id="@+id/createEventDialog"
         android:name="com.tron.familytree.family.create_event.CreateEventDialog"

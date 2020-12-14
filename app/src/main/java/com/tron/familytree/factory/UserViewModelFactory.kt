@@ -6,6 +6,8 @@ import app.appworks.school.publisher.data.source.FamilyTreeRepository
 import com.tron.familytree.branch.add_people_dialog.AddPeopleViewModel
 import com.tron.familytree.branch.dialog.BranchUserDetailDialogViewModel
 import com.tron.familytree.data.User
+import com.tron.familytree.profile.editepisode.EditEpisodeViewModel
+import com.tron.familytree.profile.edituser.EditUserViewModel
 
 
 @Suppress("UNCHECKED_CAST")
@@ -27,6 +29,24 @@ class UserViewModelFactory(
         if (modelClass.isAssignableFrom(AddPeopleViewModel::class.java)) {
             return user?.let {
                 AddPeopleViewModel(
+                    repository,
+                    it
+                )
+            } as T
+        }
+
+        if (modelClass.isAssignableFrom(EditUserViewModel::class.java)) {
+            return user?.let {
+                EditUserViewModel(
+                    repository,
+                    it
+                )
+            } as T
+        }
+
+        if (modelClass.isAssignableFrom(EditEpisodeViewModel::class.java)) {
+            return user?.let {
+                EditEpisodeViewModel(
                     repository,
                     it
                 )

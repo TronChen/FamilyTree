@@ -41,12 +41,6 @@ class ViewModelFactory constructor(
                 isAssignableFrom(FamilyViewModel::class.java) ->
                     FamilyViewModel(repository)
 
-                isAssignableFrom(EditUserViewModel::class.java) ->
-                    EditUserViewModel(repository)
-
-                isAssignableFrom(EditEpisodeViewModel::class.java) ->
-                    EditEpisodeViewModel(repository)
-
                 isAssignableFrom(CreateEventViewModel::class.java) ->
                     CreateEventViewModel(repository)
 

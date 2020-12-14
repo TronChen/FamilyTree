@@ -23,7 +23,10 @@ import java.util.*
 
 class EditEpisodeDialog : DialogFragment() {
 
-    private val viewModel by viewModels<EditEpisodeViewModel> { getVmFactory() }
+    private val viewModel by viewModels<EditEpisodeViewModel> { getVmFactory(
+        EditEpisodeDialogArgs.fromBundle(
+            requireArguments()
+        ).userProperties)}
 
     override fun onStart() {
         super.onStart()
@@ -51,7 +54,8 @@ class EditEpisodeDialog : DialogFragment() {
             val year = calendar.get(Calendar.YEAR)
             val month = calendar.get(Calendar.MONTH)
             val day = calendar.get(Calendar.DAY_OF_MONTH)
-            DatePickerDialog(requireContext(),{_, year, month, day -> binding.textSelectedTime.text ="${setDateFormat(year, month, day)}"
+            DatePickerDialog(requireContext(),{_, year, month, day ->
+                viewModel.editDate ="${setDateFormat(year, month, day)}"
             },year,month,day).show()
         }
 
