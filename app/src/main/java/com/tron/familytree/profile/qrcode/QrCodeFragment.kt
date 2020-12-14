@@ -13,6 +13,7 @@ import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import com.tron.familytree.R
 import com.tron.familytree.databinding.FragmentQrCodeBinding
+import com.tron.familytree.util.UserManager
 
 
 class QrCodeFragment : DialogFragment() {
@@ -37,7 +38,7 @@ class QrCodeFragment : DialogFragment() {
             val encoder = BarcodeEncoder()
             try {
                 val bit = encoder.encodeBitmap(
-                    "dtp6284tj0@gmail.com"
+                    UserManager.email
                     , BarcodeFormat.QR_CODE, 4000, 4000
                 )
                 ivCode.setImageBitmap(bit)

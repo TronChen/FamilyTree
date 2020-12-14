@@ -6,6 +6,7 @@ import app.appworks.school.publisher.data.source.FamilyTreeDataSource
 import com.tron.familytree.data.AppResult
 import com.tron.familytree.data.Episode
 import com.tron.familytree.data.User
+import com.tron.familytree.profile.member.MemberItem
 
 /**
  * Created by Wayne Chen on 2020-01-15.
@@ -38,6 +39,10 @@ class FamilyTreeLocalDataSource(val context: Context) : FamilyTreeDataSource {
         TODO("Not yet implemented")
     }
 
+    override suspend fun updateMemberMateId(user: User, newMember: User): AppResult<Boolean> {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun addUserToFirebase(user: User): AppResult<Boolean> {
         TODO("Not yet implemented")
     }
@@ -59,6 +64,14 @@ class FamilyTreeLocalDataSource(val context: Context) : FamilyTreeDataSource {
     }
 
     override suspend fun getEpisode(): AppResult<List<Episode>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun findUserById(id: String): AppResult<User> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun updateChild(user: User, newMember: User): AppResult<Boolean> {
         TODO("Not yet implemented")
     }
 }

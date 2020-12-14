@@ -1,14 +1,11 @@
-package app.appworks.school.publisher.data.source.remote
+package com.tron.familytree.data.source.remote
 
-import android.icu.util.Calendar
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
 import app.appworks.school.publisher.data.source.FamilyTreeDataSource
 import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageMetadata
 import com.tron.familytree.FamilyTreeApplication
@@ -16,6 +13,7 @@ import com.tron.familytree.R
 import com.tron.familytree.data.AppResult
 import com.tron.familytree.data.Episode
 import com.tron.familytree.data.User
+import com.tron.familytree.profile.member.MemberItem
 import com.tron.familytree.util.UserManager
 import java.io.File
 import kotlin.coroutines.resume
@@ -114,6 +112,24 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
                             continuation.resume(AppResult.Error(it))
                         }
                 }
+            }
+    }
+
+    override suspend fun findUserById(id: String): AppResult<User> = suspendCoroutine { continuation ->
+        val userCollection = FirebaseFirestore.getInstance().collection(PATH_USER)
+        userCollection
+            .whereEqualTo("id", id)
+            .get()
+            .addOnSuccessListener {
+                if (it != null){
+                    for (index in it) {
+                        val user = index.toObject(User::class.java)
+                        continuation.resume(AppResult.Success(user))
+                    }
+                }
+            }
+            .addOnFailureListener {
+                continuation.resume(AppResult.Error(it))
             }
     }
 
@@ -217,6 +233,38 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
             }
     }
 
+    override suspend fun updateChild(user: User,newMember: User): AppResult<Boolean> = suspendCoroutine { continuation ->
+        val User = FirebaseFirestore.getInstance().collection(PATH_USER)
+        var path: String = ""
+
+        User.whereEqualTo("name", newMember.name)
+            .get()
+            .addOnSuccessListener {
+                for (index in it) {
+                    path = index.id
+                    Log.e("FindUser", index.id)
+                    //找到原先user
+                    val document = User.document(path)
+
+                    document
+                        .update("fatherId", user.fatherId,
+                            "motherId",user.motherId
+                        )
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                continuation.resume(AppResult.Success(true))
+                            } else {
+                                task.exception?.let {
+                                    continuation.resume(AppResult.Error(it))
+                                    return@addOnCompleteListener
+                                }
+                                continuation.resume(AppResult.Fail(FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)))
+                            }
+                        }
+                }
+            }
+    }
+
     override suspend fun updateMember(user: User): AppResult<Boolean> = suspendCoroutine { continuation ->
         val User = FirebaseFirestore.getInstance().collection(PATH_USER)
         var path: String = ""
@@ -238,6 +286,37 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
                             "birthLocation", user.birthLocation,
                             "deathDate", user.deathDate
                         )
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                continuation.resume(AppResult.Success(true))
+                            } else {
+                                task.exception?.let {
+                                    continuation.resume(AppResult.Error(it))
+                                    return@addOnCompleteListener
+                                }
+                                continuation.resume(AppResult.Fail(FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)))
+                            }
+                        }
+                }
+            }
+    }
+
+
+    override suspend fun updateMemberMateId(user: User, newMember : User): AppResult<Boolean> = suspendCoroutine { continuation ->
+        val User = FirebaseFirestore.getInstance().collection(PATH_USER)
+        var path: String = ""
+
+        User.whereEqualTo("name",user.mateId)
+            .get()
+            .addOnSuccessListener {
+                for (index in it) {
+                    path = index.id
+                    Log.e("FindMate", index.id)
+                    //找到原先user
+                    val document = User.document(path)
+
+                    document
+                        .update("mateId",newMember.name)
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 continuation.resume(AppResult.Success(true))

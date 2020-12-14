@@ -116,7 +116,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.imageScan.setOnClickListener {
-            navController.navigate(R.id.action_global_qrCodeReaderFragment)
+            navController.navigate(R.id.action_global_qrCodeFragment)
         }
 
 //        binding.imageEdit.setOnClickListener {

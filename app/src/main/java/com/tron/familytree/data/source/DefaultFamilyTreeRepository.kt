@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.tron.familytree.data.AppResult
 import com.tron.familytree.data.Episode
 import com.tron.familytree.data.User
+import com.tron.familytree.profile.member.MemberItem
 
 
 class DefaultFamilyTreeRepository(private val remoteDataSource: FamilyTreeDataSource,
@@ -34,6 +35,14 @@ class DefaultFamilyTreeRepository(private val remoteDataSource: FamilyTreeDataSo
         return remoteDataSource.updateMemberFatherId(user , newMember)
     }
 
+    override suspend fun updateMemberMateId(user: User, newMember : User): AppResult<Boolean>{
+        return remoteDataSource.updateMemberMateId(user , newMember)
+    }
+
+    override suspend fun findUserById(id: String): AppResult<User>{
+        return remoteDataSource.findUserById(id)
+    }
+
     override suspend fun addUserToFirebase(user: User): AppResult<Boolean>{
         return remoteDataSource.addUserToFirebase(user)
     }
@@ -56,6 +65,10 @@ class DefaultFamilyTreeRepository(private val remoteDataSource: FamilyTreeDataSo
 
     override suspend fun getEpisode(): AppResult<List<Episode>>{
         return remoteDataSource.getEpisode()
+    }
+
+    override suspend fun updateChild(user: User,newMember: User): AppResult<Boolean>{
+        return remoteDataSource.updateChild(user,newMember)
     }
 
 }

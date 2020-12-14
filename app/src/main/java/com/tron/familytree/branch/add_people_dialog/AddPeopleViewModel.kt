@@ -150,6 +150,33 @@ class AddPeopleViewModel(
         }
     }
 
+    fun updateMemberMateId(user: User, newMember : User){
+        coroutineScope.launch {
+
+            _status.value = LoadApiStatus.LOADING
+
+            when (val result = repository.updateMemberMateId(user,newMember)) {
+                is AppResult.Success -> {
+                    _error.value = null
+                    _status.value = LoadApiStatus.DONE
+//                    leave(true)
+                }
+                is AppResult.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is AppResult.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                else -> {
+                    _error.value = FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)
+                    _status.value = LoadApiStatus.ERROR
+                }
+            }
+        }
+    }
+
     fun updateMemberFatherId(user: User, newMember : User){
         coroutineScope.launch {
 
@@ -230,7 +257,7 @@ class AddPeopleViewModel(
         return user
     }
 
-    fun setNewMember() : User{
+    fun setParent() : User{
         val user = User(
             name = userEditName,
             birth = birthDate,
@@ -239,6 +266,21 @@ class AddPeopleViewModel(
             gender = gender,
             deathDate = deathDate,
             birthLocation = userBirthLocation
+        )
+        Log.e("Add user", user.toString())
+        return user
+    }
+
+    fun setMate() : User{
+        val user = User(
+            name = userEditName,
+            birth = birthDate,
+            id = "",
+            userImage = userImage.value,
+            gender = gender,
+            deathDate = deathDate,
+            birthLocation = userBirthLocation,
+            mateId = selectedProperty.value?.mateId
         )
         Log.e("Add user", user.toString())
         return user

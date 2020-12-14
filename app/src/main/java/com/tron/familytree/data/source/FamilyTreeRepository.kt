@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.tron.familytree.data.AppResult
 import com.tron.familytree.data.Episode
 import com.tron.familytree.data.User
+import com.tron.familytree.profile.member.MemberItem
 
 interface FamilyTreeRepository {
 
@@ -20,6 +21,8 @@ interface FamilyTreeRepository {
 
     suspend fun updateMemberFatherId(user: User, newMember : User): AppResult<Boolean>
 
+    suspend fun updateMemberMateId(user: User, newMember : User): AppResult<Boolean>
+
     suspend fun addUserToFirebase(user: User): AppResult<Boolean>
 
     suspend fun findUser(name: String): AppResult<User>
@@ -31,4 +34,8 @@ interface FamilyTreeRepository {
     fun getLiveEpisode(): MutableLiveData<List<Episode>>
 
     suspend fun getEpisode(): AppResult<List<Episode>>
+
+    suspend fun findUserById(id: String): AppResult<User>
+
+    suspend fun updateChild(user: User,newMember: User): AppResult<Boolean>
 }

@@ -17,6 +17,7 @@ import com.tron.familytree.profile.editepisode.EditEpisodeViewModel
 import com.tron.familytree.profile.edituser.EditUserViewModel
 import com.tron.familytree.profile.episode.EpisodeViewModel
 import com.tron.familytree.profile.member.MemberViewModel
+import com.tron.familytree.profile.qrcode.QrCodeReaderViewModel
 
 @Suppress("UNCHECKED_CAST")
 class ViewModelFactory constructor(
@@ -61,6 +62,7 @@ class ViewModelFactory constructor(
 
                 isAssignableFrom(LogInViewModel::class.java) ->
                     LogInViewModel(repository)
+
 
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")

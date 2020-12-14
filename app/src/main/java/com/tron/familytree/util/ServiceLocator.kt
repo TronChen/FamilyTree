@@ -6,7 +6,7 @@ import app.appworks.school.publisher.data.source.DefaultFamilyTreeRepository
 import app.appworks.school.publisher.data.source.FamilyTreeDataSource
 import app.appworks.school.publisher.data.source.FamilyTreeRepository
 import app.appworks.school.publisher.data.source.local.FamilyTreeLocalDataSource
-import app.appworks.school.publisher.data.source.remote.FamilyTreeRemoteDataSource
+import com.tron.familytree.data.source.remote.FamilyTreeRemoteDataSource
 
 object ServiceLocator {
 

@@ -92,7 +92,11 @@
         android:id="@+id/qrCodeReaderFragment"
         android:name="com.tron.familytree.profile.qrcode.QrCodeReaderFragment"
         android:label="fragment_qr_code_reader"
-        tools:layout="@layout/fragment_qr_code_reader" /><action android:id="@+id/action_global_qrCodeReaderFragment" app:destination="@id/qrCodeReaderFragment"/>
+        tools:layout="@layout/fragment_qr_code_reader" >
+        <argument
+            android:name="userProperties"
+            app:argType="com.tron.familytree.data.User" />
+    </fragment><action android:id="@+id/action_global_qrCodeReaderFragment" app:destination="@id/qrCodeReaderFragment"/>
     <fragment
         android:id="@+id/albumDetailFragment"
         android:name="com.tron.familytree.family.albumdetail.AlbumDetailFragment"
@@ -123,4 +127,9 @@
         android:id="@+id/albumFragment"
         android:name="com.tron.familytree.family.album.AlbumFragment"
         android:label="AlbumFragment" /><action android:id="@+id/action_global_albumFragment" app:destination="@id/albumFragment"/>
+    <fragment
+        android:id="@+id/memberFragment"
+        android:name="com.tron.familytree.profile.member.MemberFragment"
+        android:label="MemberFragment" />
+    <action android:id="@+id/action_global_memberFragment" app:destination="@id/memberFragment" />
 </navigation>

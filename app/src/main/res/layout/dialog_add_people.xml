@@ -72,11 +72,11 @@
 
             <TextView
                 android:id="@+id/textAddMember"
+                AddMemberTitle="@{viewModel.selectedProperty}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:fontFamily="@font/noto_sans_bold"
-                AddMemberTitle="@{viewModel.selectedProperty}"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@+id/textView7"
@@ -108,11 +108,39 @@
                 android:layout_marginEnd="16dp"
                 android:ems="10"
                 android:hint="請輸入姓名"
-                android:text="@={viewModel._userEditName}"
                 android:inputType="textPersonName"
+                android:text="@={viewModel._userEditName}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/imageMember"
                 app:layout_constraintTop_toBottomOf="@+id/textView48" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/conSelectMember"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/rounded_orange_radius65"
+                app:layout_constraintBottom_toTopOf="@+id/conScan"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/conConfirm">
+
+                <TextView
+                    android:id="@+id/textView21"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/noto_sans"
+                    android:text="選擇現有的家族成員"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/conScan"
@@ -124,7 +152,9 @@
                 android:background="@drawable/rounded_orange_radius65"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/conSelectMember">
 
                 <ImageView
                     android:id="@+id/imageView34"
@@ -161,10 +191,11 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="16dp"
                 android:background="@drawable/rounded_orange_radius65"
-                app:layout_constraintBottom_toTopOf="@+id/conScan"
+                app:layout_constraintBottom_toTopOf="@+id/conSelectMember"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editBirthLocation">
 
@@ -184,14 +215,14 @@
 
             <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/imageMember"
+                updateImage="@{viewModel.updateImg}"
                 android:layout_width="130dp"
                 android:layout_height="130dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
-                updateImage="@{viewModel.updateImg}"
+                android:src="@drawable/add_orange"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView7"
-                tools:src="@tools:sample/avatars" />
+                app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
             <TextView
                 android:id="@+id/textSelectPic"
@@ -273,10 +304,10 @@
                     android:id="@+id/textDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="選擇年月"
                     android:fontFamily="@font/noto_sans"
-                    android:textSize="12sp"
+                    android:text="選擇年月"
                     android:textColor="@color/black"
+                    android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -351,11 +382,11 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="16dp"
                 android:ems="10"
-                android:inputType="textPersonName"
                 android:fontFamily="@font/noto_sans"
-                android:textColor="@color/black"
                 android:hint="輸入出生地點"
+                android:inputType="textPersonName"
                 android:text="@={viewModel._userBirthLocation}"
+                android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/imageView21"
                 app:layout_constraintTop_toBottomOf="@+id/textBirthLocation" />
