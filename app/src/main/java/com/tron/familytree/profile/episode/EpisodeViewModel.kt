@@ -69,19 +69,19 @@ class EpisodeViewModel(
     init {
 
         if (FamilyTreeApplication.INSTANCE.isLiveDataDesign()) {
-            getLiveEpisode()
+            getUserLiveEpisode()
         } else {
-            getEpisode()
+            getUserEpisode()
         }
     }
 
-    fun getEpisode() {
+    fun getUserEpisode() {
 
         coroutineScope.launch {
 
             _status.value = LoadApiStatus.LOADING
 
-            val result = repository.getEpisode()
+            val result = repository.getUserEpisode()
 
             _episodes.value = when (result) {
                 is AppResult.Success -> {
@@ -109,8 +109,8 @@ class EpisodeViewModel(
         }
     }
 
-    fun getLiveEpisode() {
-        liveEpisodes = repository.getLiveEpisode()
+    fun getUserLiveEpisode() {
+        liveEpisodes = repository.getUserLiveEpisode()
         _status.value = LoadApiStatus.DONE
         _refreshStatus.value = false
     }

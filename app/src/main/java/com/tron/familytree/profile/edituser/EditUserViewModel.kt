@@ -99,19 +99,19 @@ class EditUserViewModel(
 
 
         if (FamilyTreeApplication.INSTANCE.isLiveDataDesign()) {
-            getLiveEpisode()
+            getLiveEpisode(_selectedProperty.value!!)
         } else {
-            getEpisode()
+            getEpisode(_selectedProperty.value!!)
         }
     }
 
-    fun getEpisode() {
+    fun getEpisode(user: User) {
 
         coroutineScope.launch {
 
             _status.value = LoadApiStatus.LOADING
 
-            val result = repository.getEpisode()
+            val result = repository.getEpisode(user)
 
             _episodes.value = when (result) {
                 is AppResult.Success -> {
@@ -139,8 +139,8 @@ class EditUserViewModel(
         }
     }
 
-    fun getLiveEpisode() {
-        liveEpisodes = repository.getLiveEpisode()
+    fun getLiveEpisode(user: User) {
+        liveEpisodes = repository.getLiveEpisode(user)
         _status.value = LoadApiStatus.DONE
         _refreshStatus.value = false
     }

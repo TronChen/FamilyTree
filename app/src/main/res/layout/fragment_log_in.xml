@@ -17,6 +17,13 @@
 
         <!-- TODO: Update blank fragment layout -->
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:lottie_fileName="build_of_love.json"
+            app:lottie_loop="true"
+            app:lottie_autoPlay="true"/>
+
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="40dp"

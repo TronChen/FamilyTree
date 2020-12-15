@@ -175,4 +175,7 @@ dependencies {
 
     implementation 'com.firebaseui:firebase-ui-storage:7.1.0'
 
+    //Lottie
+    implementation 'com.airbnb.android:lottie:3.5.0'
+
 }

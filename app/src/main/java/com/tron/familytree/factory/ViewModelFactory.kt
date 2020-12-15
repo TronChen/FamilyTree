@@ -18,6 +18,7 @@ import com.tron.familytree.profile.edituser.EditUserViewModel
 import com.tron.familytree.profile.episode.EpisodeViewModel
 import com.tron.familytree.profile.member.MemberViewModel
 import com.tron.familytree.profile.qrcode.QrCodeReaderViewModel
+import com.tron.familytree.profile.qrcode.QrCodeViewModel
 
 @Suppress("UNCHECKED_CAST")
 class ViewModelFactory constructor(
@@ -62,6 +63,9 @@ class ViewModelFactory constructor(
 
                 isAssignableFrom(LogInViewModel::class.java) ->
                     LogInViewModel(repository)
+
+                isAssignableFrom(QrCodeViewModel::class.java) ->
+                    QrCodeViewModel(repository)
 
 
                 else ->

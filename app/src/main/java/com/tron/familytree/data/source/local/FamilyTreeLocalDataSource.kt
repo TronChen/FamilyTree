@@ -59,11 +59,11 @@ class FamilyTreeLocalDataSource(val context: Context) : FamilyTreeDataSource {
         TODO("Not yet implemented")
     }
 
-    override fun getLiveEpisode(): MutableLiveData<List<Episode>> {
+    override fun getLiveEpisode(user: User): MutableLiveData<List<Episode>> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getEpisode(): AppResult<List<Episode>> {
+    override suspend fun getEpisode(user: User): AppResult<List<Episode>> {
         TODO("Not yet implemented")
     }
 
@@ -76,6 +76,14 @@ class FamilyTreeLocalDataSource(val context: Context) : FamilyTreeDataSource {
     }
 
     override suspend fun getAllFamily(): AppResult<List<User>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getUserEpisode(): AppResult<List<Episode>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getUserLiveEpisode(): MutableLiveData<List<Episode>> {
         TODO("Not yet implemented")
     }
 }

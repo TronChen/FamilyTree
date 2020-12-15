@@ -31,13 +31,17 @@ interface FamilyTreeRepository {
 
     suspend fun addUserEpisode(episode: Episode): AppResult<Boolean>
 
-    fun getLiveEpisode(): MutableLiveData<List<Episode>>
+    fun getLiveEpisode(user: User): MutableLiveData<List<Episode>>
 
-    suspend fun getEpisode(): AppResult<List<Episode>>
+    suspend fun getEpisode(user: User): AppResult<List<Episode>>
 
     suspend fun findUserById(id: String): AppResult<User>
 
     suspend fun updateChild(user: User,newMember: User): AppResult<Boolean>
 
     suspend fun getAllFamily(): AppResult<List<User>>
+
+    suspend fun getUserEpisode(): AppResult<List<Episode>>
+
+    fun getUserLiveEpisode(): MutableLiveData<List<Episode>>
 }

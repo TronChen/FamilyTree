@@ -8,6 +8,8 @@ object UserManager {
     const val NAME_VALUE = "name_value"
     const val EMAIL = "email"
     const val EMAIL_VALUE = "email_value"
+    const val PHOTO = "photo"
+    const val PHOTO_VALUE = "photo_value"
 
 
 
@@ -30,5 +32,15 @@ object UserManager {
         set(value) {
             FamilyTreeApplication.INSTANCE.getSharedPreferences(EMAIL,0).edit()
                 .putString(EMAIL_VALUE, value).apply()
+        }
+
+    var photo: String?
+        get() {
+            return FamilyTreeApplication.INSTANCE.getSharedPreferences(PHOTO, 0)
+                .getString(PHOTO_VALUE,null)
+        }
+        set(value) {
+            FamilyTreeApplication.INSTANCE.getSharedPreferences(PHOTO,0).edit()
+                .putString(PHOTO_VALUE, value).apply()
         }
 }

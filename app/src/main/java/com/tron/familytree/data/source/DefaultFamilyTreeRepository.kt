@@ -59,12 +59,20 @@ class DefaultFamilyTreeRepository(private val remoteDataSource: FamilyTreeDataSo
         return remoteDataSource.addUserEpisode(episode)
     }
 
-    override fun getLiveEpisode(): MutableLiveData<List<Episode>>{
-        return remoteDataSource.getLiveEpisode()
+    override fun getLiveEpisode(user: User): MutableLiveData<List<Episode>>{
+        return remoteDataSource.getLiveEpisode(user)
     }
 
-    override suspend fun getEpisode(): AppResult<List<Episode>>{
-        return remoteDataSource.getEpisode()
+    override suspend fun getEpisode(user: User): AppResult<List<Episode>>{
+        return remoteDataSource.getEpisode(user)
+    }
+
+    override fun getUserLiveEpisode(): MutableLiveData<List<Episode>>{
+        return remoteDataSource.getUserLiveEpisode()
+    }
+
+    override suspend fun getUserEpisode(): AppResult<List<Episode>>{
+        return remoteDataSource.getUserEpisode()
     }
 
     override suspend fun updateChild(user: User,newMember: User): AppResult<Boolean>{

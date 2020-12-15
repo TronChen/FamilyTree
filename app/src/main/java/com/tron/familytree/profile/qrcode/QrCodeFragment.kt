@@ -8,15 +8,20 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import com.tron.familytree.R
 import com.tron.familytree.databinding.FragmentQrCodeBinding
+import com.tron.familytree.databinding.FragmentQrCodeReaderBinding
+import com.tron.familytree.ext.getVmFactory
 import com.tron.familytree.util.UserManager
 
 
 class QrCodeFragment : DialogFragment() {
+
+    private val viewModel by viewModels<QrCodeViewModel> { getVmFactory()}
 
     override fun onStart() {
         super.onStart()
@@ -33,6 +38,7 @@ class QrCodeFragment : DialogFragment() {
         val binding = FragmentQrCodeBinding.inflate(inflater, container, false)
 
         binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
 
         val ivCode: ImageView = binding.imageCode
             val encoder = BarcodeEncoder()

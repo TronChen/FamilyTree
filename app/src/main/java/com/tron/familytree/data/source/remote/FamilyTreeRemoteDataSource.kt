@@ -55,11 +55,11 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
             }
     }
 
-    override suspend fun getEpisode(): AppResult<List<Episode>> = suspendCoroutine { continuation ->
-        UserManager.email?.let {
+    override suspend fun getEpisode(user: User): AppResult<List<Episode>> = suspendCoroutine { continuation ->
+
             FirebaseFirestore.getInstance()
                 .collection(PATH_USER)
-                .document(it)
+                .document(user.id)
                 .collection(EPISODE)
                 .get()
                 .addOnCompleteListener { task ->
@@ -82,17 +82,45 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
                         continuation.resume(AppResult.Fail(FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)))
                     }
                 }
-        }
+
     }
 
-    override fun getLiveEpisode(): MutableLiveData<List<Episode>> {
+    override suspend fun getUserEpisode(): AppResult<List<Episode>> = suspendCoroutine { continuation ->
+
+        FirebaseFirestore.getInstance()
+            .collection(PATH_USER)
+            .document(UserManager.email.toString())
+            .collection(EPISODE)
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val list = mutableListOf<Episode>()
+                    for (document in task.result!!) {
+                        Log.d("Tron",document.id + " => " + document.data)
+
+                        val episode = document.toObject(Episode::class.java)
+                        list.add(episode)
+                    }
+                    continuation.resume(AppResult.Success(list))
+                } else {
+                    task.exception?.let {
+
+                        Log.w("Tron","[${this::class.simpleName}] Error getting documents. ${it.message}")
+                        continuation.resume(AppResult.Error(it))
+                        return@addOnCompleteListener
+                    }
+                    continuation.resume(AppResult.Fail(FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)))
+                }
+            }
+
+    }
+
+    override fun getLiveEpisode(user: User): MutableLiveData<List<Episode>> {
 
         val liveData = MutableLiveData<List<Episode>>()
-
-        UserManager.email?.let {
             FirebaseFirestore.getInstance()
                 .collection(PATH_USER)
-                .document(it)
+                .document(user.id)
                 .collection(EPISODE)
                 .orderBy("time", Query.Direction.DESCENDING)
                 .addSnapshotListener { snapshot, exception ->
@@ -112,8 +140,38 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
                     }
 
                     liveData.value = list
-                }
+
         }
+        return liveData
+    }
+
+    override fun getUserLiveEpisode(): MutableLiveData<List<Episode>> {
+
+        val liveData = MutableLiveData<List<Episode>>()
+        FirebaseFirestore.getInstance()
+            .collection(PATH_USER)
+            .document(UserManager.email.toString())
+            .collection(EPISODE)
+            .orderBy("time", Query.Direction.DESCENDING)
+            .addSnapshotListener { snapshot, exception ->
+
+                Log.i("Tron","addSnapshotListener detect")
+
+                exception?.let {
+                    Log.w("Tron","[${this::class.simpleName}] Error getting documents. ${it.message}")
+                }
+
+                val list = mutableListOf<Episode>()
+                for (document in snapshot!!) {
+                    Log.d("Tron",document.id + " => " + document.data)
+
+                    val episode = document.toObject(Episode::class.java)
+                    list.add(episode)
+                }
+
+                liveData.value = list
+
+            }
         return liveData
     }
 
@@ -241,7 +299,7 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
     override suspend fun addMember(user: User): AppResult<Boolean> = suspendCoroutine { continuation ->
         val User = FirebaseFirestore.getInstance().collection(PATH_USER)
         val document = User.document()
-
+        user.id = document.id
         document
             .set(user)
             .addOnCompleteListener { task ->
@@ -400,6 +458,18 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
 
                                 }
                             }
+                        collectionReference.whereEqualTo("name",originUser.value!!.motherId)
+                            .get().addOnSuccessListener {task ->
+                                for (fatherIndex in task){
+                                    val fatherPath = fatherIndex.id
+                                    collectionReference.document(fatherPath)
+                                        .update("mateId",originUser.value!!.motherId)
+                                        .addOnSuccessListener {
+                                            Log.e("updateComplete", it.toString())
+                                        }
+
+                                }
+                            }
                     }
 
                      }
@@ -442,6 +512,18 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
                                         .update("mateId",originUser.value!!.fatherId)
                                         .addOnSuccessListener {
 //                                            Log.e("updateComplete", it.toString())
+                                        }
+
+                                }
+                            }
+                        User.whereEqualTo("name",originUser.value!!.motherId)
+                            .get().addOnSuccessListener {task ->
+                                for (fatherIndex in task){
+                                    val fatherPath = fatherIndex.id
+                                    User.document(fatherPath)
+                                        .update("mateId",originUser.value!!.motherId)
+                                        .addOnSuccessListener {
+                                            Log.e("updateComplete", it.toString())
                                         }
 
                                 }

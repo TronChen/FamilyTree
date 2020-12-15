@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.tron.familytree.data.Episode
 import com.tron.familytree.databinding.DialogBranchUserDetailBinding
@@ -49,7 +50,12 @@ class BranchUserDetailDialog : BottomSheetDialogFragment() {
 
         binding.recyclerEpisode.adapter = adapter
 
-        adapter.submitList(createMock())
+
+
+        viewModel.liveEpisodes.observe(viewLifecycleOwner, Observer {
+            Log.e("UserEpisode", it.toString())
+            adapter.submitList(it)
+        })
 
 
 
