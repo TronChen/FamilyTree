@@ -105,6 +105,10 @@ class AddPeopleDialog : DialogFragment() {
             findNavController().navigate(AddPeopleDialogDirections.actionGlobalQrCodeReaderFragment(viewModel.selectedProperty.value!!))
         }
 
+        binding.conSelectMember.setOnClickListener {
+            findNavController().navigate(AddPeopleDialogDirections.actionGlobalSelectMemberFragment(viewModel.selectedProperty.value!!))
+        }
+
 
         viewModel.userEditName = binding.editName.text.toString()
         viewModel.userBirthLocation = binding.editBirthLocation.text.toString()

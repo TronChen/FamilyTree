@@ -71,4 +71,8 @@ class DefaultFamilyTreeRepository(private val remoteDataSource: FamilyTreeDataSo
         return remoteDataSource.updateChild(user,newMember)
     }
 
+    override suspend fun getAllFamily(): AppResult<List<User>>{
+        return remoteDataSource.getAllFamily()
+    }
+
 }

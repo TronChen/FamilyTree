@@ -132,4 +132,12 @@
         android:name="com.tron.familytree.profile.member.MemberFragment"
         android:label="MemberFragment" />
     <action android:id="@+id/action_global_memberFragment" app:destination="@id/memberFragment" />
+    <fragment
+        android:id="@+id/selectMemberFragment"
+        android:name="com.tron.familytree.profile.selectMember.SelectMemberFragment"
+        android:label="SelectMemberFragment" >
+        <argument
+            android:name="userProperties"
+            app:argType="com.tron.familytree.data.User" />
+    </fragment><action android:id="@+id/action_global_selectMemberFragment" app:destination="@id/selectMemberFragment"/>
 </navigation>

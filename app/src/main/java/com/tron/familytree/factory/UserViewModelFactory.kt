@@ -9,6 +9,7 @@ import com.tron.familytree.data.User
 import com.tron.familytree.profile.editepisode.EditEpisodeViewModel
 import com.tron.familytree.profile.edituser.EditUserViewModel
 import com.tron.familytree.profile.qrcode.QrCodeReaderViewModel
+import com.tron.familytree.profile.selectMember.SelectMemberViewModel
 
 
 @Suppress("UNCHECKED_CAST")
@@ -48,6 +49,15 @@ class UserViewModelFactory(
         if (modelClass.isAssignableFrom(QrCodeReaderViewModel::class.java)) {
             return user?.let {
                 QrCodeReaderViewModel(
+                    repository,
+                    it
+                )
+            } as T
+        }
+
+        if (modelClass.isAssignableFrom(SelectMemberViewModel::class.java)) {
+            return user?.let {
+                SelectMemberViewModel(
                     repository,
                     it
                 )

@@ -38,4 +38,6 @@ interface FamilyTreeRepository {
     suspend fun findUserById(id: String): AppResult<User>
 
     suspend fun updateChild(user: User,newMember: User): AppResult<Boolean>
+
+    suspend fun getAllFamily(): AppResult<List<User>>
 }
