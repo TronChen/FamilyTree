@@ -14,66 +14,15 @@
         android:layout_height="match_parent"
         tools:context=".message.MessageFragment">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/conChatRoom"
-            android:layout_width="0dp"
-            android:layout_height="120dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/rounded_light_grey_radius_24"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerChat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:id="@+id/textView43"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:fontFamily="@font/noto_sans"
-                android:text="陳志堅"
-                android:textColor="@color/black"
-                android:textSize="24sp"
-                app:layout_constraintBottom_toTopOf="@+id/textView44"
-                app:layout_constraintStart_toEndOf="@+id/circularImageView5"
-                app:layout_constraintTop_toTopOf="@+id/circularImageView5"
-                app:layout_constraintVertical_chainStyle="packed" />
-
-            <TextView
-                android:id="@+id/textView44"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/noto_sans"
-                android:text="回家吃飯啦！！！"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="@+id/circularImageView5"
-                app:layout_constraintStart_toStartOf="@+id/textView43" />
-
-            <TextView
-                android:id="@+id/textView45"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:fontFamily="@font/noto_sans"
-                android:text="11/12 7:25"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <com.mikhaellopez.circularimageview.CircularImageView
-                android:id="@+id/circularImageView5"
-                android:layout_width="83dp"
-                android:layout_height="83dp"
-                android:layout_marginStart="16dp"
-                android:src="@drawable/pikachu"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/item_list_chat_room" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

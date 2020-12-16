@@ -20,10 +20,13 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.tron.familytree.data.User
 import com.tron.familytree.databinding.ActivityMainBinding
 import com.tron.familytree.databinding.NavHeaderDrawerBinding
 import com.tron.familytree.ext.getVmFactory
+import com.tron.familytree.message.MessageFragmentDirections
 import com.tron.familytree.util.CurrentFragmentType
+import com.tron.familytree.util.UserManager
 
 const val ADD_USER = 111
 const val EDIT_USER = 222
@@ -62,7 +65,10 @@ class MainActivity : AppCompatActivity() {
                 binding.imageCalendar.visibility = View.INVISIBLE
                 binding.imageScan.visibility = View.INVISIBLE
                 binding.imageEdit.visibility = View.INVISIBLE
-                findNavController(R.id.myNavHostFragment).navigate(R.id.action_global_messageFragment)
+                findNavController(R.id.myNavHostFragment).navigate(MessageFragmentDirections.actionGlobalMessageFragment(
+                    User(id = UserManager.email.toString(),
+                    name = UserManager.name.toString())
+                ))
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_profile -> {

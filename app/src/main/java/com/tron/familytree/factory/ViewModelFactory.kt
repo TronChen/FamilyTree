@@ -31,9 +31,6 @@ class ViewModelFactory constructor(
                 isAssignableFrom(MainActivityViewModel::class.java) ->
                     MainActivityViewModel(repository)
 
-                isAssignableFrom(MessageViewModel::class.java) ->
-                    MessageViewModel(repository)
-
                 isAssignableFrom(MapViewModel::class.java) ->
                     MapViewModel(repository)
 

@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import app.appworks.school.publisher.data.source.FamilyTreeDataSource
 import com.tron.familytree.data.AppResult
+import com.tron.familytree.data.ChatRoom
 import com.tron.familytree.data.Episode
 import com.tron.familytree.data.User
 import com.tron.familytree.profile.member.MemberItem
@@ -84,6 +85,18 @@ class FamilyTreeLocalDataSource(val context: Context) : FamilyTreeDataSource {
     }
 
     override fun getUserLiveEpisode(): MutableLiveData<List<Episode>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun addChatroom(chatRoom: ChatRoom): AppResult<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getChatroom(): AppResult<List<ChatRoom>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getLiveChatroom(): MutableLiveData<List<ChatRoom>> {
         TODO("Not yet implemented")
     }
 }

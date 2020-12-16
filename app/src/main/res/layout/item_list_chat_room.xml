@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="chatRoom"
+            type="com.tron.familytree.data.ChatRoom" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/conChatRoom"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/rounded_light_grey_radius_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/textChatName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:fontFamily="@font/noto_sans"
+                android:text="@{chatRoom.attenderName[0]}"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toTopOf="@+id/textChatMessage"
+                app:layout_constraintStart_toEndOf="@+id/cvImgUser"
+                app:layout_constraintTop_toTopOf="@+id/cvImgUser"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/textChatMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/noto_sans"
+                android:text="回家吃飯啦！！！"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@+id/cvImgUser"
+                app:layout_constraintStart_toStartOf="@+id/textChatName" />
+
+            <TextView
+                android:id="@+id/textTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/noto_sans"
+                android:text="11/12 7:25"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/cvImgUser"
+                android:layout_width="83dp"
+                android:layout_height="83dp"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/pikachu"
+                mainImage="@{chatRoom.userImage[0]}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -24,7 +24,13 @@
         android:id="@+id/messageFragment"
         android:name="com.tron.familytree.message.MessageFragment"
         android:label="fragment_message"
-        tools:layout="@layout/fragment_message" />
+        tools:layout="@layout/fragment_message" >
+        <argument
+            android:name="userProperties"
+            app:argType="com.tron.familytree.data.User"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.tron.familytree.profile.ProfileFragment"
@@ -105,9 +111,13 @@
     <action android:id="@+id/action_global_albumDetailFragment" app:destination="@id/albumDetailFragment" />
     <fragment
         android:id="@+id/chatRoomFragment"
-        android:name="com.tron.familytree.message.ChatRoomFragment"
+        android:name="com.tron.familytree.message.chatroom.ChatRoomFragment"
         android:label="fragment_chat_room"
-        tools:layout="@layout/fragment_chat_room" /><action android:id="@+id/action_global_chatRoomFragment" app:destination="@id/chatRoomFragment"/>
+        tools:layout="@layout/fragment_chat_room" >
+        <argument
+            android:name="chatRoomProperties"
+            app:argType="com.tron.familytree.data.ChatRoom" />
+    </fragment><action android:id="@+id/action_global_chatRoomFragment" app:destination="@id/chatRoomFragment"/>
     <dialog
         android:id="@+id/addPeopleDialog"
         android:name="com.tron.familytree.branch.add_people_dialog.AddPeopleDialog"
@@ -139,5 +149,10 @@
         <argument
             android:name="userProperties"
             app:argType="com.tron.familytree.data.User" />
-    </fragment><action android:id="@+id/action_global_selectMemberFragment" app:destination="@id/selectMemberFragment"/>
+    </fragment>
+    <action android:id="@+id/action_global_selectMemberFragment" app:destination="@id/selectMemberFragment" />
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.tron.familytree.MainActivity"
+        android:label="MainActivity" />
 </navigation>

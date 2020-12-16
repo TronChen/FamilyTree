@@ -2,6 +2,7 @@ package app.appworks.school.publisher.data.source
 
 import androidx.lifecycle.MutableLiveData
 import com.tron.familytree.data.AppResult
+import com.tron.familytree.data.ChatRoom
 import com.tron.familytree.data.Episode
 import com.tron.familytree.data.User
 import com.tron.familytree.profile.member.MemberItem
@@ -81,6 +82,18 @@ class DefaultFamilyTreeRepository(private val remoteDataSource: FamilyTreeDataSo
 
     override suspend fun getAllFamily(): AppResult<List<User>>{
         return remoteDataSource.getAllFamily()
+    }
+
+    override suspend fun addChatroom(chatRoom: ChatRoom): AppResult<Boolean>{
+        return remoteDataSource.addChatroom(chatRoom)
+    }
+
+    override suspend fun getChatroom(): AppResult<List<ChatRoom>>{
+        return remoteDataSource.getChatroom()
+    }
+
+    override fun getLiveChatroom(): MutableLiveData<List<ChatRoom>>{
+        return remoteDataSource.getLiveChatroom()
     }
 
 }

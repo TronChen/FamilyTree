@@ -3,6 +3,7 @@ package app.appworks.school.publisher.data.source
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.tron.familytree.data.AppResult
+import com.tron.familytree.data.ChatRoom
 import com.tron.familytree.data.Episode
 import com.tron.familytree.data.User
 import com.tron.familytree.profile.member.MemberItem
@@ -46,4 +47,10 @@ interface FamilyTreeDataSource {
     suspend fun getUserEpisode(): AppResult<List<Episode>>
 
     fun getUserLiveEpisode(): MutableLiveData<List<Episode>>
+
+    suspend fun addChatroom(chatRoom: ChatRoom): AppResult<Boolean>
+
+    suspend fun getChatroom(): AppResult<List<ChatRoom>>
+
+    fun getLiveChatroom(): MutableLiveData<List<ChatRoom>>
 }

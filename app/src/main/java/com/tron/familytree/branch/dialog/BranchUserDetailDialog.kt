@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.tron.familytree.data.Episode
 import com.tron.familytree.databinding.DialogBranchUserDetailBinding
@@ -57,39 +58,12 @@ class BranchUserDetailDialog : BottomSheetDialogFragment() {
             adapter.submitList(it)
         })
 
+        binding.imageChat.setOnClickListener {
+            findNavController().navigate(BranchUserDetailDialogDirections.actionGlobalMessageFragment(viewModel.selectedProperty.value!!))
+        }
+
 
 
         return binding.root
     }
-
-    fun createMock() : List<Episode>{
-        val episode1 = Episode(
-            user  = "茶川川",
-            content = "當個快樂的博士生，每天睏霸上學當個快樂的博士生，每天睏霸上學當個快樂的博士生，每天睏霸上學當個快樂的博士生，每天睏霸上學當個快樂的博士生，每天睏霸上學當個快樂的博士生，每天睏霸上學當個快樂的博士生，每天睏霸上學",
-            title = "博士畢業",
-            time = "1984",
-            location = "台北"
-        )
-
-        val episode2 = Episode(
-            user  = "茶川川",
-            content = "沒那麼快樂了，累累博士生當個快樂的博士生，每天睏霸上學當個快樂的博士生，每天睏霸上學當個快樂的博士生，每天睏霸上學當個快樂的博士生，每天睏霸上學當個快樂的博士生，每天睏霸上學當個快樂的博士生，每天睏霸上學當個快樂的博士生，每天睏霸上學",
-            title = "雙博士畢業",
-            time = "1986",
-            location = "台北"
-        )
-
-        val list = mutableListOf<Episode>()
-        list.add(episode1)
-        list.add(episode2)
-        list.add(episode1)
-        list.add(episode2)
-        list.add(episode1)
-        list.add(episode2)
-        list.add(episode1)
-        list.add(episode2)
-
-        return list
-    }
-
 }

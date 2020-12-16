@@ -11,6 +11,7 @@ import com.google.firebase.storage.StorageMetadata
 import com.tron.familytree.FamilyTreeApplication
 import com.tron.familytree.R
 import com.tron.familytree.data.AppResult
+import com.tron.familytree.data.ChatRoom
 import com.tron.familytree.data.Episode
 import com.tron.familytree.data.User
 import com.tron.familytree.util.UserManager
@@ -25,7 +26,91 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
     private const val KEY_CREATED_TIME = "createdTime"
     private const val PATH_USER = "User"
     private const val EPISODE = "Episode"
+    private const val CHATROOM = "Chatroom"
     private const val FAMILY = "Family"
+
+
+    override suspend fun getChatroom(): AppResult<List<ChatRoom>> = suspendCoroutine { continuation ->
+
+        FirebaseFirestore.getInstance()
+            .collection(CHATROOM)
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val list = mutableListOf<ChatRoom>()
+                    for (document in task.result!!) {
+                        Log.d("Tron",document.id + " => " + document.data)
+
+                        val chatRoom = document.toObject(ChatRoom::class.java)
+                        list.add(chatRoom)
+                    }
+                    continuation.resume(AppResult.Success(list))
+                } else {
+                    task.exception?.let {
+
+                        Log.w("Tron","[${this::class.simpleName}] Error getting documents. ${it.message}")
+                        continuation.resume(AppResult.Error(it))
+                        return@addOnCompleteListener
+                    }
+                    continuation.resume(AppResult.Fail(FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)))
+                }
+            }
+
+    }
+
+    override fun getLiveChatroom(): MutableLiveData<List<ChatRoom>> {
+
+        val liveData = MutableLiveData<List<ChatRoom>>()
+        FirebaseFirestore.getInstance()
+            .collection(CHATROOM)
+            .addSnapshotListener { snapshot, exception ->
+
+                Log.i("Tron","addSnapshotListener detect")
+
+                exception?.let {
+                    Log.w("Tron","[${this::class.simpleName}] Error getting documents. ${it.message}")
+                }
+
+                val list = mutableListOf<ChatRoom>()
+                for (document in snapshot!!) {
+                    Log.d("Tron",document.id + " => " + document.data)
+
+                    val chatroom = document.toObject(ChatRoom::class.java)
+                    list.add(chatroom)
+                }
+
+                liveData.value = list
+
+            }
+        return liveData
+    }
+
+    override suspend fun addChatroom(chatRoom: ChatRoom): AppResult<Boolean> = suspendCoroutine { continuation ->
+        val userCollection = FirebaseFirestore.getInstance().collection(CHATROOM)
+        val document = userCollection.document()
+
+        userCollection.whereEqualTo("attenderId",chatRoom.attenderId)
+            .get()
+            .addOnSuccessListener {
+                for (index in it){
+                    continuation.resume(AppResult.Success(true))
+                }
+                if (it.isEmpty){
+                    chatRoom.id = document.id
+                    userCollection.document(chatRoom.id)
+                        .set(chatRoom)
+                        .addOnSuccessListener {
+                            if (it != null) {
+                                continuation.resume(AppResult.Success(true))
+                            }
+                        }
+                        .addOnFailureListener {
+                            continuation.resume(AppResult.Error(it))
+                        }
+                }
+            }
+    }
+
 
 
     override suspend fun getAllFamily(): AppResult<List<User>> = suspendCoroutine { continuation ->

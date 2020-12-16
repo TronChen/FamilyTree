@@ -6,6 +6,7 @@ import app.appworks.school.publisher.data.source.FamilyTreeRepository
 import com.tron.familytree.branch.add_people_dialog.AddPeopleViewModel
 import com.tron.familytree.branch.dialog.BranchUserDetailDialogViewModel
 import com.tron.familytree.data.User
+import com.tron.familytree.message.MessageViewModel
 import com.tron.familytree.profile.editepisode.EditEpisodeViewModel
 import com.tron.familytree.profile.edituser.EditUserViewModel
 import com.tron.familytree.profile.qrcode.QrCodeReaderViewModel
@@ -58,6 +59,15 @@ class UserViewModelFactory(
         if (modelClass.isAssignableFrom(SelectMemberViewModel::class.java)) {
             return user?.let {
                 SelectMemberViewModel(
+                    repository,
+                    it
+                )
+            } as T
+        }
+
+        if (modelClass.isAssignableFrom(MessageViewModel::class.java)) {
+            return user?.let {
+                MessageViewModel(
                     repository,
                     it
                 )

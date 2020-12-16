@@ -7,9 +7,9 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class ChatRoom(
     var id : String = "",
-    var userImage : String,
-    var attenderId : List<String>,
-    var message : List<Message>
+    var userImage : List<String> = emptyList(),
+    var attenderId : List<String> = emptyList(),
+    var attenderName : List<String> = emptyList()
 ):Parcelable
 
 @Parcelize
