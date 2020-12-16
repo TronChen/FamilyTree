@@ -2,6 +2,8 @@ package com.tron.familytree.data
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
+import java.util.*
+import kotlin.time.days
 
 
 @Parcelize
@@ -14,7 +16,9 @@ data class ChatRoom(
 
 @Parcelize
 data class Message(
-    var user : String = "",
-    var time : Long = 0L,
-    var text : String
+    var user: String = "",
+    var userName: String = "",
+    var userImage: String? = null,
+    var time: Date? = Calendar.getInstance().time,
+    var text: String? = null
 ): Parcelable

@@ -25,6 +25,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginLeft="8dp"
+                mainImage="@{message.userImage}"
                 android:scaleType="centerCrop"
                 android:src="@drawable/pikachu"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -36,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="4dp"
-                android:text="陳志堅"
+                android:text="@{message.userName}"
                 android:textSize="12sp"
                 app:layout_constraintLeft_toRightOf="@+id/image_message_profile"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -50,7 +51,7 @@
                 android:background="@drawable/rounded_orange_radius65"
                 android:maxWidth="240dp"
                 android:padding="8dp"
-                android:text="回家吃飯啦！！！"
+                android:text="@{message.text}"
                 android:textColor="#ffffff"
                 app:layout_constraintLeft_toRightOf="@+id/image_message_profile"
                 app:layout_constraintTop_toBottomOf="@+id/text_message_name" />
@@ -60,7 +61,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
-                android:text="11:40"
+                timeToHrMin="@{message.time}"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="@+id/text_message_body"
                 app:layout_constraintLeft_toRightOf="@+id/text_message_body" />

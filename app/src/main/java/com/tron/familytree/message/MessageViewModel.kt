@@ -11,6 +11,7 @@ import com.tron.familytree.data.ChatRoom
 import com.tron.familytree.data.Episode
 import com.tron.familytree.data.User
 import com.tron.familytree.network.LoadApiStatus
+import com.tron.familytree.util.UserManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -38,7 +39,9 @@ class MessageViewModel(
     val chatMember: LiveData<User>
         get() = _chatMember
 
-
+    val _mySelf = MutableLiveData<User>()
+    val mySelf: LiveData<User>
+        get() = _mySelf
 
     // status: The internal MutableLiveData that stores the status of the most recent request
     private val _status = MutableLiveData<LoadApiStatus>()
@@ -88,6 +91,8 @@ class MessageViewModel(
         } else {
             getChatroom()
         }
+
+        findUserMyself(UserManager.email.toString())
     }
 
     fun getChatroom() {
@@ -165,6 +170,32 @@ class MessageViewModel(
                     _error.value = null
                     _status.value = LoadApiStatus.DONE
                     _chatMember.value = result.data
+                }
+                is AppResult.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is AppResult.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                else -> {
+                    _error.value = FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)
+                    _status.value = LoadApiStatus.ERROR
+                }
+            }
+        }
+    }
+
+    fun findUserMyself(id: String){
+        coroutineScope.launch {
+            _status.value = LoadApiStatus.LOADING
+
+            when (val result = repository.findUserById(id)) {
+                is AppResult.Success -> {
+                    _error.value = null
+                    _status.value = LoadApiStatus.DONE
+                    _mySelf.value = result.data
                 }
                 is AppResult.Fail -> {
                     _error.value = result.error

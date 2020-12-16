@@ -1,10 +1,8 @@
 package app.appworks.school.publisher.data.source
 
 import androidx.lifecycle.MutableLiveData
-import com.tron.familytree.data.AppResult
-import com.tron.familytree.data.ChatRoom
-import com.tron.familytree.data.Episode
-import com.tron.familytree.data.User
+import com.tron.familytree.data.*
+import com.tron.familytree.message.chatroom.MessageItem
 import com.tron.familytree.profile.member.MemberItem
 
 
@@ -94,6 +92,18 @@ class DefaultFamilyTreeRepository(private val remoteDataSource: FamilyTreeDataSo
 
     override fun getLiveChatroom(): MutableLiveData<List<ChatRoom>>{
         return remoteDataSource.getLiveChatroom()
+    }
+
+    override suspend fun addMessage(chatRoom: ChatRoom,message: Message): AppResult<Boolean>{
+        return remoteDataSource.addMessage(chatRoom,message)
+    }
+
+    override fun getLiveMessage(chatRoom: ChatRoom): MutableLiveData<List<MessageItem>>{
+        return remoteDataSource.getLiveMessage(chatRoom)
+    }
+
+    override suspend fun getMessage(chatRoom: ChatRoom): AppResult<List<MessageItem>>{
+        return remoteDataSource.getMessage(chatRoom)
     }
 
 }

@@ -10,11 +10,10 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageMetadata
 import com.tron.familytree.FamilyTreeApplication
 import com.tron.familytree.R
-import com.tron.familytree.data.AppResult
-import com.tron.familytree.data.ChatRoom
-import com.tron.familytree.data.Episode
-import com.tron.familytree.data.User
+import com.tron.familytree.data.*
+import com.tron.familytree.message.chatroom.MessageItem
 import com.tron.familytree.util.UserManager
+import kotlinx.coroutines.coroutineScope
 import java.io.File
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -27,56 +26,183 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
     private const val PATH_USER = "User"
     private const val EPISODE = "Episode"
     private const val CHATROOM = "Chatroom"
+    private const val MESSAGE = "Message"
     private const val FAMILY = "Family"
 
 
-    override suspend fun getChatroom(): AppResult<List<ChatRoom>> = suspendCoroutine { continuation ->
 
+    override suspend fun getMessage(chatRoom: ChatRoom): AppResult<List<MessageItem>> = suspendCoroutine { continuation ->
+        val userCollection = FirebaseFirestore.getInstance().collection(CHATROOM)
+        userCollection
+            .whereEqualTo("id", chatRoom.id)
+            .get()
+            .addOnSuccessListener {
+                for (index in it) {
+
+                    userCollection.document(index.id).collection(MESSAGE)
+                        .orderBy("time",Query.Direction.ASCENDING)
+                        .get()
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                val list = mutableListOf<MessageItem>()
+                                for (document in task.result!!) {
+                                    Log.d("Tron", document.id + " => " + document.data)
+
+                                    val message = document.toObject(Message::class.java)
+                                    if (message.user == UserManager.email){
+                                        list.add(MessageItem.Sender(message))
+                                    }else{
+                                        list.add(MessageItem.Receiver(message))
+                                    }
+                                }
+                                continuation.resume(AppResult.Success(list))
+                            } else {
+                                task.exception?.let {
+
+                                    Log.w(
+                                        "Tron",
+                                        "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                                    )
+                                    continuation.resume(AppResult.Error(it))
+                                    return@addOnCompleteListener
+                                }
+                                continuation.resume(
+                                    AppResult.Fail(
+                                        FamilyTreeApplication.INSTANCE.getString(
+                                            R.string.you_know_nothing
+                                        )
+                                    )
+                                )
+                            }
+                        }
+
+                }
+            }
+    }
+
+    override fun getLiveMessage(chatRoom: ChatRoom): MutableLiveData<List<MessageItem>> {
+        val userCollection = FirebaseFirestore.getInstance().collection(CHATROOM)
+        val liveData = MutableLiveData<List<MessageItem>>()
+        userCollection
+            .whereEqualTo("id",chatRoom.id)
+            .get()
+            .addOnSuccessListener {
+                for (index in it){
+                    userCollection.document(index.id).collection(MESSAGE)
+                        .orderBy("time",Query.Direction.ASCENDING)
+                        .addSnapshotListener { snapshot, exception ->
+
+                            Log.i("Tron","addSnapshotListener detect")
+
+                            exception?.let {
+                                Log.w("Tron","[${this::class.simpleName}] Error getting documents. ${it.message}")
+                            }
+
+                            val list = mutableListOf<MessageItem>()
+                            for (document in snapshot!!) {
+                                Log.d("Tron",document.id + " => " + document.data)
+
+                                val message = document.toObject(Message::class.java)
+                                if (message.user == UserManager.email){
+                                    list.add(MessageItem.Sender(message))
+                                }else{
+                                    list.add(MessageItem.Receiver(message))
+                                }
+                            }
+                            liveData.value = list
+                        }
+                }
+            }
+        return liveData
+    }
+
+    override suspend fun addMessage(chatRoom: ChatRoom,message: Message): AppResult<Boolean> = suspendCoroutine { continuation ->
+        val userCollection = FirebaseFirestore.getInstance().collection(CHATROOM)
+
+        userCollection.whereEqualTo("id",chatRoom.id)
+            .get()
+            .addOnSuccessListener {
+                for (index in it){
+                    userCollection.document(index.id).collection(MESSAGE)
+                        .add(message).addOnSuccessListener {
+                            continuation.resume(AppResult.Success(true))
+                        }
+                        .addOnFailureListener {
+                            continuation.resume(AppResult.Error(it))
+                        }
+                }
+            }
+    }
+
+    override suspend fun getChatroom(): AppResult<List<ChatRoom>> = suspendCoroutine { continuation ->
         FirebaseFirestore.getInstance()
             .collection(CHATROOM)
+            .whereArrayContains("attenderId",UserManager.email.toString())
             .get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val list = mutableListOf<ChatRoom>()
                     for (document in task.result!!) {
-                        Log.d("Tron",document.id + " => " + document.data)
+                        Log.d("Tron", document.id + " => " + document.data)
 
                         val chatRoom = document.toObject(ChatRoom::class.java)
+                        chatRoom.attenderId.filter { it != UserManager.email }
+                        chatRoom.attenderName.filter { it != UserManager.name }
                         list.add(chatRoom)
                     }
                     continuation.resume(AppResult.Success(list))
                 } else {
                     task.exception?.let {
 
-                        Log.w("Tron","[${this::class.simpleName}] Error getting documents. ${it.message}")
+                        Log.w(
+                            "Tron",
+                            "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                        )
                         continuation.resume(AppResult.Error(it))
                         return@addOnCompleteListener
                     }
-                    continuation.resume(AppResult.Fail(FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)))
+                    continuation.resume(
+                        AppResult.Fail(
+                            FamilyTreeApplication.INSTANCE.getString(
+                                R.string.you_know_nothing
+                            )
+                        )
+                    )
                 }
             }
-
     }
+
 
     override fun getLiveChatroom(): MutableLiveData<List<ChatRoom>> {
 
         val liveData = MutableLiveData<List<ChatRoom>>()
+
         FirebaseFirestore.getInstance()
             .collection(CHATROOM)
+            .whereArrayContains("attenderId",UserManager.email.toString())
             .addSnapshotListener { snapshot, exception ->
 
-                Log.i("Tron","addSnapshotListener detect")
+                Log.i("Tron", "addSnapshotListener detect")
 
                 exception?.let {
-                    Log.w("Tron","[${this::class.simpleName}] Error getting documents. ${it.message}")
+                    Log.w(
+                        "Tron",
+                        "[${this::class.simpleName}] Error getting documents. ${it.message}"
+                    )
                 }
 
                 val list = mutableListOf<ChatRoom>()
                 for (document in snapshot!!) {
-                    Log.d("Tron",document.id + " => " + document.data)
+                    Log.d("Tron", document.id + " => " + document.data)
 
+                    val chatroom1 = ChatRoom()
                     val chatroom = document.toObject(ChatRoom::class.java)
-                    list.add(chatroom)
+                    chatroom1.id = chatroom.id
+                    chatroom1.userImage = chatroom.userImage.filter { it != UserManager.photo}
+                    chatroom1.attenderId = chatroom.attenderId.filter { it != UserManager.email }
+                    chatroom1.attenderName = chatroom.attenderName.filter { it != UserManager.name }
+                    Log.e("chatroom1", chatroom1.toString())
+                    list.add(chatroom1)
                 }
 
                 liveData.value = list
@@ -84,6 +210,7 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
             }
         return liveData
     }
+
 
     override suspend fun addChatroom(chatRoom: ChatRoom): AppResult<Boolean> = suspendCoroutine { continuation ->
         val userCollection = FirebaseFirestore.getInstance().collection(CHATROOM)

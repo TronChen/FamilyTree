@@ -43,7 +43,26 @@ class MessageFragment : Fragment() {
         binding.viewModel = viewModel
 
         val adapter = MessageAdapter(MessageAdapter.MessageOnItemClickListener{
+//            val attenderId = mutableListOf<String>()
+//            val attenderName = mutableListOf<String>()
+//            val userImage = mutableListOf<String>()
+//            for (i in it.attenderId) {
+//                attenderId.add(i)
+//            }
+//            attenderId.add(UserManager.email.toString())
+//            for(i in it.attenderName) {
+//                attenderName.add(i)
+//            }
+//            attenderName.add(UserManager.name.toString())
+//            for (i in it.userImage) {
+//                userImage.add(i)
+//            }
+//            userImage.add(UserManager.photo.toString())
+//            it.attenderId = attenderId
+//            it.attenderName = attenderName
+//            it.userImage = userImage
             Log.e("MessageItemClick", it.toString())
+
             findNavController().navigate(MessageFragmentDirections.actionGlobalChatRoomFragment(it))
         })
 
@@ -73,7 +92,7 @@ class MessageFragment : Fragment() {
         return ChatRoom(
             id = "",
             attenderId = listOf(user.id,UserManager.email.toString()),
-            userImage = listOf(user.userImage.toString()),
+            userImage = listOf(user.userImage.toString(),UserManager.photo.toString()),
             attenderName = listOf(viewModel._chatMember.value!!.name, UserManager.name.toString())
         )
     }

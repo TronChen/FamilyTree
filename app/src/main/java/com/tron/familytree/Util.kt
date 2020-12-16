@@ -1,6 +1,7 @@
 package com.tron.familytree
 
 import android.util.Log
+import android.util.TimeFormatException
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -11,6 +12,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.tron.familytree.data.User
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.time.ExperimentalTime
+import kotlin.time.hours
 
 @BindingAdapter("mainImage")
 fun bindImage(imgView: ImageView, imgUrl: String?) {
@@ -71,5 +77,13 @@ fun bindAddTitle(text : TextView, user: User) {
         if (user.name == "No mateMother"){
             text.text = "${user.motherId} 的 母親"
         }
+    }
+}
+
+@ExperimentalTime
+@BindingAdapter("timeToHrMin")
+fun bindTimeToHrMin(text: TextView, time : Date?){
+    time?.let {
+        text.text = "${SimpleDateFormat("HH:mm").format(it.time)}"
     }
 }

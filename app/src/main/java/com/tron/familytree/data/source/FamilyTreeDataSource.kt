@@ -2,10 +2,8 @@ package app.appworks.school.publisher.data.source
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.tron.familytree.data.AppResult
-import com.tron.familytree.data.ChatRoom
-import com.tron.familytree.data.Episode
-import com.tron.familytree.data.User
+import com.tron.familytree.data.*
+import com.tron.familytree.message.chatroom.MessageItem
 import com.tron.familytree.profile.member.MemberItem
 import kotlin.coroutines.Continuation
 
@@ -53,4 +51,10 @@ interface FamilyTreeDataSource {
     suspend fun getChatroom(): AppResult<List<ChatRoom>>
 
     fun getLiveChatroom(): MutableLiveData<List<ChatRoom>>
+
+    suspend fun addMessage(chatRoom: ChatRoom,message: Message): AppResult<Boolean>
+
+    fun getLiveMessage(chatRoom: ChatRoom): MutableLiveData<List<MessageItem>>
+
+    suspend fun getMessage(chatRoom: ChatRoom): AppResult<List<MessageItem>>
 }
