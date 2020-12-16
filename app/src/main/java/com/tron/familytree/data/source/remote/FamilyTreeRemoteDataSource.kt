@@ -13,7 +13,6 @@ import com.tron.familytree.R
 import com.tron.familytree.data.*
 import com.tron.familytree.message.chatroom.MessageItem
 import com.tron.familytree.util.UserManager
-import kotlinx.coroutines.coroutineScope
 import java.io.File
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -130,6 +129,14 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
                         .addOnFailureListener {
                             continuation.resume(AppResult.Error(it))
                         }
+
+                    userCollection.document(index.id)
+                        .update("latestMessage",message).addOnSuccessListener {
+//                            continuation.resume(AppResult.Success(true))
+                        }
+                        .addOnFailureListener {
+//                            continuation.resume(AppResult.Error(it))
+                        }
                 }
             }
     }
@@ -145,10 +152,13 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
                     for (document in task.result!!) {
                         Log.d("Tron", document.id + " => " + document.data)
 
-                        val chatRoom = document.toObject(ChatRoom::class.java)
-                        chatRoom.attenderId.filter { it != UserManager.email }
-                        chatRoom.attenderName.filter { it != UserManager.name }
-                        list.add(chatRoom)
+                        val chatroom1 = ChatRoom()
+                        val chatroom = document.toObject(ChatRoom::class.java)
+                        chatroom1.id = chatroom.id
+                        chatroom1.userImage = chatroom.userImage.filter { it != UserManager.photo}
+                        chatroom1.attenderId = chatroom.attenderId.filter { it != UserManager.email }
+                        chatroom1.attenderName = chatroom.attenderName.filter { it != UserManager.name }
+                        list.add(chatroom1)
                     }
                     continuation.resume(AppResult.Success(list))
                 } else {
@@ -171,6 +181,45 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
                 }
             }
     }
+
+//    override fun getLiveLatestMessage(): MutableLiveData<List<Message>> {
+//
+//        val liveData = MutableLiveData<List<Message>>()
+//
+//        FirebaseFirestore.getInstance()
+//            .collection(CHATROOM)
+//            .whereArrayContains("attenderId",UserManager.email.toString())
+//            .addSnapshotListener { snapshot, exception ->
+//
+//                Log.i("Tron", "addSnapshotListener detect")
+//
+//                exception?.let {
+//                    Log.w(
+//                        "Tron",
+//                        "[${this::class.simpleName}] Error getting documents. ${it.message}"
+//                    )
+//                }
+//
+//                val list = mutableListOf<Message>()
+//                for (document in snapshot!!) {
+//                    FirebaseFirestore.getInstance()
+//                        .collection(CHATROOM)
+//                        .document(document.id)
+//                        .collection(MESSAGE)
+//                        .orderBy("time", Query.Direction.DESCENDING)
+//                        .limit(1)
+//                        .addSnapshotListener {  snapshot, exception ->
+//                            for (document in snapshot!!) {
+//                                val message = document.toObject(Message::class.java)
+//                                list.add(message)
+//                            }
+//                        }
+//                }
+//                liveData.value = list
+//
+//            }
+//        return liveData
+//    }
 
 
     override fun getLiveChatroom(): MutableLiveData<List<ChatRoom>> {
@@ -201,6 +250,7 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
                     chatroom1.userImage = chatroom.userImage.filter { it != UserManager.photo}
                     chatroom1.attenderId = chatroom.attenderId.filter { it != UserManager.email }
                     chatroom1.attenderName = chatroom.attenderName.filter { it != UserManager.name }
+                    chatroom1.latestMessage = chatroom.latestMessage
                     Log.e("chatroom1", chatroom1.toString())
                     list.add(chatroom1)
                 }

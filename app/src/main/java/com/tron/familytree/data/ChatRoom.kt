@@ -3,15 +3,15 @@ package com.tron.familytree.data
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 import java.util.*
-import kotlin.time.days
 
 
 @Parcelize
 data class ChatRoom(
-    var id : String = "",
-    var userImage : List<String> = emptyList(),
-    var attenderId : List<String> = emptyList(),
-    var attenderName : List<String> = emptyList()
+    var id: String = "",
+    var userImage: List<String> = emptyList(),
+    var attenderId: List<String> = emptyList(),
+    var attenderName: List<String> = emptyList(),
+    var latestMessage: Message? = null
 ):Parcelable
 
 @Parcelize
