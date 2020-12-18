@@ -17,5 +17,6 @@ data class Event(
     var content: String = "",
     var location: String = "",
     var eventType: EventType? = null,
-    var eventTime: Long? = null
+    var eventTime: Long? = null,
+    var eventMonth: String = ""
 ):Parcelable

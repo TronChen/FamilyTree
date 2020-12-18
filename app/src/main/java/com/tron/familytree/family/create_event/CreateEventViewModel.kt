@@ -23,6 +23,7 @@ class CreateEventViewModel(
     val editLocation = MutableLiveData<String>()
     val editContent = MutableLiveData<String>()
     val eventType = MutableLiveData<EventType>()
+    val eventMonth = MutableLiveData<String>()
 
     val editDate = MutableLiveData<String>()
     val editTime = MutableLiveData<String>()

@@ -141,5 +141,9 @@ class DefaultFamilyTreeRepository(private val remoteDataSource: FamilyTreeDataSo
         return remoteDataSource.getLiveEventByUserId(id)
     }
 
+    override suspend fun getEventByTime(date: String): AppResult<List<Event>>{
+        return remoteDataSource.getEventByTime(date)
+    }
+
 
 }

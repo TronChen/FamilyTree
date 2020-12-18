@@ -73,4 +73,6 @@ interface FamilyTreeRepository {
     suspend fun getEventByUserId(id: String): AppResult<List<Event>>
 
     fun getLiveEventByUserId(id: String): MutableLiveData<List<Event>>
+
+    suspend fun getEventByTime(date: String): AppResult<List<Event>>
 }

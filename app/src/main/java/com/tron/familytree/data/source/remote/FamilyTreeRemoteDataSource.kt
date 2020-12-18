@@ -108,6 +108,35 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
             }
     }
 
+    override suspend fun getEventByTime(date: String): AppResult<List<Event>> = suspendCoroutine { continuation ->
+        FirebaseFirestore.getInstance()
+            .collection(PATH_USER)
+            .document(UserManager.email.toString())
+            .collection(EVENT)
+            .whereEqualTo("date",date)
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val list = mutableListOf<Event>()
+                    for (document in task.result!!) {
+                        Log.d("Tron",document.id + " => " + document.data)
+
+                        val event = document.toObject(Event::class.java)
+                        list.add(event)
+                    }
+                    continuation.resume(AppResult.Success(list))
+                } else {
+                    task.exception?.let {
+
+                        Log.w("Tron","[${this::class.simpleName}] Error getting documents. ${it.message}")
+                        continuation.resume(AppResult.Error(it))
+                        return@addOnCompleteListener
+                    }
+                    continuation.resume(AppResult.Fail(FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)))
+                }
+            }
+    }
+
 
     override fun getLiveEventByUserId(id: String): MutableLiveData<List<Event>> {
         val userCollection = FirebaseFirestore.getInstance().collection(PATH_USER)

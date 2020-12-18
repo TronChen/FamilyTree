@@ -39,14 +39,14 @@ class CalendarFragment : Fragment() {
 
     private lateinit var widget: MaterialCalendarView
 
+//    val localDate: LocalDate? = java.time.LocalDate.now().now()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentCalendarBinding.inflate(inflater, container, false)
-
-        val localDate = LocalDate.now()
 
         widget = binding.materialCalendarView
 //        widget.setCurrentDate(localDate)
@@ -67,24 +67,26 @@ class CalendarFragment : Fragment() {
             val day   = SimpleDateFormat("dd").format(it.eventTime).toInt()
         })
 
+//        widget.setSelectedDate(localDate)
         // Get the current selected date
-        widget.setOnDateChangedListener { _, date, selected ->
-            if (selected) {
-
+        widget.setOnDateChangedListener { widget, date, selected ->
 //                oneDayDecorator.setDate(date.date)
 
                 // Create a sorted list of event based on the current date
-                val selectedDate =  SimpleDateFormat("yyyy-MM-dd").parse(date.date.toString()).time
+                val selectedDate =  SimpleDateFormat("yyyy-M-dd").parse(date.date.toString()).time
                 viewModel.createDailyEvent(selectedDate)
-
+            val eventMonth = "${date.date.year}-${date.date.monthValue}-${date.date.dayOfMonth}"
                 Log.e("Tron","$selectedDate")
-                Log.e("Tron","${date.date}")
+//                Log.e("Tron","${date.date.month}")
+            Log.e("Tron","${date.date.monthValue}")
+            Log.e("Tron",eventMonth)
+
+            viewModel.getEventByTime(eventMonth)
 
 
 
             }
 
-        }
 
 
 
@@ -100,6 +102,7 @@ class CalendarFragment : Fragment() {
         )
             }
                 adapter.submitList(it)
+            adapter.notifyDataSetChanged()
         })
 
 

@@ -61,6 +61,7 @@ class CreateEventDialog : DialogFragment() {
             val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
             DatePickerDialog(requireContext(),{_, year, month, day ->
                 viewModel.editDate.value ="${setDateFormat(year, month, day)}"
+                viewModel.eventMonth.value = "${setMonthFormat(year, month, day)}"
                 Log.e("DatePicker","$year,$month,$day}")
                 time.set(year,month,day)
                 eventTime.value = time.timeInMillis
@@ -100,6 +101,9 @@ class CreateEventDialog : DialogFragment() {
     private fun setDateFormat(year: Int, month: Int, day: Int): String {
         return "$year-${month + 1}-$day"
     }
+    private fun setMonthFormat(year: Int, month: Int, day: Int): String {
+        return "$year-${month + 1}"
+    }
 
     fun setEvent(): Event {
         return Event(
@@ -112,7 +116,8 @@ class CreateEventDialog : DialogFragment() {
             content = viewModel.editContent.value!!,
             location = viewModel.editLocation.value!!,
             eventType = viewModel.eventType.value,
-            eventTime = eventTime.value
+            eventTime = eventTime.value,
+            eventMonth = viewModel.eventMonth.value!!
         )
     }
 
