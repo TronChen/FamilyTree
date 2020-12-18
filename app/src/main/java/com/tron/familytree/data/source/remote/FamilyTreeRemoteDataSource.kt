@@ -109,12 +109,70 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
     }
 
 
+    override fun getLiveEventByUserId(id: String): MutableLiveData<List<Event>> {
+        val userCollection = FirebaseFirestore.getInstance().collection(PATH_USER)
+        val liveData = MutableLiveData<List<Event>>()
+
+        userCollection
+            .document(id)
+            .collection(EVENT)
+            .orderBy("eventTime",Query.Direction.DESCENDING)
+            .addSnapshotListener { snapshot, exception ->
+
+                Log.i("Tron","addSnapshotListener detect")
+
+                exception?.let {
+                    Log.w("Tron","[${this::class.simpleName}] Error getting documents. ${it.message}")
+                }
+
+                val list = mutableListOf<Event>()
+                for (document in snapshot!!) {
+                    Log.d("Tron",document.id + " => " + document.data)
+
+                    val event = document.toObject(Event::class.java)
+                    list.add(event)
+                }
+                liveData.value = list
+            }
+        return liveData
+    }
+
+    override suspend fun getEventByUserId(id: String): AppResult<List<Event>> = suspendCoroutine { continuation ->
+        FirebaseFirestore.getInstance()
+            .collection(PATH_USER)
+            .document(id)
+            .collection(EVENT)
+            .orderBy("eventTime",Query.Direction.DESCENDING)
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val list = mutableListOf<Event>()
+                    for (document in task.result!!) {
+                        Log.d("Tron",document.id + " => " + document.data)
+
+                        val event = document.toObject(Event::class.java)
+                        list.add(event)
+                    }
+                    continuation.resume(AppResult.Success(list))
+                } else {
+                    task.exception?.let {
+
+                        Log.w("Tron","[${this::class.simpleName}] Error getting documents. ${it.message}")
+                        continuation.resume(AppResult.Error(it))
+                        return@addOnCompleteListener
+                    }
+                    continuation.resume(AppResult.Fail(FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)))
+                }
+            }
+    }
+
+
     override fun getLiveEvent(): MutableLiveData<List<Event>> {
         val userCollection = FirebaseFirestore.getInstance().collection(EVENT)
         val liveData = MutableLiveData<List<Event>>()
 
         userCollection
-            .orderBy("eventTime",Query.Direction.ASCENDING)
+            .orderBy("eventTime",Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, exception ->
 
                 Log.i("Tron","addSnapshotListener detect")
@@ -138,6 +196,7 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
     override suspend fun getEvent(): AppResult<List<Event>> = suspendCoroutine { continuation ->
         FirebaseFirestore.getInstance()
             .collection(EVENT)
+            .orderBy("eventTime",Query.Direction.DESCENDING)
             .get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -338,46 +397,6 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
                 }
             }
     }
-
-
-//    override fun getLiveLatestMessage(): MutableLiveData<List<Message>> {
-//
-//        val liveData = MutableLiveData<List<Message>>()
-//
-//        FirebaseFirestore.getInstance()
-//            .collection(CHATROOM)
-//            .whereArrayContains("attenderId",UserManager.email.toString())
-//            .addSnapshotListener { snapshot, exception ->
-//
-//                Log.i("Tron", "addSnapshotListener detect")
-//
-//                exception?.let {
-//                    Log.w(
-//                        "Tron",
-//                        "[${this::class.simpleName}] Error getting documents. ${it.message}"
-//                    )
-//                }
-//
-//                val list = mutableListOf<Message>()
-//                for (document in snapshot!!) {
-//                    FirebaseFirestore.getInstance()
-//                        .collection(CHATROOM)
-//                        .document(document.id)
-//                        .collection(MESSAGE)
-//                        .orderBy("time", Query.Direction.DESCENDING)
-//                        .limit(1)
-//                        .addSnapshotListener {  snapshot, exception ->
-//                            for (document in snapshot!!) {
-//                                val message = document.toObject(Message::class.java)
-//                                list.add(message)
-//                            }
-//                        }
-//                }
-//                liveData.value = list
-//
-//            }
-//        return liveData
-//    }
 
 
     override fun getLiveChatroom(): MutableLiveData<List<ChatRoom>> {

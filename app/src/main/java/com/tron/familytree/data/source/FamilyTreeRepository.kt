@@ -69,4 +69,8 @@ interface FamilyTreeRepository {
     suspend fun getAttender(event: Event): AppResult<List<User>>
 
     suspend fun findChatroom(member: String, userId : String): AppResult<Boolean>
+
+    suspend fun getEventByUserId(id: String): AppResult<List<Event>>
+
+    fun getLiveEventByUserId(id: String): MutableLiveData<List<Event>>
 }

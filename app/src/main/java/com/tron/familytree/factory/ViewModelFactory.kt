@@ -6,6 +6,7 @@ import app.appworks.school.publisher.data.source.FamilyTreeRepository
 import com.tron.familytree.MainActivityViewModel
 import com.tron.familytree.family.FamilyViewModel
 import com.tron.familytree.family.album.AlbumViewModel
+import com.tron.familytree.family.calendar.CalendarViewModel
 import com.tron.familytree.family.create_album.CreateAlbumViewModel
 import com.tron.familytree.family.create_event.CreateEventViewModel
 import com.tron.familytree.family.event.EventViewModel
@@ -63,6 +64,9 @@ class ViewModelFactory constructor(
 
                 isAssignableFrom(QrCodeViewModel::class.java) ->
                     QrCodeViewModel(repository)
+
+                isAssignableFrom(CalendarViewModel::class.java) ->
+                    CalendarViewModel(repository)
 
 
                 else ->

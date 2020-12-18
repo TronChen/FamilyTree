@@ -137,4 +137,12 @@ class FamilyTreeLocalDataSource(val context: Context) : FamilyTreeDataSource {
     override suspend fun findChatroom(member: String, userId: String): AppResult<Boolean> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun getEventByUserId(id: String): AppResult<List<Event>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getLiveEventByUserId(id: String): MutableLiveData<List<Event>> {
+        TODO("Not yet implemented")
+    }
 }
