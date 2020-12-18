@@ -109,4 +109,32 @@ class FamilyTreeLocalDataSource(val context: Context) : FamilyTreeDataSource {
     override suspend fun getMessage(chatRoom: ChatRoom): AppResult<List<MessageItem>> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun addEvent(event: Event): AppResult<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getEvent(): AppResult<List<Event>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getLiveEvent(): MutableLiveData<List<Event>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun addEventAttender(user: User, event: Event): AppResult<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getLiveAttender(event: Event): MutableLiveData<List<User>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getAttender(event: Event): AppResult<List<User>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun findChatroom(member: String, userId: String): AppResult<Boolean> {
+        TODO("Not yet implemented")
+    }
 }

@@ -9,8 +9,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.firestore.FirebaseFirestore
 import com.tron.familytree.data.ChatRoom
 import com.tron.familytree.data.User
+import com.tron.familytree.data.source.remote.FamilyTreeRemoteDataSource
 import com.tron.familytree.databinding.FragmentMessageBinding
 import com.tron.familytree.ext.getVmFactory
 import com.tron.familytree.util.UserManager
@@ -51,7 +53,8 @@ class MessageFragment : Fragment() {
         })
 
         viewModel._chatMember.observe(viewLifecycleOwner, Observer {
-                viewModel.addChatroom(setChatroom(it))
+            //Observe chatMember與他有沒有聊天室
+            viewModel.findChatroom(it.id, UserManager.email.toString())
         })
 
         viewModel.liveChatroom.observe(viewLifecycleOwner, Observer {
@@ -59,15 +62,18 @@ class MessageFragment : Fragment() {
             adapter.submitList(it)
         })
 
+        val bbb = listOf("dtp6284tj0@gmail.com","tronchen1993@gmail.com")
+        FirebaseFirestore.getInstance()
+            .collection("Chatroom")
+            .whereIn("attenderId", listOf(bbb,bbb.reversed()))
+            .get()
+            .addOnSuccessListener {
+                for (index in it) {
+                    Log.e("HHHHHHH",index.id)
+                }
+            }
+
         return binding.root
     }
 
-    fun setChatroom(user: User) : ChatRoom{
-        return ChatRoom(
-            id = "",
-            attenderId = listOf(user.id,UserManager.email.toString()),
-            userImage = listOf(user.userImage.toString(),UserManager.photo.toString()),
-            attenderName = listOf(viewModel._chatMember.value!!.name, UserManager.name.toString())
-        )
-    }
 }

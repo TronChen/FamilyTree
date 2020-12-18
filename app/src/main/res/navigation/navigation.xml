@@ -92,7 +92,11 @@
     <dialog
         android:id="@+id/eventDialog"
         android:name="com.tron.familytree.family.event_dialog.EventDialog"
-        android:label="EventDialog" />
+        android:label="EventDialog" >
+        <argument
+            android:name="eventProperties"
+            app:argType="com.tron.familytree.data.Event" />
+    </dialog>
     <action android:id="@+id/action_global_eventDialog" app:destination="@id/eventDialog" />
     <fragment
         android:id="@+id/qrCodeReaderFragment"
@@ -155,4 +159,8 @@
         android:id="@+id/mainActivity"
         android:name="com.tron.familytree.MainActivity"
         android:label="MainActivity" />
+    <fragment
+        android:id="@+id/eventFragment"
+        android:name="com.tron.familytree.family.event.EventFragment"
+        android:label="EventFragment" /><action android:id="@+id/action_global_eventFragment" app:destination="@id/eventFragment"/>
 </navigation>

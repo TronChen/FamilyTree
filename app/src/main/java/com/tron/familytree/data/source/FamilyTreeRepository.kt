@@ -55,4 +55,18 @@ interface FamilyTreeRepository {
     fun getLiveMessage(chatRoom: ChatRoom): MutableLiveData<List<MessageItem>>
 
     suspend fun getMessage(chatRoom: ChatRoom): AppResult<List<MessageItem>>
+
+    suspend fun addEvent(event: Event): AppResult<Boolean>
+
+    suspend fun getEvent(): AppResult<List<Event>>
+
+    fun getLiveEvent(): MutableLiveData<List<Event>>
+
+    suspend fun addEventAttender(user: User, event: Event): AppResult<Boolean>
+
+    fun getLiveAttender(event: Event): MutableLiveData<List<User>>
+
+    suspend fun getAttender(event: Event): AppResult<List<User>>
+
+    suspend fun findChatroom(member: String, userId : String): AppResult<Boolean>
 }

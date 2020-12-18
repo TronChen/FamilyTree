@@ -65,6 +65,7 @@
                 android:ems="10"
                 android:fontFamily="@font/noto_sans"
                 android:gravity="top"
+                android:text="@={viewModel.editTitle}"
                 android:hint="輸入活動主題"
                 android:inputType="textPersonName"
                 android:lines="5"
@@ -85,7 +86,7 @@
                 android:layout_marginTop="24dp"
                 android:src="@drawable/clock"
                 app:layout_constraintStart_toStartOf="@+id/editTextTitle"
-                app:layout_constraintTop_toBottomOf="@+id/editTextTitle" />
+                app:layout_constraintTop_toBottomOf="@+id/spinEventType" />
 
             <TextView
                 android:id="@+id/textTime"
@@ -134,6 +135,7 @@
                 android:fontFamily="@font/noto_sans"
                 android:gravity="top"
                 android:hint="輸入地點"
+                android:text="@={viewModel.editLocation}"
                 android:inputType="textPersonName"
                 android:lines="5"
                 android:paddingStart="12dp"
@@ -176,7 +178,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/noto_sans"
-                    android:text="選擇日期"
+                    android:text="@{viewModel.editDate}"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -228,7 +230,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/noto_sans"
-                    android:text="選擇時間"
+                    android:text="@{viewModel.editTime}"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -253,10 +255,40 @@
                 android:paddingTop="12dp"
                 android:paddingEnd="12dp"
                 android:paddingBottom="12dp"
+                android:text="@={viewModel.editContent}"
                 app:layout_constraintBottom_toTopOf="@+id/conConfirm"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView17" />
+
+            <TextView
+                android:id="@+id/textView28"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/noto_sans"
+                android:text="活動類別"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editTextTitle" />
+
+            <Spinner
+                android:id="@+id/spinEventType"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/rounded_light_grey_radius_24"
+                android:entries="@array/spn_list"
+                android:prompt="@string/spinArray"
+                android:spinnerMode="dropdown"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView28" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

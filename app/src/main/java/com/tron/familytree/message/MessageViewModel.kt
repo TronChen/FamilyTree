@@ -34,6 +34,10 @@ class MessageViewModel(
     val chatroom: LiveData<List<ChatRoom>>
         get() = _chatroom
 
+    val _checkChatroom = MutableLiveData<List<ChatRoom>>()
+    val checkChatroom: LiveData<List<ChatRoom>>
+        get() = _checkChatroom
+
 
     val _chatMember = MutableLiveData<User>()
     val chatMember: LiveData<User>
@@ -211,5 +215,41 @@ class MessageViewModel(
                 }
             }
         }
+    }
+
+    fun findChatroom(member: String, userId : String){
+        coroutineScope.launch {
+            _status.value = LoadApiStatus.LOADING
+
+            when (val result = repository.findChatroom(member,userId)) {
+                is AppResult.Success -> {
+                    _error.value = null
+                    _status.value = LoadApiStatus.DONE
+                    addChatroom(setChatroom(_chatMember.value!!))
+
+                }
+                is AppResult.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is AppResult.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                else -> {
+                    _error.value = FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)
+                    _status.value = LoadApiStatus.ERROR
+                }
+            }
+        }
+    }
+
+    fun setChatroom(user: User) : ChatRoom{
+        return ChatRoom(
+            id = "",
+            attenderId = listOf(user.id,UserManager.email.toString()),
+            userImage = listOf(user.userImage.toString(),UserManager.photo.toString()),
+            attenderName = listOf(_chatMember.value!!.name, UserManager.name.toString())
+        )
     }
 }

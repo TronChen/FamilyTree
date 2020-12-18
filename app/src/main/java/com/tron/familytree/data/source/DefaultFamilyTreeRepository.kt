@@ -3,7 +3,6 @@ package app.appworks.school.publisher.data.source
 import androidx.lifecycle.MutableLiveData
 import com.tron.familytree.data.*
 import com.tron.familytree.message.chatroom.MessageItem
-import com.tron.familytree.profile.member.MemberItem
 
 
 class DefaultFamilyTreeRepository(private val remoteDataSource: FamilyTreeDataSource,
@@ -94,6 +93,10 @@ class DefaultFamilyTreeRepository(private val remoteDataSource: FamilyTreeDataSo
         return remoteDataSource.getLiveChatroom()
     }
 
+    override suspend fun findChatroom(member: String, userId : String): AppResult<Boolean>{
+        return remoteDataSource.findChatroom(member,userId)
+    }
+
     override suspend fun addMessage(chatRoom: ChatRoom,message: Message): AppResult<Boolean>{
         return remoteDataSource.addMessage(chatRoom,message)
     }
@@ -105,5 +108,30 @@ class DefaultFamilyTreeRepository(private val remoteDataSource: FamilyTreeDataSo
     override suspend fun getMessage(chatRoom: ChatRoom): AppResult<List<MessageItem>>{
         return remoteDataSource.getMessage(chatRoom)
     }
+
+    override suspend fun addEvent(event: Event): AppResult<Boolean>{
+        return remoteDataSource.addEvent(event)
+    }
+
+    override suspend fun getEvent(): AppResult<List<Event>>{
+        return remoteDataSource.getEvent()
+    }
+
+    override fun getLiveEvent(): MutableLiveData<List<Event>>{
+        return remoteDataSource.getLiveEvent()
+    }
+
+    override suspend fun addEventAttender(user: User, event: Event): AppResult<Boolean>{
+        return remoteDataSource.addEventAttender(user,event)
+    }
+
+    override fun getLiveAttender(event: Event): MutableLiveData<List<User>>{
+        return remoteDataSource.getLiveAttender(event)
+    }
+
+    override suspend fun getAttender(event: Event): AppResult<List<User>>{
+        return remoteDataSource.getAttender(event)
+    }
+
 
 }

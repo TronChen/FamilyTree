@@ -1,5 +1,6 @@
 package com.tron.familytree.profile.qrcode
 
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -7,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -18,6 +20,7 @@ import com.tron.familytree.databinding.FragmentQrCodeReaderBinding
 import com.tron.familytree.ext.getVmFactory
 import com.tron.familytree.profile.member.MemberViewModel
 import me.dm7.barcodescanner.zxing.ZXingScannerView
+import java.util.jar.Manifest
 
 
 class QrCodeReaderFragment : Fragment(), ZXingScannerView.ResultHandler {
@@ -119,7 +122,7 @@ class QrCodeReaderFragment : Fragment(), ZXingScannerView.ResultHandler {
 
 //    private fun isCameraPermissionGranted(): Boolean {
 //        val selfPermission =
-//            ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
+//            ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA)
 //        return selfPermission == PackageManager.PERMISSION_GRANTED
 //    }
 //

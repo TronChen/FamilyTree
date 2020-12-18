@@ -14,4 +14,14 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="you_know_nothing">You know nothing</string>
+
+
+    <string name="spinArray">選擇活動種類</string>
+    <string name="eventType">活動種類</string>
+    <string-array name="spn_list">
+        <item>聚餐</item>
+        <item>休閒活動</item>
+        <item>一起運動</item>
+        <item>家族總動員</item>
+    </string-array>
 </resources>

@@ -21,15 +21,27 @@
             tools:layout_editor_absoluteX="-31dp"
             tools:layout_editor_absoluteY="27dp">
 
+            <ImageView
+                android:id="@+id/imageEventType"
+                android:layout_width="wrap_content"
+                android:layout_height="180dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
             <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/imageView13"
-                android:layout_width="110dp"
-                android:layout_height="110dp"
+                mainImage="@{viewModel.publisher.userImage}"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:src="@drawable/pikachu"
+                app:civ_border_color="@color/orange"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageEventType"
                 tools:src="@tools:sample/avatars" />
 
             <TextView
@@ -39,7 +51,7 @@
                 android:fontFamily="@font/noto_sans"
                 android:text="發起了活動"
                 android:textColor="@color/black"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView13"
                 app:layout_constraintStart_toStartOf="@+id/textName"
                 app:layout_constraintTop_toBottomOf="@+id/textName" />
@@ -50,9 +62,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:fontFamily="@font/noto_sans"
-                android:text="陳志堅"
+                android:text="@{viewModel.selectedProperty.publisher}"
                 android:textColor="@color/black"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/textView7"
                 app:layout_constraintStart_toEndOf="@+id/imageView13"
                 app:layout_constraintTop_toTopOf="@+id/imageView13" />
@@ -64,8 +76,18 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:src="@drawable/circle"
+                android:background="@drawable/rounded_white_radius100"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="@+id/textView10"
+                app:layout_constraintTop_toBottomOf="@+id/textView10"
+                app:srcCompat="@drawable/calendarbirth" />
 
             <TextView
                 android:id="@+id/textView10"
@@ -74,9 +96,9 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
                 android:fontFamily="@font/noto_sans"
-                android:text="陳氏宗親聚餐"
+                android:text="@{viewModel.selectedProperty.title}"
                 android:textColor="@color/black"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView13" />
 
@@ -86,54 +108,60 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:fontFamily="@font/noto_sans"
-                android:text="2020/11/11 16:00"
+                android:text="@{viewModel.selectedProperty.date}"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView"
+                app:layout_constraintStart_toEndOf="@+id/imageView"
+                app:layout_constraintTop_toTopOf="@+id/imageView"
+                tools:text="2222" />
+
+            <TextView
+                android:id="@+id/textEventTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/noto_sans"
+                android:text="@{viewModel.selectedProperty.time}"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView16"
                 app:layout_constraintStart_toEndOf="@+id/imageView16"
-                app:layout_constraintTop_toTopOf="@+id/imageView16" />
+                app:layout_constraintTop_toTopOf="@+id/imageView16"
+                tools:text="1111" />
 
             <ImageView
                 android:id="@+id/imageView16"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
                 android:src="@drawable/clock"
-                app:layout_constraintStart_toStartOf="@+id/textView10"
-                app:layout_constraintTop_toBottomOf="@+id/textView10" />
-
-            <ImageView
-                android:id="@+id/imageView14"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginEnd="16dp"
-                android:src="@drawable/bookmarksimple"
-                app:layout_constraintBottom_toBottomOf="@+id/textView10"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textView10" />
+                app:layout_constraintBottom_toBottomOf="@+id/textView8"
+                app:layout_constraintStart_toEndOf="@+id/textView8"
+                app:layout_constraintTop_toTopOf="@+id/textView8" />
 
             <ImageView
                 android:id="@+id/imageView15"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
                 android:layout_marginTop="8dp"
                 android:src="@drawable/mappinclear"
                 app:layout_constraintEnd_toStartOf="@+id/textView19"
                 app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintStart_toStartOf="@+id/imageView16"
-                app:layout_constraintTop_toBottomOf="@+id/textView8" />
+                app:layout_constraintStart_toStartOf="@+id/imageView"
+                app:layout_constraintTop_toBottomOf="@+id/textEventTime" />
 
             <TextView
                 android:id="@+id/textView20"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:fontFamily="@font/noto_sans"
+                android:text="@{viewModel.selectedProperty.content}"
                 android:textColor="@color/black"
                 android:textSize="14sp"
-                android:text="團結大家凝聚力，為下一場械鬥奮戰！團結大家凝聚力，為下一場械鬥奮戰！團結大家凝聚力，為下一場械鬥奮戰！團結大家凝聚力，為下一場械鬥奮戰！團結大家凝聚力，為下一場械鬥奮戰！團結大家凝聚力，為下一場械鬥奮戰！"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView19" />
@@ -143,68 +171,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
                 android:fontFamily="@font/noto_sans"
                 android:text="參加名單"
                 android:textColor="@color/black"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/conGroupMessage" />
+                app:layout_constraintTop_toBottomOf="@+id/conSingleMessage" />
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerAttender"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="80dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="4dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toTopOf="@+id/conConfirm"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView25" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/conGroupMessage"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/rounded_light_grey_radius_24"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/conSingleMessage">
-
-                <ImageView
-                    android:id="@+id/imageView18"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:src="@drawable/chatscircle"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/textView24"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintHorizontal_chainStyle="packed"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/textView24"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:fontFamily="@font/noto_sans"
-                    android:text="參與群聊"
-                    android:textColor="@color/black"
-                    android:textSize="18sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/imageView18"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/imageView18"
-                    app:layout_constraintTop_toTopOf="@+id/imageView18" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                app:layout_constraintTop_toBottomOf="@+id/textView25"
+                tools:listitem="@layout/item_list_event_dialog_attender" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/conSingleMessage"
@@ -213,6 +203,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
+                android:elevation="2dp"
                 android:background="@drawable/rounded_light_grey_radius_24"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -254,6 +245,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
+                android:elevation="2dp"
                 android:background="@drawable/rounded_orange_radius65"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -279,7 +271,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:fontFamily="@font/noto_sans"
-                android:text="茶川川餐廳"
+                android:text="@{viewModel.selectedProperty.location}"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView15"

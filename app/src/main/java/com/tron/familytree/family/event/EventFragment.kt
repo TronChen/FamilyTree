@@ -7,12 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.tron.familytree.R
 import com.tron.familytree.data.Episode
 import com.tron.familytree.data.Event
 import com.tron.familytree.databinding.FragmentEventBinding
 import com.tron.familytree.ext.getVmFactory
+import com.tron.familytree.family.event_dialog.EventDialogDirections
 
 
 class EventFragment(val position: Int) : Fragment() {
@@ -29,17 +31,22 @@ class EventFragment(val position: Int) : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
 
-        binding.imageView10.setOnClickListener {
-            findNavController().navigate(R.id.action_global_eventDialog)
-        }
+//        binding.imageView10.setOnClickListener {
+//            findNavController().navigate(R.id.action_global_eventDialog)
+//        }
 
         val adapter = EventAdapter(EventAdapter.EventOnItemClickListener {
             Log.e("EventCLick", it.toString())
-            findNavController().navigate(R.id.action_global_eventDialog)
+            findNavController().navigate(EventFragmentDirections.actionGlobalEventDialog(it))
         })
         binding.recyclerEvent.adapter = adapter
 
-        adapter.submitList(viewModel.createMock())
+        viewModel.liveEvent.observe(viewLifecycleOwner, Observer {
+
+            adapter.submitList(it)
+        })
+
+//        binding.imageView8.setImageResource(R.drawable.sport)
 
 
 
