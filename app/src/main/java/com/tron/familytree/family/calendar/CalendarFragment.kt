@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Color.red
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.TimeUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.datepicker.SingleDateSelector
 import com.prolificinteractive.materialcalendarview.*
@@ -23,6 +25,7 @@ import com.tron.familytree.databinding.FragmentCalendarBinding
 import com.tron.familytree.databinding.FragmentEventBinding
 import com.tron.familytree.ext.getVmFactory
 import com.tron.familytree.family.event.EventViewModel
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 
 
@@ -49,10 +52,18 @@ class CalendarFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
 
-//        widget.addDecorators(
-//            SingleDateDecorator(requireContext().resources.getColor(R.color.orange),
-//                CalendarDay.from(year, month, day))
-//        )
+
+        viewModel.liveUserEvent.observe(viewLifecycleOwner, Observer { it ->
+            it.forEach {
+                val year = SimpleDateFormat("yyyy").format(it.eventTime).toInt()
+                val month   = SimpleDateFormat("MM").format(it.eventTime).toInt()
+                val day   = SimpleDateFormat("dd").format(it.eventTime).toInt()
+            widget.addDecorators(
+            SingleDateDecorator(requireContext().resources.getColor(R.color.orange),
+                CalendarDay.from(year, month, day))
+        )
+            }
+        })
 
 
 
