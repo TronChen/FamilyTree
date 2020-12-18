@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Color.red
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.util.TimeUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -27,6 +28,7 @@ import com.tron.familytree.ext.getVmFactory
 import com.tron.familytree.family.event.EventViewModel
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.util.*
 
 
 class CalendarFragment : Fragment() {
@@ -53,17 +55,54 @@ class CalendarFragment : Fragment() {
         binding.viewModel = viewModel
 
 
+        val adapter = CalendarAdapter(CalendarAdapter.CalendarOnItemClickListener{
+            viewModel._selectedEvent.value = it
+        })
+
+        binding.bottomCalendar.recEvent.adapter = adapter
+
+        viewModel._selectedEvent.observe(viewLifecycleOwner, Observer {
+            val year = SimpleDateFormat("yyyy").format(it.eventTime).toInt()
+            val month   = SimpleDateFormat("MM").format(it.eventTime).toInt()
+            val day   = SimpleDateFormat("dd").format(it.eventTime).toInt()
+        })
+
+        // Get the current selected date
+        widget.setOnDateChangedListener { _, date, selected ->
+            if (selected) {
+
+//                oneDayDecorator.setDate(date.date)
+
+                // Create a sorted list of event based on the current date
+                val selectedDate =  SimpleDateFormat("yyyy-MM-dd").parse(date.date.toString()).time
+                viewModel.createDailyEvent(selectedDate)
+
+                Log.e("Tron","$selectedDate")
+                Log.e("Tron","${date.date}")
+
+
+
+            }
+
+        }
+
+
+
+
         viewModel.liveUserEvent.observe(viewLifecycleOwner, Observer { it ->
             it.forEach {
                 val year = SimpleDateFormat("yyyy").format(it.eventTime).toInt()
                 val month   = SimpleDateFormat("MM").format(it.eventTime).toInt()
                 val day   = SimpleDateFormat("dd").format(it.eventTime).toInt()
             widget.addDecorators(
-            SingleDateDecorator(requireContext().resources.getColor(R.color.orange),
+            SingleDateDecorator(requireContext().resources.getColor(R.color.deep_blue),
                 CalendarDay.from(year, month, day))
         )
             }
+                adapter.submitList(it)
         })
+
+
 
 
 

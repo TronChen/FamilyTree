@@ -19,11 +19,31 @@ class CalendarViewModel(
     private val repository: FamilyTreeRepository
 ) : ViewModel() {
 
+    //Selected date for safe arg
+    private val _navigationToPostDialog = MutableLiveData<Long>()
+
+    val navigationToPostDialog : LiveData<Long>
+        get() = _navigationToPostDialog
+
+    var allLiveEvents = MutableLiveData<List<Event>>()
+
+    //Query Selected Events
+
+    private var _selectedEvents = MutableLiveData<List<Event>>()
+
+    val selectedEvent : LiveData<List<Event>>
+        get() = _selectedEvents
+
+    val selectedLiveEvent = MutableLiveData<List<Event>>()
+
+
     var liveUserEvent = MutableLiveData<List<Event>>()
 
     val _userEvent = MutableLiveData<List<Event>>()
     val userEvent: LiveData<List<Event>>
         get() = _userEvent
+
+    val _selectedEvent = MutableLiveData<Event>()
 
 
     // status: The internal MutableLiveData that stores the status of the most recent request
@@ -113,5 +133,10 @@ class CalendarViewModel(
         liveUserEvent = repository.getLiveEventByUserId(id)
         _status.value = LoadApiStatus.DONE
         _refreshStatus.value = false
+    }
+
+    fun createDailyEvent (toTimeStamp: Long) {
+//        selectedLiveEvent.value = allLiveEvents.value.sortByTimeStamp(toTimeStamp)
+        _navigationToPostDialog.value = toTimeStamp
     }
 }

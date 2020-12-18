@@ -97,7 +97,7 @@
                         android:visibility="invisible"
                         app:layout_constraintEnd_toEndOf="@+id/constraintLayout10"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/calendarblank" />
+                        app:srcCompat="@drawable/calendarblank2" />
 
                     <ImageView
                         android:id="@+id/imageScan"
