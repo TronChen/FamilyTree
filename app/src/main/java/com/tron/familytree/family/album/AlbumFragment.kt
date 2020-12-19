@@ -1,6 +1,7 @@
 package com.tron.familytree.family.album
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,10 @@ import com.tron.familytree.data.Event
 import com.tron.familytree.data.Photo
 import com.tron.familytree.databinding.FragmentAlbumBinding
 import com.tron.familytree.ext.getVmFactory
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.time.times
 
 
 class AlbumFragment(val position : Int) : Fragment() {
@@ -36,8 +41,24 @@ class AlbumFragment(val position : Int) : Fragment() {
 
         adapter.submitList(createMock())
 
+        viewModel.liveEvent.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            it?.let {
+                it.forEach { event ->
+                    event.eventTime
+                    val aaa = Calendar.getInstance().timeInMillis
+                    if ( aaa < event.eventTime!! ) {
+                        //即將到來的活動  爲以結束的
 
+                    }
+                    if (aaa > event.eventTime!!){
+                        //以結束的活動
 
+                    }
+                }
+            }
+        })
+
+        val aaa = Calendar.getInstance().before(Calendar.getInstance())
 
 
 
