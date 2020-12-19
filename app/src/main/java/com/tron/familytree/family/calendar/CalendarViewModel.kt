@@ -168,9 +168,4 @@ class CalendarViewModel(
         _status.value = LoadApiStatus.DONE
         _refreshStatus.value = false
     }
-
-    fun createDailyEvent (toTimeStamp: Long) {
-//        selectedLiveEvent.value = allLiveEvents.value.sortByTimeStamp(toTimeStamp)
-        _navigationToPostDialog.value = toTimeStamp
-    }
 }
