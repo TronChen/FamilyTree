@@ -23,11 +23,11 @@ class AlbumAdapter(private val itemClickListener: AlbumOnItemClickListener)
         val item = getItem(position)
         when (holder) {
             is PhotoViewHolder ->{
-                val photo = item as Photo
+                val photo = item as Event
                 holder.bind(photo)
-                holder.binding.imageView11.setOnClickListener {
-                    itemClickListener.onItemClicked(photo)
-                }
+//                holder.binding.imageView11.setOnClickListener {
+//                    itemClickListener.onItemClicked(photo)
+//                }
             }
         }
 
@@ -44,8 +44,8 @@ class AlbumAdapter(private val itemClickListener: AlbumOnItemClickListener)
     }
 
     class PhotoViewHolder(val binding: ItemListAlbumBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(photo: Photo) {
-            binding.photo = photo
+        fun bind(event: Event) {
+            binding.event = event
             // This is important, because it forces the data binding to execute immediately,
             // which allows the RecyclerView to make the correct view size measurements
             binding.executePendingBindings()

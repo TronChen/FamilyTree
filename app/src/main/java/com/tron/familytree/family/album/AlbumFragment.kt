@@ -36,7 +36,7 @@ class AlbumFragment(val position : Int) : Fragment() {
         val adapter =  AlbumAdapter(AlbumAdapter.AlbumOnItemClickListener{
             findNavController().navigate(R.id.action_global_albumDetailFragment)
         })
-        binding.recyclerAlbum.adapter = adapter
+        binding.recComAlbum.adapter = adapter
 
 
         adapter.submitList(createMock())
@@ -47,7 +47,7 @@ class AlbumFragment(val position : Int) : Fragment() {
                     event.eventTime
                     val aaa = Calendar.getInstance().timeInMillis
                     if ( aaa < event.eventTime!! ) {
-                        //即將到來的活動  爲以結束的
+                        //即將到來的活動
 
                     }
                     if (aaa > event.eventTime!!){
@@ -57,8 +57,6 @@ class AlbumFragment(val position : Int) : Fragment() {
                 }
             }
         })
-
-        val aaa = Calendar.getInstance().before(Calendar.getInstance())
 
 
 
