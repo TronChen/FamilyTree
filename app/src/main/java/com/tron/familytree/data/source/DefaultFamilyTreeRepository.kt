@@ -145,5 +145,9 @@ class DefaultFamilyTreeRepository(private val remoteDataSource: FamilyTreeDataSo
         return remoteDataSource.getEventByTime(date)
     }
 
+    override suspend fun addPhoto(event: Event,photo: Photo): AppResult<Boolean>{
+        return remoteDataSource.addPhoto(event,photo)
+    }
+
 
 }

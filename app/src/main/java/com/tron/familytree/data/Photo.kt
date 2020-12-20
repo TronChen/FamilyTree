@@ -6,7 +6,6 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Photo(
     var publisher: String = "",
-    var photo: List<String>? = null,
-    var title: String = "",
-    var event: Event? = null
+    var photo: String? = null,
+    var id: String? = null
 ): Parcelable

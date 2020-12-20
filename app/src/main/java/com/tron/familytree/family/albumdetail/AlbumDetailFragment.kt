@@ -33,6 +33,11 @@ class AlbumDetailFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
 
+        val adapter = AlbumDetailAdapter(AlbumDetailAdapter.AlbumDetailOnItemClickListener{
+
+        })
+        binding.recPhoto.adapter = adapter
+
 
         // Inflate the layout for this fragment
         return binding.root

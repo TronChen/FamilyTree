@@ -77,4 +77,6 @@ interface FamilyTreeDataSource {
     fun getLiveEventByUserId(id: String): MutableLiveData<List<Event>>
 
     suspend fun getEventByTime(date: String): AppResult<List<Event>>
+
+    suspend fun addPhoto(event: Event,photo: Photo): AppResult<Boolean>
 }

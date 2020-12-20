@@ -29,7 +29,20 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
     private const val FAMILY = "Family"
     private const val EVENT = "Event"
     private const val ATTENDER = "Attender"
+    private const val ALBUM = "Album"
 
+
+    override suspend fun addPhoto(event: Event,photo: Photo): AppResult<Boolean> = suspendCoroutine { continuation ->
+        val userCollection = FirebaseFirestore.getInstance().collection(EVENT).document(event.id).collection(ALBUM)
+        photo.id = userCollection.document().id
+        userCollection.document(photo.id!!)
+            .set(photo).addOnSuccessListener {
+                continuation.resume(AppResult.Success(true))
+            }
+            .addOnFailureListener {
+                continuation.resume(AppResult.Error(it))
+            }
+    }
 
     override suspend fun getAttender(event: Event): AppResult<List<User>> = suspendCoroutine { continuation ->
         FirebaseFirestore.getInstance()

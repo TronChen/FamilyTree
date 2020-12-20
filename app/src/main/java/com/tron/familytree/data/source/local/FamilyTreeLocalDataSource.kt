@@ -149,4 +149,8 @@ class FamilyTreeLocalDataSource(val context: Context) : FamilyTreeDataSource {
     override suspend fun getEventByTime(date: String): AppResult<List<Event>> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun addPhoto(event: Event, photo: Photo): AppResult<Boolean> {
+        TODO("Not yet implemented")
+    }
 }
