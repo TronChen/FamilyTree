@@ -2,6 +2,7 @@ package app.appworks.school.publisher.data.source
 
 import androidx.lifecycle.MutableLiveData
 import com.tron.familytree.data.*
+import com.tron.familytree.data.Map
 import com.tron.familytree.message.chatroom.MessageItem
 
 
@@ -155,6 +156,14 @@ class DefaultFamilyTreeRepository(private val remoteDataSource: FamilyTreeDataSo
 
     override suspend fun getAlbum(event: Event): AppResult<List<Photo>>{
         return remoteDataSource.getAlbum(event)
+    }
+
+    override suspend fun getUserLocation(): AppResult<List<Map>>{
+        return remoteDataSource.getUserLocation()
+    }
+
+    override fun getLiveUserLocation(): MutableLiveData<List<Map>>{
+        return remoteDataSource.getLiveUserLocation()
     }
 
 }

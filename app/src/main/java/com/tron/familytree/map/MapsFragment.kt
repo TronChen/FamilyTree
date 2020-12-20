@@ -23,6 +23,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
@@ -34,6 +35,7 @@ import com.tron.familytree.databinding.FragmentMapsBinding
 import com.tron.familytree.databinding.ItemListMarkerBinding
 import com.tron.familytree.ext.getVmFactory
 import com.tron.familytree.util.UserManager
+import java.util.*
 
 
 class MapsFragment : Fragment() {
@@ -95,7 +97,7 @@ class MapsFragment : Fragment() {
 
 
         //set friends Location
-//        getUsersLocation()
+        getUsersLocation()
         getDeviceLocation()
 
 
@@ -109,11 +111,14 @@ class MapsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val bindingItem = ItemListMarkerBinding.inflate(inflater)
-        ccc =  createDrawableFromView(requireContext(),bindingItem.imageView8)
+
 
         val binding = FragmentMapsBinding.inflate(inflater)
         binding.viewModel = viewModel
+
+        viewModel.user.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+
+        })
 
 //        if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION)
 //            != PackageManager.PERMISSION_GRANTED){
@@ -129,7 +134,6 @@ class MapsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
-
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
     }
@@ -189,6 +193,9 @@ class MapsFragment : Fragment() {
                         if (lastKnownLocation != null) {
 
                             myMap?.apply {
+                                viewModel.user.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+                                val bindingItem = ItemListMarkerBinding.inflate(LayoutInflater.from(context))
+                                ccc =  createDrawableFromView(requireContext(),bindingItem.imageView8)
                                 Firebase.firestore.collection("Map").document(UserManager.email.toString())
                                     .set(Map(longitude = lastKnownLocation!!.longitude,
                                     latitude = lastKnownLocation!!.latitude,
@@ -207,6 +214,7 @@ class MapsFragment : Fragment() {
                                 moveCamera(
                                     CameraUpdateFactory.newLatLngZoom(
                                         LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude), 10f))
+                                })
                             }
                         }
                     } else {
@@ -219,9 +227,23 @@ class MapsFragment : Fragment() {
         }
     }
 
-//    private fun getUsersLocation() {
-//
-//        myMap?.apply {
+    private fun getUsersLocation() {
+
+        myMap?.apply {
+            viewModel.liveUserLocation.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+                it.let { list ->
+                    list.forEach { map ->
+                        addMarker(
+                            MarkerOptions()
+                                .position(LatLng(map.latitude!!, map.longitude!!))
+                                .title(map.userId)
+                                .snippet("${map.latitude!!},${map.longitude!!}")
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.people))
+                        )
+                    }
+                }
+            })
+        }
 //            val userA = LatLng(25.0250383, 121.5327086)
 //            val userB = LatLng(25.1714657, 121.4359783)
 //            val userC = LatLng(25.0669043, 121.469388)
@@ -245,9 +267,9 @@ class MapsFragment : Fragment() {
 //                .snippet("${userC.latitude}, ${userC.longitude}")
 //                .icon(BitmapDescriptorFactory.fromResource(R.drawable.circle)))
 //        }
-//
-//
-//    }
+
+
+    }
 
     fun getBitmapFromView(view: View): Bitmap? {
         val returnedBitmap =

@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import app.appworks.school.publisher.data.source.FamilyTreeDataSource
 import com.tron.familytree.data.*
+import com.tron.familytree.data.Map
 import com.tron.familytree.message.chatroom.MessageItem
 import com.tron.familytree.profile.member.MemberItem
 
@@ -159,6 +160,14 @@ class FamilyTreeLocalDataSource(val context: Context) : FamilyTreeDataSource {
     }
 
     override suspend fun getAlbum(event: Event): AppResult<List<Photo>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getUserLocation(): AppResult<List<Map>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getLiveUserLocation(): MutableLiveData<List<Map>> {
         TODO("Not yet implemented")
     }
 }

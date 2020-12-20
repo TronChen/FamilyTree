@@ -11,6 +11,7 @@ import com.google.firebase.storage.StorageMetadata
 import com.tron.familytree.FamilyTreeApplication
 import com.tron.familytree.R
 import com.tron.familytree.data.*
+import com.tron.familytree.data.Map
 import com.tron.familytree.message.chatroom.MessageItem
 import com.tron.familytree.util.UserManager
 import java.io.File
@@ -30,6 +31,59 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
     private const val EVENT = "Event"
     private const val ATTENDER = "Attender"
     private const val ALBUM = "Album"
+    private const val MAP = "Map"
+
+    override suspend fun getUserLocation(): AppResult<List<Map>> = suspendCoroutine { continuation ->
+        FirebaseFirestore.getInstance()
+            .collection(MAP)
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val list = mutableListOf<Map>()
+                    for (document in task.result!!) {
+                        Log.d("Tron",document.id + " => " + document.data)
+
+                        val map = document.toObject(Map::class.java)
+                        list.add(map)
+                    }
+                    continuation.resume(AppResult.Success(list))
+                } else {
+                    task.exception?.let {
+
+                        Log.w("Tron","[${this::class.simpleName}] Error getting documents. ${it.message}")
+                        continuation.resume(AppResult.Error(it))
+                        return@addOnCompleteListener
+                    }
+                    continuation.resume(AppResult.Fail(FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)))
+                }
+            }
+    }
+
+    override fun getLiveUserLocation(): MutableLiveData<List<Map>> {
+        val userCollection = FirebaseFirestore.getInstance()
+            .collection(MAP)
+        val liveData = MutableLiveData<List<Map>>()
+
+        userCollection
+            .addSnapshotListener { snapshot, exception ->
+
+                Log.i("Tron","addSnapshotListener detect")
+
+                exception?.let {
+                    Log.w("Tron","[${this::class.simpleName}] Error getting documents. ${it.message}")
+                }
+
+                val list = mutableListOf<Map>()
+                for (document in snapshot!!) {
+                    Log.d("Tron",document.id + " => " + document.data)
+
+                    val map = document.toObject(Map::class.java)
+                    list.add(map)
+                }
+                liveData.value = list
+            }
+        return liveData
+    }
 
     override suspend fun getAlbum(event: Event): AppResult<List<Photo>> = suspendCoroutine { continuation ->
         FirebaseFirestore.getInstance()
