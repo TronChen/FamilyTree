@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import app.appworks.school.publisher.data.source.FamilyTreeRepository
 import com.tron.familytree.data.Episode
 import com.tron.familytree.data.Event
+import com.tron.familytree.family.albumdetail.AlbumDetailViewModel
 import com.tron.familytree.family.event_dialog.EventDialogViewModel
 import com.tron.familytree.profile.editepisode.EditEpisodeViewModel
 
@@ -25,6 +26,16 @@ import com.tron.familytree.profile.editepisode.EditEpisodeViewModel
                     )
                 } as T
             }
+
+            if (modelClass.isAssignableFrom(AlbumDetailViewModel::class.java)) {
+                return event?.let {
+                    AlbumDetailViewModel(
+                        repository,
+                        it
+                    )
+                } as T
+            }
+
 
 
             throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")

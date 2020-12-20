@@ -111,7 +111,11 @@
         android:id="@+id/albumDetailFragment"
         android:name="com.tron.familytree.family.albumdetail.AlbumDetailFragment"
         android:label="fragment_album_detail"
-        tools:layout="@layout/fragment_album_detail" />
+        tools:layout="@layout/fragment_album_detail" >
+        <argument
+            android:name="eventProperties"
+            app:argType="com.tron.familytree.data.Event" />
+    </fragment>
     <action android:id="@+id/action_global_albumDetailFragment" app:destination="@id/albumDetailFragment" />
     <fragment
         android:id="@+id/chatRoomFragment"
