@@ -153,4 +153,12 @@ class FamilyTreeLocalDataSource(val context: Context) : FamilyTreeDataSource {
     override suspend fun addPhoto(event: Event, photo: Photo): AppResult<Boolean> {
         TODO("Not yet implemented")
     }
+
+    override fun getLiveAlbum(event: Event): MutableLiveData<List<Photo>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getAlbum(event: Event): AppResult<List<Photo>> {
+        TODO("Not yet implemented")
+    }
 }

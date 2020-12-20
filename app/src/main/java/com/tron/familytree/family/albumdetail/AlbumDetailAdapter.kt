@@ -125,6 +125,6 @@ class AlbumDetailAdapter(private val itemClickListener: AlbumDetailOnItemClickLi
 }
 
 sealed class PhotoItem{
-    data class AlbumPhoto(val photo: Photo,val index : Int): PhotoItem() {}
-    data class AlbumPhotoAdd(val photo: Photo,val index : Int): PhotoItem() {}
+    data class AlbumPhoto(val photo: Photo): PhotoItem() {}
+    data class AlbumPhotoAdd(val photo: Photo): PhotoItem() {}
 }

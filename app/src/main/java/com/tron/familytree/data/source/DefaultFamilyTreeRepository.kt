@@ -149,5 +149,12 @@ class DefaultFamilyTreeRepository(private val remoteDataSource: FamilyTreeDataSo
         return remoteDataSource.addPhoto(event,photo)
     }
 
+    override fun getLiveAlbum(event: Event): MutableLiveData<List<Photo>>{
+        return remoteDataSource.getLiveAlbum(event)
+    }
+
+    override suspend fun getAlbum(event: Event): AppResult<List<Photo>>{
+        return remoteDataSource.getAlbum(event)
+    }
 
 }

@@ -77,4 +77,8 @@ interface FamilyTreeRepository {
     suspend fun getEventByTime(date: String): AppResult<List<Event>>
 
     suspend fun addPhoto(event: Event,photo: Photo): AppResult<Boolean>
+
+    fun getLiveAlbum(event: Event): MutableLiveData<List<Photo>>
+
+    suspend fun getAlbum(event: Event): AppResult<List<Photo>>
 }

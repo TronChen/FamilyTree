@@ -4,11 +4,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import app.appworks.school.publisher.data.source.FamilyTreeRepository
+import com.tron.familytree.FamilyTreeApplication
+import com.tron.familytree.R
+import com.tron.familytree.data.AppResult
 import com.tron.familytree.data.Event
+import com.tron.familytree.data.Photo
 import com.tron.familytree.network.LoadApiStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class AlbumDetailViewModel(
     private val repository: FamilyTreeRepository, private val event: Event
@@ -18,6 +23,12 @@ class AlbumDetailViewModel(
     // The external LiveData for the SelectedProperty
     val selectedProperty: LiveData<Event>
         get() = _selectedProperty
+
+    var liveAlbum = MutableLiveData<List<Photo>>()
+
+    val _album = MutableLiveData<List<Photo>>()
+    val album: LiveData<List<Photo>>
+        get() = _album
 
     // status: The internal MutableLiveData that stores the status of the most recent request
     private val _status = MutableLiveData<LoadApiStatus>()
@@ -61,5 +72,51 @@ class AlbumDetailViewModel(
 
     init {
         _selectedProperty.value = event
+
+        if (FamilyTreeApplication.INSTANCE.isLiveDataDesign()) {
+            getLiveAlbum(event)
+        } else {
+            getAlbum(event)
+        }
+    }
+
+    fun getAlbum(event: Event) {
+
+        coroutineScope.launch {
+
+            _status.value = LoadApiStatus.LOADING
+
+            val result = repository.getAlbum(event)
+
+            _album.value = when (result) {
+                is AppResult.Success -> {
+                    _error.value = null
+                    _status.value = LoadApiStatus.DONE
+                    result.data
+                }
+                is AppResult.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                    null
+                }
+                is AppResult.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                    null
+                }
+                else -> {
+                    _error.value = FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)
+                    _status.value = LoadApiStatus.ERROR
+                    null
+                }
+            }
+            _refreshStatus.value = false
+        }
+    }
+
+    fun getLiveAlbum(event: Event) {
+        liveAlbum = repository.getLiveAlbum(event)
+        _status.value = LoadApiStatus.DONE
+        _refreshStatus.value = false
     }
 }

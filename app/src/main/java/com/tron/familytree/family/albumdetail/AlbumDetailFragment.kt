@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.tron.familytree.R
+import com.tron.familytree.data.Photo
 import com.tron.familytree.databinding.DialogEventBinding
 import com.tron.familytree.databinding.FragmentAlbumDetailBinding
 import com.tron.familytree.ext.getVmFactory
@@ -37,6 +39,24 @@ class AlbumDetailFragment : Fragment() {
 
         })
         binding.recPhoto.adapter = adapter
+
+        viewModel.liveAlbum.observe(viewLifecycleOwner, Observer {
+            val photoList = mutableListOf<PhotoItem>()
+            it.let {
+                it.forEach { photo ->
+            photoList.add(PhotoItem.AlbumPhoto(photo))
+                }
+            }
+            photoList.add(PhotoItem.AlbumPhotoAdd(Photo(id = "addPhoto")))
+            photoList.add(PhotoItem.AlbumPhotoAdd(Photo(id = "addPhoto")))
+            photoList.add(PhotoItem.AlbumPhotoAdd(Photo(id = "addPhoto")))
+            photoList.add(PhotoItem.AlbumPhotoAdd(Photo(id = "addPhoto")))
+            photoList.add(PhotoItem.AlbumPhotoAdd(Photo(id = "addPhoto")))
+            photoList.add(PhotoItem.AlbumPhotoAdd(Photo(id = "addPhoto")))
+            photoList.add(PhotoItem.AlbumPhotoAdd(Photo(id = "addPhoto")))
+            photoList.add(PhotoItem.AlbumPhotoAdd(Photo(id = "addPhoto")))
+            adapter.submitList(photoList)
+        })
 
 
         // Inflate the layout for this fragment
