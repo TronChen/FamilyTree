@@ -1,31 +1,39 @@
 package com.tron.familytree.map
 
+import android.app.Activity
 import android.content.Context
-import android.content.Context.LOCATION_SERVICE
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
 import android.location.Location
-import android.location.LocationManager
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.LinearLayout
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.core.content.ContextCompat.getSystemServiceName
+import androidx.core.graphics.scale
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
+import androidx.fragment.app.viewModels
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.*
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.tron.familytree.R
-import java.util.jar.Manifest
+import com.tron.familytree.data.Map
+import com.tron.familytree.databinding.FragmentMapsBinding
+import com.tron.familytree.databinding.ItemListMarkerBinding
+import com.tron.familytree.ext.getVmFactory
+import com.tron.familytree.util.UserManager
 
 
 class MapsFragment : Fragment() {
@@ -41,23 +49,6 @@ class MapsFragment : Fragment() {
     private val callback = OnMapReadyCallback { googleMap ->
         myMap = googleMap
         getLocationPermission()
-
-
-        /**
-         * Manipulates the map once available.
-         * This callback is triggered when the map is ready to be used.
-         * This is where we can add markers or lines, add listeners or move the camera.
-         * In this case, we just add a marker near Sydney, Australia.
-         * If Google Play services is not installed on the device, the user will be prompted to
-         * install it inside the SupportMapFragment. This method will only be triggered once the
-         * user has installed Google Play services and returned to the app.
-         */
-        /*val sydney = LatLng(-34.0, 151.0)
-        googleMap.addMarker(MarkerOptions()
-            .position(sydney)
-            .title("Marker in Sydney")
-            .snippet("This is a pen"))
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))*/
 
         val spotA = LatLng(25.0424825, 121.5626907)
         val spotB = LatLng(25.0476935, 121.5152081)
@@ -110,12 +101,19 @@ class MapsFragment : Fragment() {
 
     }
 
+    var ccc : Bitmap? = null
+    private val viewModel by viewModels<MapsViewModel> { getVmFactory() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val bindingItem = ItemListMarkerBinding.inflate(inflater)
+        ccc =  createDrawableFromView(requireContext(),bindingItem.imageView8)
+
+        val binding = FragmentMapsBinding.inflate(inflater)
+        binding.viewModel = viewModel
 
 //        if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION)
 //            != PackageManager.PERMISSION_GRANTED){
@@ -124,13 +122,14 @@ class MapsFragment : Fragment() {
 
 
 
-        return inflater.inflate(R.layout.fragment_maps, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
+
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
     }
@@ -190,11 +189,20 @@ class MapsFragment : Fragment() {
                         if (lastKnownLocation != null) {
 
                             myMap?.apply {
+                                Firebase.firestore.collection("Map").document(UserManager.email.toString())
+                                    .set(Map(longitude = lastKnownLocation!!.longitude,
+                                    latitude = lastKnownLocation!!.latitude,
+                                    userImage = UserManager.photo.toString(),
+                                    userId = UserManager.email.toString()))
+
+
                                 addMarker(MarkerOptions()
                                     .position(LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude))
                                     .title("It's ME!!")
                                     .snippet("${lastKnownLocation!!.latitude}, ${lastKnownLocation!!.longitude}")
-                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.people)))
+                                    .icon(BitmapDescriptorFactory.fromBitmap(ccc)
+                                    )
+                                )
 
                                 moveCamera(
                                     CameraUpdateFactory.newLatLngZoom(
@@ -211,33 +219,65 @@ class MapsFragment : Fragment() {
         }
     }
 
-    private fun getUsersLocation() {
-        myMap?.apply {
-            val userA = LatLng(25.0250383, 121.5327086)
-            val userB = LatLng(25.1714657, 121.4359783)
-            val userC = LatLng(25.0669043, 121.469388)
-            val userList = listOf(userA, userB, userC)
+//    private fun getUsersLocation() {
+//
+//        myMap?.apply {
+//            val userA = LatLng(25.0250383, 121.5327086)
+//            val userB = LatLng(25.1714657, 121.4359783)
+//            val userC = LatLng(25.0669043, 121.469388)
+//            val userList = listOf(userA, userB, userC)
+//
+//            addMarker(MarkerOptions()
+//                .position(userA)
+//                .title("匿名蠑螈")
+//                .snippet("${userA.latitude}, ${userA.longitude}")
+//                .icon(BitmapDescriptorFactory.fromResource(R.drawable.circle)))
+//
+//            addMarker(MarkerOptions()
+//                .position(userB)
+//                .title("匿名海豹")
+//                .snippet("${userB.latitude}, ${userB.longitude}")
+//                .icon(BitmapDescriptorFactory.fromResource(R.drawable.circle)))
+//
+//            addMarker(MarkerOptions()
+//                .position(userC)
+//                .title("匿名喵喵")
+//                .snippet("${userC.latitude}, ${userC.longitude}")
+//                .icon(BitmapDescriptorFactory.fromResource(R.drawable.circle)))
+//        }
+//
+//
+//    }
 
-            addMarker(MarkerOptions()
-                .position(userA)
-                .title("匿名蠑螈")
-                .snippet("${userA.latitude}, ${userA.longitude}")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.circle)))
+    fun getBitmapFromView(view: View): Bitmap? {
+        val returnedBitmap =
+            Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(returnedBitmap)
+        val bgDrawable = view.background
+        if (bgDrawable != null) bgDrawable.draw(canvas) else canvas.drawColor(Color.WHITE)
+        view.draw(canvas)
+        return returnedBitmap
+    }
 
-            addMarker(MarkerOptions()
-                .position(userB)
-                .title("匿名海豹")
-                .snippet("${userB.latitude}, ${userB.longitude}")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.circle)))
+    fun createDrawableFromView(context: Context, view: View): Bitmap? {
 
-            addMarker(MarkerOptions()
-                .position(userC)
-                .title("匿名喵喵")
-                .snippet("${userC.latitude}, ${userC.longitude}")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.circle)))
-        }
-
-
+        val displayMetrics = DisplayMetrics()
+        (context as Activity).windowManager.defaultDisplay.getMetrics(displayMetrics)
+        view.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        view.measure(displayMetrics.widthPixels, displayMetrics.heightPixels)
+        view.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels)
+        view.buildDrawingCache()
+        val bitmap = Bitmap.createBitmap(
+            1500,
+            1500,
+            Bitmap.Config.ARGB_8888
+        )
+        val canvas = Canvas(bitmap)
+        view.draw(canvas)
+        return bitmap.scale(120,120)
     }
 
 
