@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.tron.familytree.MainActivity
 import com.tron.familytree.R
@@ -55,6 +56,8 @@ class AlbumDetailFragment : Fragment() {
                         1080
                     ) //Final image resolution will be less than 1080 x 1080(Optional)
                     .start(ADD_PHOTO)
+            }else{
+                findNavController().navigate(AlbumDetailFragmentDirections.actionGlobalAlbumSinglePicFragment(it))
             }
         })
         binding.recPhoto.adapter = adapter

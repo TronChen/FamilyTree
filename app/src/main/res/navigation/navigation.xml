@@ -167,4 +167,13 @@
         android:id="@+id/eventFragment"
         android:name="com.tron.familytree.family.event.EventFragment"
         android:label="EventFragment" /><action android:id="@+id/action_global_eventFragment" app:destination="@id/eventFragment"/>
+    <fragment
+        android:id="@+id/albumSinglePicFragment"
+        android:name="com.tron.familytree.family.album_single_pic.AlbumSinglePicFragment"
+        android:label="AlbumSinglePicFragment" >
+        <argument
+            android:name="photoProperties"
+            app:argType="com.tron.familytree.data.Photo" />
+    </fragment>
+    <action android:id="@+id/action_global_albumSinglePicFragment" app:destination="@id/albumSinglePicFragment" />
 </navigation>
