@@ -30,6 +30,8 @@ import com.tron.familytree.util.UserManager
 
 const val ADD_USER = 111
 const val EDIT_USER = 222
+const val ADD_PHOTO = 333
+
 class MainActivity : AppCompatActivity() {
 
     val viewModel by viewModels<MainActivityViewModel> { getVmFactory() }
@@ -296,6 +298,19 @@ class MainActivity : AppCompatActivity() {
                             if (data != null) {
                                 if (filePath.isNotEmpty()) {
                                     viewModel.editUserImgPath.value = filePath
+                                    Log.e("data", data.toString())
+                                    Log.e("reqCode", requestCode.toString())
+                                    Log.e("rstCode", resultCode.toString())
+                                    Toast.makeText(this@MainActivity, viewModel.addUserImgPath.value, Toast.LENGTH_SHORT)
+                                        .show()
+                                }
+                            }
+
+                        }
+                        ADD_PHOTO ->{
+                            if (data != null) {
+                                if (filePath.isNotEmpty()) {
+                                    viewModel.addPhotoPath.value = filePath
                                     Log.e("data", data.toString())
                                     Log.e("reqCode", requestCode.toString())
                                     Log.e("rstCode", resultCode.toString())

@@ -36,6 +36,7 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
             .collection(EVENT)
             .document(event.id)
             .collection(ALBUM)
+            .orderBy("createTime",Query.Direction.DESCENDING)
             .get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -64,6 +65,7 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
             .collection(EVENT)
             .document(event.id)
             .collection(ALBUM)
+            .orderBy("createTime",Query.Direction.DESCENDING)
         val liveData = MutableLiveData<List<Photo>>()
 
         userCollection
