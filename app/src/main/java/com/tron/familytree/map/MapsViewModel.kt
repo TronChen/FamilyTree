@@ -1,10 +1,22 @@
 package com.tron.familytree.map
 
+import android.graphics.Bitmap
+import android.transition.Transition
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import app.appworks.school.publisher.data.source.FamilyTreeRepository
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.SimpleTarget
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import com.tron.familytree.FamilyTreeApplication
+import com.tron.familytree.GlideCircleBorderTransform
 import com.tron.familytree.R
 import com.tron.familytree.data.AppResult
 import com.tron.familytree.data.Map
@@ -150,6 +162,46 @@ class MapsViewModel(
         liveUserLocation = repository.getLiveUserLocation()
         _status.value = LoadApiStatus.DONE
         _refreshStatus.value = false
+    }
+
+
+    val _userMarkerList = MutableLiveData<List<Marker>>()
+
+    fun drawUsersLocation(map: GoogleMap, usersLocationList: List<Map>) {
+
+        val markerList = mutableListOf<Marker>()
+
+        if (usersLocationList.isNotEmpty()) {
+            usersLocationList.forEach {myLocation ->
+
+                Glide.with(FamilyTreeApplication.INSTANCE.applicationContext)
+                    .asBitmap()
+                    .load(myLocation.userImage)
+                    .apply(
+//                    RequestOptions().transform(CenterCrop(), RoundedCorners(50), GlideCircleBorderTransform(100f, 10))
+                        RequestOptions().transform(CenterCrop(), GlideCircleBorderTransform(135f, 0))
+//                        RequestOptions().transform(GlideCircleBorderTransform(135f, 0))
+                    )
+                    .into( object : SimpleTarget<Bitmap>(150, 150) {
+                        override fun onResourceReady(
+                            resource: Bitmap,
+                            transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
+                        ) {
+                            map?.apply {
+                                val marker = addMarker(
+                                    MarkerOptions()
+                                        .title(myLocation.userId)
+                                        .position(LatLng(myLocation.latitude!!, myLocation.longitude!!))
+                                        .icon(BitmapDescriptorFactory.fromBitmap(resource)))
+                                marker.tag = myLocation.userId
+                                markerList.add(marker)
+                            }
+                        }
+                    })
+            }
+            _userMarkerList.value = markerList
+        }
+
     }
 
 

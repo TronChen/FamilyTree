@@ -15,27 +15,33 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.graphics.scale
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.tron.familytree.FamilyTreeApplication
+import com.tron.familytree.GlideCircleBorderTransform
 import com.tron.familytree.R
 import com.tron.familytree.data.Map
 import com.tron.familytree.databinding.FragmentMapsBinding
 import com.tron.familytree.databinding.ItemListMarkerBinding
 import com.tron.familytree.ext.getVmFactory
 import com.tron.familytree.util.UserManager
-import java.util.*
 
 
 class MapsFragment : Fragment() {
@@ -97,8 +103,8 @@ class MapsFragment : Fragment() {
 
 
         //set friends Location
-        getUsersLocation()
-        getDeviceLocation()
+//        getUsersLocation()
+//        getDeviceLocation()
 
 
     }
@@ -116,8 +122,10 @@ class MapsFragment : Fragment() {
         val binding = FragmentMapsBinding.inflate(inflater)
         binding.viewModel = viewModel
 
-        viewModel.user.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-
+        viewModel.liveUserLocation.observe(viewLifecycleOwner, androidx.lifecycle.Observer {userLocationList ->
+            myMap?.let {
+                viewModel.drawUsersLocation(it,userLocationList)
+            }
         })
 
 //        if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION)
@@ -182,68 +190,129 @@ class MapsFragment : Fragment() {
         }
     }
 
-    // 5. getDeviceLocation
-    private fun getDeviceLocation() {
-        try {
-            if (locationPermission) {
-                val locationRequest = fusedLocationProviderClient.lastLocation
-                locationRequest.addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        lastKnownLocation = task.result
-                        if (lastKnownLocation != null) {
+//    // 5. getDeviceLocation
+//    private fun getDeviceLocation() {
+//        try {
+//            if (locationPermission) {
+//                val locationRequest = fusedLocationProviderClient.lastLocation
+//                locationRequest.addOnCompleteListener { task ->
+//                    if (task.isSuccessful) {
+//                        lastKnownLocation = task.result
+//                        if (lastKnownLocation != null) {
+//
+//                            myMap?.apply {
+//
+//                                viewModel.user.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+//                                val bindingItem = ItemListMarkerBinding.inflate(LayoutInflater.from(context))
+//                                    val imgUri = it.userImage?.toUri()?.buildUpon()?.scheme("https")
+//                                        ?.build()
+//
+//                                    if (it.userImage != null) {
+//                                    Glide.with(bindingItem.imageView8.context)
+//                                        .asBitmap()
+//                                        .load(imgUri)
+//                                        .apply(
+//                                            RequestOptions()
+//                                                .transform(CenterCrop(),GlideCircleBorderTransform(135f, 0)))
+//                                        .into(object : SimpleTarget<Bitmap>(150,150){
+//                                            override fun onResourceReady(
+//                                                resource: Bitmap,
+//                                                transition: Transition<in Bitmap>?
+//                                            ) {
+//                                                addMarker(MarkerOptions()
+//                                                    .position(LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude))
+//                                                    .title("It's ME!!")
+//                                                    .snippet("${lastKnownLocation!!.latitude}, ${lastKnownLocation!!.longitude}")
+//                                                    .icon(BitmapDescriptorFactory.fromBitmap(resource)
+//                                                    )
+//                                                )
+//                                            }
+//
+//                                        })
+//                                    }
+//
+//
+//                                Firebase.firestore.collection("Map").document(UserManager.email.toString())
+//                                    .set(Map(
+//                                        longitude = lastKnownLocation!!.longitude,
+//                                    latitude = lastKnownLocation!!.latitude,
+//                                    userImage = UserManager.photo.toString(),
+//                                    userId = UserManager.email.toString()))
+//
+//                                moveCamera(
+//                                    CameraUpdateFactory.newLatLngZoom(
+//                                        LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude), 10f))
+//                                })
+//                            }
+//                        }
+//                    } else {
+//                        myMap?.uiSettings?.isMyLocationButtonEnabled = false
+//                    }
+//                }
+//            }
+//        } catch (e: SecurityException) {
+//            e.printStackTrace()
+//        }
+//    }
 
-                            myMap?.apply {
-                                viewModel.user.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-                                val bindingItem = ItemListMarkerBinding.inflate(LayoutInflater.from(context))
-                                ccc =  createDrawableFromView(requireContext(),bindingItem.imageView8)
-                                Firebase.firestore.collection("Map").document(UserManager.email.toString())
-                                    .set(Map(longitude = lastKnownLocation!!.longitude,
-                                    latitude = lastKnownLocation!!.latitude,
-                                    userImage = UserManager.photo.toString(),
-                                    userId = UserManager.email.toString()))
-
-
-                                addMarker(MarkerOptions()
-                                    .position(LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude))
-                                    .title("It's ME!!")
-                                    .snippet("${lastKnownLocation!!.latitude}, ${lastKnownLocation!!.longitude}")
-                                    .icon(BitmapDescriptorFactory.fromBitmap(ccc)
-                                    )
-                                )
-
-                                moveCamera(
-                                    CameraUpdateFactory.newLatLngZoom(
-                                        LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude), 10f))
-                                })
-                            }
-                        }
-                    } else {
-                        myMap?.uiSettings?.isMyLocationButtonEnabled = false
-                    }
-                }
-            }
-        } catch (e: SecurityException) {
-            e.printStackTrace()
-        }
-    }
-
-    private fun getUsersLocation() {
-
-        myMap?.apply {
-            viewModel.liveUserLocation.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-                it.let { list ->
-                    list.forEach { map ->
-                        addMarker(
-                            MarkerOptions()
-                                .position(LatLng(map.latitude!!, map.longitude!!))
-                                .title(map.userId)
-                                .snippet("${map.latitude!!},${map.longitude!!}")
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.people))
-                        )
-                    }
-                }
-            })
-        }
+//    private fun getUsersLocation() {
+//
+//        myMap?.apply {
+//            viewModel.liveUserLocation.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+//                it.let { list ->
+//                    list.forEach { map ->
+//                        val bindingItem =
+//                            ItemListMarkerBinding.inflate(LayoutInflater.from(context))
+//                        if (map.userImage != null) {
+//
+//                            val imgUri = map.userImage?.toUri()?.buildUpon()?.scheme("https")
+//                                ?.build()
+//                            Glide.with(FamilyTreeApplication.INSTANCE.applicationContext)
+//                                .asBitmap()
+//                                .load(imgUri)
+//                                .apply(
+//                                    RequestOptions()
+//                                        .transform(
+//                                            CenterCrop(),
+//                                            GlideCircleBorderTransform(135f, 0)
+//                                        )
+//                                )
+//                                .into(object : SimpleTarget<Bitmap>(150, 150) {
+//                                    override fun onResourceReady(
+//                                        resource: Bitmap,
+//                                        transition: Transition<in Bitmap>?
+//                                    ) {
+//                                        addMarker(
+//                                            MarkerOptions()
+//                                                .position(
+//                                                    LatLng(
+//                                                        lastKnownLocation!!.latitude,
+//                                                        lastKnownLocation!!.longitude
+//                                                    )
+//                                                )
+//                                                .snippet("${lastKnownLocation!!.latitude}, ${lastKnownLocation!!.longitude}")
+//                                                .icon(
+//                                                    BitmapDescriptorFactory.fromBitmap(resource)
+//                                                )
+//                                        )
+//                                    }
+//
+//                                })
+//
+//                        }
+//
+////                        addMarker(
+////                            MarkerOptions()
+////                                .position(LatLng(map.latitude!!, map.longitude!!))
+////                                .title(map.userId)
+////                                .snippet("${map.latitude!!},${map.longitude!!}")
+////                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.people))
+////                        )
+//                    }
+//                }
+//            })
+//        }
+//    }
 //            val userA = LatLng(25.0250383, 121.5327086)
 //            val userB = LatLng(25.1714657, 121.4359783)
 //            val userC = LatLng(25.0669043, 121.469388)
@@ -269,38 +338,37 @@ class MapsFragment : Fragment() {
 //        }
 
 
-    }
 
-    fun getBitmapFromView(view: View): Bitmap? {
-        val returnedBitmap =
-            Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(returnedBitmap)
-        val bgDrawable = view.background
-        if (bgDrawable != null) bgDrawable.draw(canvas) else canvas.drawColor(Color.WHITE)
-        view.draw(canvas)
-        return returnedBitmap
-    }
-
-    fun createDrawableFromView(context: Context, view: View): Bitmap? {
-
-        val displayMetrics = DisplayMetrics()
-        (context as Activity).windowManager.defaultDisplay.getMetrics(displayMetrics)
-        view.layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        )
-        view.measure(displayMetrics.widthPixels, displayMetrics.heightPixels)
-        view.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels)
-        view.buildDrawingCache()
-        val bitmap = Bitmap.createBitmap(
-            1500,
-            1500,
-            Bitmap.Config.ARGB_8888
-        )
-        val canvas = Canvas(bitmap)
-        view.draw(canvas)
-        return bitmap.scale(120,120)
-    }
+//    fun getBitmapFromView(view: View): Bitmap? {
+//        val returnedBitmap =
+//            Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+//        val canvas = Canvas(returnedBitmap)
+//        val bgDrawable = view.background
+//        if (bgDrawable != null) bgDrawable.draw(canvas) else canvas.drawColor(Color.WHITE)
+//        view.draw(canvas)
+//        return returnedBitmap
+//    }
+//
+//    fun createDrawableFromView(context: Context, view: View): Bitmap? {
+//
+//        val displayMetrics = DisplayMetrics()
+//        (context as Activity).windowManager.defaultDisplay.getMetrics(displayMetrics)
+//        view.layoutParams = LinearLayout.LayoutParams(
+//            LinearLayout.LayoutParams.WRAP_CONTENT,
+//            LinearLayout.LayoutParams.WRAP_CONTENT
+//        )
+//        view.measure(displayMetrics.widthPixels, displayMetrics.heightPixels)
+//        view.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels)
+//        view.buildDrawingCache()
+//        val bitmap = Bitmap.createBitmap(
+//            1500,
+//            1500,
+//            Bitmap.Config.ARGB_8888
+//        )
+//        val canvas = Canvas(bitmap)
+//        view.draw(canvas)
+//        return bitmap.scale(120,120)
+//    }
 
 
 }
