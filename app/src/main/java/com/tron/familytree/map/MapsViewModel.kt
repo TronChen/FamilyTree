@@ -1,7 +1,7 @@
 package com.tron.familytree.map
 
 import android.graphics.Bitmap
-import android.transition.Transition
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -187,6 +187,7 @@ class MapsViewModel(
                             transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
                         ) {
                             map?.apply {
+
                                 val marker = addMarker(
                                     MarkerOptions()
                                         .title(myLocation.userId)
@@ -194,6 +195,8 @@ class MapsViewModel(
                                         .icon(BitmapDescriptorFactory.fromBitmap(resource)))
                                 marker.tag = myLocation.userId
                                 markerList.add(marker)
+                                Log.e("MarkerTag", marker.tag as String)
+
                             }
                         }
                     })

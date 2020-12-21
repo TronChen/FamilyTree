@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -19,14 +20,16 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.tron.familytree.R
 import com.tron.familytree.data.Map
 import com.tron.familytree.databinding.FragmentMapsBinding
 import com.tron.familytree.ext.getVmFactory
 import com.tron.familytree.util.UserManager
+import okhttp3.internal.notify
 
 
-class MapsFragment : Fragment() {
+class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
 
     // permission request code, just is a Int and unique.
     var PERMISSION_ID = 1010
@@ -39,6 +42,8 @@ class MapsFragment : Fragment() {
     private val callback = OnMapReadyCallback { googleMap ->
         myMap = googleMap
         getLocationPermission()
+
+        myMap?.setOnMarkerClickListener(this)
 
         googleMap?.apply {
             uiSettings.isMyLocationButtonEnabled = true
@@ -64,7 +69,6 @@ class MapsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-
         val binding = FragmentMapsBinding.inflate(inflater)
         binding.viewModel = viewModel
 
@@ -76,10 +80,6 @@ class MapsFragment : Fragment() {
             myMap?.let { map ->
                 viewModel.drawUsersLocation(map,userLocationList)
             }
-        })
-
-        viewModel._userMarkerList.observe(viewLifecycleOwner, Observer {
-            Log.e("mark", it.toString())
         })
 
         return binding.root
@@ -147,6 +147,7 @@ class MapsFragment : Fragment() {
 
                             myMap?.apply {
 
+
                                 val myLocation = listOf(Map(
                                     longitude = lastKnownLocation!!.longitude,
                                     latitude = lastKnownLocation!!.latitude,
@@ -176,6 +177,37 @@ class MapsFragment : Fragment() {
         } catch (e: SecurityException) {
             e.printStackTrace()
         }
+    }
+
+    override fun onMarkerClick(p0: Marker?): Boolean {
+        viewModel._userMarkerList.observe(viewLifecycleOwner, Observer {
+            Log.e("mark", it.toString())
+            it.let {
+                it.forEach {marker ->
+                    myMap.let {
+
+                        if (p0 != null) {
+                            if (p0.tag == UserManager.email) {
+                                Toast.makeText(context, "${p0.tag}", Toast.LENGTH_SHORT).show()
+                            }
+                            if (p0.tag == marker.tag) {
+                                Toast.makeText(context, "${p0.tag}", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+
+                    }
+                }
+            }
+        })
+//        if (p0 != null) {
+//
+//            if(p0.tag == UserManager.email.toString())
+//                Toast.makeText(requireContext(), "Hamdy", Toast.LENGTH_SHORT).show()
+//        }
+
+        Log.e("MarkerClick", p0.toString())
+
+        return false
     }
 
 //    private fun getUsersLocation() {
