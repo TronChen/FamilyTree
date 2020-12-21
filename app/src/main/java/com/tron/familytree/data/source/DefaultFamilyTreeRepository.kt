@@ -166,4 +166,8 @@ class DefaultFamilyTreeRepository(private val remoteDataSource: FamilyTreeDataSo
         return remoteDataSource.getLiveUserLocation()
     }
 
+    override suspend fun addLocation(map: Map): AppResult<Boolean>{
+        return remoteDataSource.addLocation(map)
+    }
+
 }

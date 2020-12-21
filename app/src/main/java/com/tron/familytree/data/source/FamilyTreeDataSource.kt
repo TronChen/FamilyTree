@@ -88,4 +88,6 @@ interface FamilyTreeDataSource {
     suspend fun getUserLocation(): AppResult<List<Map>>
 
     fun getLiveUserLocation(): MutableLiveData<List<Map>>
+
+    suspend fun addLocation(map: Map): AppResult<Boolean>
 }

@@ -33,9 +33,22 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
     private const val ALBUM = "Album"
     private const val MAP = "Map"
 
+    override suspend fun addLocation(map: Map): AppResult<Boolean> = suspendCoroutine { continuation ->
+        val userCollection = FirebaseFirestore.getInstance().collection(MAP).document(UserManager.email.toString())
+
+        userCollection
+            .set(map).addOnSuccessListener {
+                continuation.resume(AppResult.Success(true))
+            }
+            .addOnFailureListener {
+                continuation.resume(AppResult.Error(it))
+            }
+    }
+
     override suspend fun getUserLocation(): AppResult<List<Map>> = suspendCoroutine { continuation ->
         FirebaseFirestore.getInstance()
             .collection(MAP)
+            .whereNotEqualTo("userId",UserManager.email.toString())
             .get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -62,6 +75,7 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
     override fun getLiveUserLocation(): MutableLiveData<List<Map>> {
         val userCollection = FirebaseFirestore.getInstance()
             .collection(MAP)
+            .whereNotEqualTo("userId",UserManager.email.toString())
         val liveData = MutableLiveData<List<Map>>()
 
         userCollection

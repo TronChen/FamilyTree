@@ -34,6 +34,8 @@ class MapsViewModel(
 
     val userImage = MutableLiveData<String>()
 
+    val _userMarkerList = MutableLiveData<List<Marker>>()
+
     private val _user = MutableLiveData<User>()
 
     val user: LiveData<User>
@@ -90,11 +92,10 @@ class MapsViewModel(
 
         findUserById(UserManager.email.toString())
 
-        if (FamilyTreeApplication.INSTANCE.isLiveDataDesign()) {
-            getLiveUserLocation()
-        } else {
+
             getUserLocation()
-        }
+        getLiveUserLocation()
+
     }
 
 
@@ -165,8 +166,6 @@ class MapsViewModel(
     }
 
 
-    val _userMarkerList = MutableLiveData<List<Marker>>()
-
     fun drawUsersLocation(map: GoogleMap, usersLocationList: List<Map>) {
 
         val markerList = mutableListOf<Marker>()
@@ -202,6 +201,39 @@ class MapsViewModel(
             _userMarkerList.value = markerList
         }
 
+    }
+
+    fun addLocation(map: Map) {
+
+        coroutineScope.launch {
+
+            _status.value = LoadApiStatus.LOADING
+
+            val result = repository.addLocation(map)
+
+            when (result) {
+                is AppResult.Success -> {
+                    _error.value = null
+                    _status.value = LoadApiStatus.DONE
+                }
+                is AppResult.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                    null
+                }
+                is AppResult.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                    null
+                }
+                else -> {
+                    _error.value = FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)
+                    _status.value = LoadApiStatus.ERROR
+                    null
+                }
+            }
+            _refreshStatus.value = false
+        }
     }
 
 

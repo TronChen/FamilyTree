@@ -170,4 +170,8 @@ class FamilyTreeLocalDataSource(val context: Context) : FamilyTreeDataSource {
     override fun getLiveUserLocation(): MutableLiveData<List<Map>> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun addLocation(map: Map): AppResult<Boolean> {
+        TODO("Not yet implemented")
+    }
 }
