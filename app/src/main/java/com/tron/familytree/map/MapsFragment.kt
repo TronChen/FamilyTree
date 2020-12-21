@@ -82,6 +82,14 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
             }
         })
 
+        binding.cardMyLocation.setOnClickListener {
+            myMap?.apply {
+                moveCamera(
+                    CameraUpdateFactory.newLatLngZoom(
+                        LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude), 15f))
+            }
+        }
+
         return binding.root
     }
 
@@ -179,6 +187,8 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
         }
     }
 
+
+
     override fun onMarkerClick(p0: Marker?): Boolean {
         viewModel._userMarkerList.observe(viewLifecycleOwner, Observer {
             Log.e("mark", it.toString())
@@ -209,6 +219,31 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
 
         return false
     }
+
+//    override fun onMyLocationChange(p0: Location?) {
+//        myMap?.apply {
+//
+//            Log.e("onMyLocationChange", p0.toString())
+//
+//            val myLocation = listOf(
+//                Map(
+//                    longitude = p0!!.longitude,
+//                    latitude = p0.latitude,
+//                    userImage = UserManager.photo.toString(),
+//                    userId = UserManager.email.toString()
+//                )
+//            )
+//
+//            val myNowLocation = MutableLiveData<Map>()
+//
+//            for (index in myLocation) {
+//                myNowLocation.value = index
+//            }
+//
+//            viewModel.drawUsersLocation(this, myLocation)
+//            viewModel.addLocation(myNowLocation.value!!)
+//        }
+//    }
 
 //    private fun getUsersLocation() {
 //

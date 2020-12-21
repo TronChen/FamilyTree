@@ -1,5 +1,7 @@
 package com.tron.familytree
 
+import android.R.attr
+import android.R.attr.data
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -12,13 +14,15 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.MutableLiveData
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.github.dhaval2404.imagepicker.ImagePicker
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.tron.familytree.data.User
 import com.tron.familytree.databinding.ActivityMainBinding
@@ -28,9 +32,11 @@ import com.tron.familytree.message.MessageFragmentDirections
 import com.tron.familytree.util.CurrentFragmentType
 import com.tron.familytree.util.UserManager
 
+
 const val ADD_USER = 111
 const val EDIT_USER = 222
 const val ADD_PHOTO = 333
+const val PLACE_API = 1111
 
 class MainActivity : AppCompatActivity() {
 
@@ -88,6 +94,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (!Places.isInitialized()) {
+            let { Places.initialize(this,"AIzaSyCiCPmbflbA9FlcM46aRJ4istK6GfAA2GQ") }
+        }
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
@@ -280,6 +290,7 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
             when (resultCode) {
                 Activity.RESULT_OK -> {
+
                     val filePath: String = ImagePicker.getFilePath(data) ?: ""
                     when(requestCode and 0x0000ffff){
                         ADD_USER ->{
