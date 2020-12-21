@@ -124,7 +124,7 @@
                 app:layout_constraintTop_toTopOf="@+id/imageView9" />
 
             <EditText
-                android:id="@+id/editTextLocation"
+                android:id="@+id/textLocation"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -157,8 +157,8 @@
                 android:text="活動內容"
                 android:textColor="@color/black"
                 android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="@+id/editTextLocation"
-                app:layout_constraintTop_toBottomOf="@+id/editTextLocation" />
+                app:layout_constraintStart_toStartOf="@+id/textLocation"
+                app:layout_constraintTop_toBottomOf="@+id/textLocation" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/conDate"

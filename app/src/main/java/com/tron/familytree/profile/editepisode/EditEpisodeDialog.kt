@@ -47,14 +47,6 @@ class EditEpisodeDialog : DialogFragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
 
-//        Places.initialize(requireContext(),"AIzaSyDl_BDrZgG_D48maz3BHm0t95XhWwqcI98")
-//        val placeClient : PlacesClient = Places.createClient(requireContext())
-//
-//        startAutoCompleteActivity(binding.editTextLocation)
-
-
-
-
         viewModel.editTitle.observe(viewLifecycleOwner, Observer {
             Log.e("EditTitle",it)
         })
@@ -81,7 +73,7 @@ class EditEpisodeDialog : DialogFragment() {
 // Create a new Places client instance.
         val placesClient = activity?.let { Places.createClient(it) }
 
-        binding.editTextLocation.setOnClickListener {
+        binding.textLocation.setOnClickListener {
 
             // Set the fields to specify which types of place data to return.
 
@@ -99,36 +91,11 @@ class EditEpisodeDialog : DialogFragment() {
             startActivityForResult(intent, PLACE_API)
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         return binding.root
     }
 
     private fun setDateFormat(year: Int, month: Int, day: Int): String {
         return "$year-${month + 1}-$day"
-    }
-
-    fun startAutoCompleteActivity(view:View){
-        val intent = Autocomplete.IntentBuilder(
-            AutocompleteActivityMode.OVERLAY,
-            Arrays.asList(Place.Field.ID, Place.Field.NAME)
-        ).build(requireContext())
-
-        startActivityForResult(intent,1010)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -138,6 +105,11 @@ class EditEpisodeDialog : DialogFragment() {
 
                 Log.e("reqCode", requestCode.toString())
                 val place = data?.let { Autocomplete.getPlaceFromIntent(it) }
+            if (place != null) {
+                viewModel.editLocation.value = place.name
+                viewModel.latitude.value = place.latLng?.latitude
+                viewModel.longitude.value = place.latLng?.longitude
+            }
                 if (place != null) {
                     Log.e(
                         "PLACE_API",
@@ -152,6 +124,9 @@ class EditEpisodeDialog : DialogFragment() {
                     ).show()
                 }
                 val address = place?.address
+            if (place != null) {
+                Log.e("latLng", place.latLng?.latitude.toString())
+            }
                 // do query with address
         }
     }

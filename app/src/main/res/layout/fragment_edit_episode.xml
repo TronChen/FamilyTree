@@ -133,8 +133,8 @@
                     app:layout_constraintStart_toEndOf="@+id/imageView9"
                     app:layout_constraintTop_toTopOf="@+id/imageView9" />
 
-                <EditText
-                    android:id="@+id/editTextLocation"
+                <TextView
+                    android:id="@+id/textLocation"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -143,20 +143,18 @@
                     android:background="@drawable/rounded_light_grey_radius_24"
                     android:ems="10"
                     android:fontFamily="@font/noto_sans"
-                    android:gravity="top"
-                    android:hint="輸入地點"
-                    android:text="@={viewModel.editLocation}"
-                    android:inputType="textPersonName"
-                    android:lines="5"
+                    android:gravity="center"
                     android:paddingStart="12dp"
                     android:paddingTop="12dp"
                     android:paddingEnd="12dp"
                     android:paddingBottom="12dp"
+                    android:text="@={viewModel.editLocation}"
                     android:textColor="@color/black"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView9" />
+                    app:layout_constraintTop_toBottomOf="@+id/imageView9"
+                    tools:text="請選擇地點" />
 
                 <TextView
                     android:id="@+id/textView17"
@@ -167,8 +165,8 @@
                     android:text="事蹟內容"
                     android:textColor="@color/black"
                     android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="@+id/editTextLocation"
-                    app:layout_constraintTop_toBottomOf="@+id/editTextLocation" />
+                    app:layout_constraintStart_toStartOf="@+id/textLocation"
+                    app:layout_constraintTop_toBottomOf="@+id/textLocation" />
 
                 <!--                <com.google.android.material.textfield.TextInputLayout-->
                 <!--                    android:layout_width="match_parent"-->

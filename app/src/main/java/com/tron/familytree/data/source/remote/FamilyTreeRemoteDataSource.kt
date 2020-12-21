@@ -785,12 +785,15 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
 
     override suspend fun addUserEpisode(episode: Episode): AppResult<Boolean> = suspendCoroutine { continuation ->
         val userCollection = FirebaseFirestore.getInstance().collection(PATH_USER)
+        val episodeCollection = FirebaseFirestore.getInstance().collection(EPISODE)
+
+        episode.id = episodeCollection.document().id
 
         userCollection.whereEqualTo("id",UserManager.email)
             .get()
             .addOnSuccessListener {
                 for (index in it){
-                    userCollection.document(index.id).collection(EPISODE).document(episode.title)
+                    userCollection.document(index.id).collection(EPISODE).document(episode.id!!)
                         .set(episode)
                         .addOnSuccessListener {
                             if (it != null) {
@@ -802,6 +805,20 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
                         }
                 }
             }
+
+
+        episodeCollection.document(episode.id!!)
+            .set(episode)
+            .addOnSuccessListener {
+                if (it != null) {
+//                    continuation.resume(AppResult.Success(true))
+                }
+            }
+            .addOnFailureListener {
+//                continuation.resume(AppResult.Error(it))
+            }
+
+
     }
 
     override suspend fun findUserById(id: String): AppResult<User> = suspendCoroutine { continuation ->
