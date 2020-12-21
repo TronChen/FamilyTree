@@ -170,4 +170,8 @@ class DefaultFamilyTreeRepository(private val remoteDataSource: FamilyTreeDataSo
         return remoteDataSource.addLocation(map)
     }
 
+    override suspend fun getAllEpisode(): AppResult<List<Episode>>{
+        return remoteDataSource.getAllEpisode()
+    }
+
 }

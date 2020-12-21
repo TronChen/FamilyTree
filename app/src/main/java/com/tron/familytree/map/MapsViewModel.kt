@@ -19,6 +19,7 @@ import com.tron.familytree.FamilyTreeApplication
 import com.tron.familytree.GlideCircleBorderTransform
 import com.tron.familytree.R
 import com.tron.familytree.data.AppResult
+import com.tron.familytree.data.Episode
 import com.tron.familytree.data.Map
 import com.tron.familytree.data.User
 import com.tron.familytree.network.LoadApiStatus
@@ -36,16 +37,25 @@ class MapsViewModel(
 
     val _userMarkerList = MutableLiveData<List<Marker>>()
 
-    private val _user = MutableLiveData<User>()
+    val _episodeMarkerList = MutableLiveData<List<Marker>>()
 
+    val _user = MutableLiveData<User>()
     val user: LiveData<User>
         get() = _user
+
+    val _userTag = MutableLiveData<User>()
+    val userTag: LiveData<User>
+        get() = _userTag
 
     var liveUserLocation = MutableLiveData<List<Map>>()
 
     val _userLocation = MutableLiveData<List<Map>>()
     val userLocation : LiveData<List<Map>>
     get() = _userLocation
+
+    val _episode = MutableLiveData<List<Episode>>()
+    val episode : LiveData<List<Episode>>
+        get() = _episode
 
     // status: The internal MutableLiveData that stores the status of the most recent request
     private val _status = MutableLiveData<LoadApiStatus>()
@@ -95,6 +105,7 @@ class MapsViewModel(
 
             getUserLocation()
         getLiveUserLocation()
+        getAllEpisode()
 
     }
 
@@ -122,6 +133,66 @@ class MapsViewModel(
                     _status.value = LoadApiStatus.ERROR
                 }
             }
+        }
+    }
+
+    fun findUserByIdTag(tag : String){
+        coroutineScope.launch {
+            _status.value = LoadApiStatus.LOADING
+
+            when (val result = repository.findUserById(tag)) {
+                is AppResult.Success -> {
+                    _error.value = null
+                    _status.value = LoadApiStatus.DONE
+                    _userTag.value = result.data
+                }
+                is AppResult.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is AppResult.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                else -> {
+                    _error.value = FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)
+                    _status.value = LoadApiStatus.ERROR
+                }
+            }
+        }
+    }
+
+    fun getAllEpisode() {
+
+        coroutineScope.launch {
+
+            _status.value = LoadApiStatus.LOADING
+
+            val result = repository.getAllEpisode()
+
+            _episode.value = when (result) {
+                is AppResult.Success -> {
+                    _error.value = null
+                    _status.value = LoadApiStatus.DONE
+                    result.data
+                }
+                is AppResult.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                    null
+                }
+                is AppResult.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                    null
+                }
+                else -> {
+                    _error.value = FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)
+                    _status.value = LoadApiStatus.ERROR
+                    null
+                }
+            }
+            _refreshStatus.value = false
         }
     }
 

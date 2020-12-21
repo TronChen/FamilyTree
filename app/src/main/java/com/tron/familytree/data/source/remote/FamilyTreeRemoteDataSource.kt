@@ -33,6 +33,32 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
     private const val ALBUM = "Album"
     private const val MAP = "Map"
 
+    override suspend fun getAllEpisode(): AppResult<List<Episode>> = suspendCoroutine { continuation ->
+        FirebaseFirestore.getInstance()
+            .collection(EPISODE)
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val list = mutableListOf<Episode>()
+                    for (document in task.result!!) {
+                        Log.d("Tron",document.id + " => " + document.data)
+
+                        val episode = document.toObject(Episode::class.java)
+                        list.add(episode)
+                    }
+                    continuation.resume(AppResult.Success(list))
+                } else {
+                    task.exception?.let {
+
+                        Log.w("Tron","[${this::class.simpleName}] Error getting documents. ${it.message}")
+                        continuation.resume(AppResult.Error(it))
+                        return@addOnCompleteListener
+                    }
+                    continuation.resume(AppResult.Fail(FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)))
+                }
+            }
+    }
+
     override suspend fun addLocation(map: Map): AppResult<Boolean> = suspendCoroutine { continuation ->
         val userCollection = FirebaseFirestore.getInstance().collection(MAP).document(UserManager.email.toString())
 

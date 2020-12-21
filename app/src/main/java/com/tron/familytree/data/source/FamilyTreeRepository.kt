@@ -88,4 +88,6 @@ interface FamilyTreeRepository {
     fun getLiveUserLocation(): MutableLiveData<List<Map>>
 
     suspend fun addLocation(map: Map): AppResult<Boolean>
+
+    suspend fun getAllEpisode(): AppResult<List<Episode>>
 }

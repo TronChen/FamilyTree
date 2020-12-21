@@ -1,32 +1,42 @@
 package com.tron.familytree.map
 
+import android.app.Activity
+import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.graphics.scale
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import com.tron.familytree.R
 import com.tron.familytree.data.Map
 import com.tron.familytree.databinding.FragmentMapsBinding
 import com.tron.familytree.ext.getVmFactory
 import com.tron.familytree.util.UserManager
-import okhttp3.internal.notify
 
 
 class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
@@ -90,12 +100,40 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
             }
         }
 
+        binding.cardEpisode.setOnClickListener {
+            val markerList = mutableListOf<Marker>()
+            for (episode in viewModel.episode.value!!) {
+                myMap?.apply {
+                    val marker = addMarker(
+                        MarkerOptions()
+                            .title(episode.title)
+                            .position(LatLng(episode.latitude!!, episode.longitude!!))
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.maps_and_flags)))
+                    marker.tag = episode.id
+                    markerList.add(marker)
+                    Log.e("MarkerTag", marker.tag as String)
+                }
+            }
+            viewModel._episodeMarkerList.value = markerList
+        }
+
         return binding.root
     }
 
     override fun onPause() {
         super.onPause()
+        Log.e("Pause","onPause")
         viewModel._userMarkerList.value?.forEach { it.remove() }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.e("onStop","onStop")
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.e("onDestroyView","onDestroyView")
     }
 
 
@@ -198,8 +236,30 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
 
                         if (p0 != null) {
                             if (p0.tag == UserManager.email) {
-                                Toast.makeText(context, "${p0.tag}", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "我在這兒", Toast.LENGTH_SHORT).show()
                             }
+                            if (p0.tag == marker.tag) {
+                                Toast.makeText(context, "${p0.tag}", Toast.LENGTH_SHORT).show()
+
+                                viewModel.findUserByIdTag(p0.tag.toString())
+                                viewModel.userTag.observe(viewLifecycleOwner, Observer {
+                                findNavController().navigate(MapsFragmentDirections.actionGlobalBranchUserDetailDialog(it))
+                                })
+                            }
+                        }
+
+                    }
+                }
+            }
+        })
+
+        viewModel._episodeMarkerList.observe(viewLifecycleOwner, Observer {
+            Log.e("mark", it.toString())
+            it.let {
+                it.forEach {marker ->
+                    myMap.let {
+
+                        if (p0 != null) {
                             if (p0.tag == marker.tag) {
                                 Toast.makeText(context, "${p0.tag}", Toast.LENGTH_SHORT).show()
                             }
@@ -329,36 +389,36 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
 
 
 
-//    fun getBitmapFromView(view: View): Bitmap? {
-//        val returnedBitmap =
-//            Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
-//        val canvas = Canvas(returnedBitmap)
-//        val bgDrawable = view.background
-//        if (bgDrawable != null) bgDrawable.draw(canvas) else canvas.drawColor(Color.WHITE)
-//        view.draw(canvas)
-//        return returnedBitmap
-//    }
-//
-//    fun createDrawableFromView(context: Context, view: View): Bitmap? {
-//
-//        val displayMetrics = DisplayMetrics()
-//        (context as Activity).windowManager.defaultDisplay.getMetrics(displayMetrics)
-//        view.layoutParams = LinearLayout.LayoutParams(
-//            LinearLayout.LayoutParams.WRAP_CONTENT,
-//            LinearLayout.LayoutParams.WRAP_CONTENT
-//        )
-//        view.measure(displayMetrics.widthPixels, displayMetrics.heightPixels)
-//        view.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels)
-//        view.buildDrawingCache()
-//        val bitmap = Bitmap.createBitmap(
-//            1500,
-//            1500,
-//            Bitmap.Config.ARGB_8888
-//        )
-//        val canvas = Canvas(bitmap)
-//        view.draw(canvas)
-//        return bitmap.scale(120,120)
-//    }
+    fun getBitmapFromView(view: View): Bitmap? {
+        val returnedBitmap =
+            Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(returnedBitmap)
+        val bgDrawable = view.background
+        if (bgDrawable != null) bgDrawable.draw(canvas) else canvas.drawColor(Color.WHITE)
+        view.draw(canvas)
+        return returnedBitmap
+    }
+
+    fun createDrawableFromView(context: Context, view: View): Bitmap? {
+
+        val displayMetrics = DisplayMetrics()
+        (context as Activity).windowManager.defaultDisplay.getMetrics(displayMetrics)
+        view.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        view.measure(displayMetrics.widthPixels, displayMetrics.heightPixels)
+        view.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels)
+        view.buildDrawingCache()
+        val bitmap = Bitmap.createBitmap(
+            1500,
+            1500,
+            Bitmap.Config.ARGB_8888
+        )
+        val canvas = Canvas(bitmap)
+        view.draw(canvas)
+        return bitmap.scale(120,120)
+    }
 
 
 }

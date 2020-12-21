@@ -174,4 +174,8 @@ class FamilyTreeLocalDataSource(val context: Context) : FamilyTreeDataSource {
     override suspend fun addLocation(map: Map): AppResult<Boolean> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun getAllEpisode(): AppResult<List<Episode>> {
+        TODO("Not yet implemented")
+    }
 }
