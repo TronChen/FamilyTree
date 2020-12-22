@@ -66,19 +66,4 @@ class BranchUserDetailDialog : BottomSheetDialogFragment() {
 
         return binding.root
     }
-
-    override fun onPause() {
-        super.onPause()
-        Log.e("onPause","onPause")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.e("onStop","onStop")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.e("onDestroy","onDestroy")
-    }
 }

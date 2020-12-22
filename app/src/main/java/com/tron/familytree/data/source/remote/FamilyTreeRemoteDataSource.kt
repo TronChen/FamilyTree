@@ -33,6 +33,22 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
     private const val ALBUM = "Album"
     private const val MAP = "Map"
 
+    override suspend fun findEpisodeById(id: String): AppResult<Episode> = suspendCoroutine { continuation ->
+        val userCollection = FirebaseFirestore.getInstance().collection(EPISODE)
+        userCollection
+            .document(id)
+            .get()
+            .addOnSuccessListener {
+                if (it != null){
+                        val episode = it.toObject(Episode::class.java)
+                        continuation.resume(AppResult.Success(episode!!))
+                    }
+                }
+            .addOnFailureListener {
+                continuation.resume(AppResult.Error(it))
+            }
+    }
+
     override suspend fun getAllEpisode(): AppResult<List<Episode>> = suspendCoroutine { continuation ->
         FirebaseFirestore.getInstance()
             .collection(EPISODE)

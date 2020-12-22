@@ -221,7 +221,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
                                 Toast.makeText(context, "我在這兒", Toast.LENGTH_SHORT).show()
                             }
                             if (p0.tag == marker.tag) {
-                                Toast.makeText(context, "${p0.tag}", Toast.LENGTH_SHORT).show()
+//                                Toast.makeText(context, "${p0.tag}", Toast.LENGTH_SHORT).show()
                                 viewModel.findUserByIdTag(p0.tag.toString())
                             }
                         }

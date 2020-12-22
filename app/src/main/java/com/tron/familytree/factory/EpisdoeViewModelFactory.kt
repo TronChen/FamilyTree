@@ -6,6 +6,7 @@ import app.appworks.school.publisher.data.source.FamilyTreeRepository
 import com.tron.familytree.data.Episode
 import com.tron.familytree.data.User
 import com.tron.familytree.profile.editepisode.EditEpisodeViewModel
+import com.tron.familytree.profile.episode.episode_dialog.EpisodeDetailViewModel
 
 
 @Suppress("UNCHECKED_CAST")
@@ -19,6 +20,15 @@ class EpisdoeViewModelFactory(
         if (modelClass.isAssignableFrom(EditEpisodeViewModel::class.java)) {
             return episode?.let {
                 EditEpisodeViewModel(
+                    repository,
+                    it
+                )
+            } as T
+        }
+
+        if (modelClass.isAssignableFrom(EpisodeDetailViewModel::class.java)) {
+            return episode?.let {
+                EpisodeDetailViewModel(
                     repository,
                     it
                 )

@@ -178,4 +178,8 @@ class FamilyTreeLocalDataSource(val context: Context) : FamilyTreeDataSource {
     override suspend fun getAllEpisode(): AppResult<List<Episode>> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun findEpisodeById(id: String): AppResult<Episode> {
+        TODO("Not yet implemented")
+    }
 }

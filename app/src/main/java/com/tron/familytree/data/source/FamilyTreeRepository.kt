@@ -90,4 +90,6 @@ interface FamilyTreeRepository {
     suspend fun addLocation(map: Map): AppResult<Boolean>
 
     suspend fun getAllEpisode(): AppResult<List<Episode>>
+
+    suspend fun findEpisodeById(id: String): AppResult<Episode>
 }

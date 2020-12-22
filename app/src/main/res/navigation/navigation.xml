@@ -176,4 +176,13 @@
             app:argType="com.tron.familytree.data.Photo" />
     </fragment>
     <action android:id="@+id/action_global_albumSinglePicFragment" app:destination="@id/albumSinglePicFragment" />
+    <dialog
+        android:id="@+id/episodeDetailDialog"
+        android:name="com.tron.familytree.profile.episode.episode_dialog.EpisodeDetailDialog"
+        android:label="EpisodeDetailDialog" >
+        <argument
+            android:name="episodeProperties"
+            app:argType="com.tron.familytree.data.Episode" />
+    </dialog>
+    <action android:id="@+id/action_global_episodeDetailDialog" app:destination="@id/episodeDetailDialog" />
 </navigation>

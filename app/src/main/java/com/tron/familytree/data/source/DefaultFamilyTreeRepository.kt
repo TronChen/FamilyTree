@@ -174,4 +174,8 @@ class DefaultFamilyTreeRepository(private val remoteDataSource: FamilyTreeDataSo
         return remoteDataSource.getAllEpisode()
     }
 
+    override suspend fun findEpisodeById(id: String): AppResult<Episode>{
+        return remoteDataSource.findEpisodeById(id)
+    }
+
 }
