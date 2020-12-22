@@ -73,42 +73,45 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@{viewModel.user.name}"
             android:fontFamily="@font/noto_sans_bold"
-            android:textSize="18sp"
+            android:text="@{viewModel.user.name}"
             android:textColor="@color/black"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/familyId" />
+            app:layout_constraintTop_toBottomOf="@+id/familyId"
+            tools:text="陳大川" />
 
         <TextView
             android:id="@+id/birth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@{viewModel.user.birth}"
-            android:visibility="@{viewModel.user.birth == null ? View.GONE : View.VISIBLE}"
             android:fontFamily="@font/noto_sans_bold"
-            android:textSize="18sp"
+            android:text="@{viewModel.user.birth}"
             android:textColor="@color/black"
+            android:textSize="18sp"
+            android:visibility="@{viewModel.user.birth == null ? View.GONE : View.VISIBLE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/name" />
+            app:layout_constraintTop_toBottomOf="@+id/name"
+            tools:text="1993-12-30" />
 
         <TextView
             android:id="@+id/birth_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@{viewModel.user.birthLocation}"
-            android:visibility="@{viewModel.user.birthLocation == null ? View.GONE : View.VISIBLE}"
             android:fontFamily="@font/noto_sans_bold"
-            android:textSize="18sp"
+            android:text="@{viewModel.user.birthLocation}"
             android:textColor="@color/black"
+            android:textSize="18sp"
+            android:visibility="@{viewModel.user.birthLocation == null ? View.GONE : View.VISIBLE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/birth" />
+            app:layout_constraintTop_toBottomOf="@+id/birth"
+            tools:text="新竹" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"

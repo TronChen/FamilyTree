@@ -52,11 +52,26 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/conBackGround"
+            android:id="@+id/conBackGroundBot"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/trans_backgoriund"
+            android:layout_height="0dp"
+            android:background="@drawable/trans_background_bot"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/conBackGroundTop">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/conBackGroundTop"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/trans_background_top"
+            app:layout_constraintBottom_toTopOf="@+id/conBackGroundBot"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 

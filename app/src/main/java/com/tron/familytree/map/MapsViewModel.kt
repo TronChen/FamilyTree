@@ -103,7 +103,7 @@ class MapsViewModel(
         findUserById(UserManager.email.toString())
 
 
-            getUserLocation()
+        getUserLocation()
         getLiveUserLocation()
         getAllEpisode()
 

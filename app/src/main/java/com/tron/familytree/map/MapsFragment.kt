@@ -24,14 +24,8 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.*
+import com.google.android.gms.maps.model.*
 import com.tron.familytree.R
 import com.tron.familytree.data.Map
 import com.tron.familytree.databinding.FragmentMapsBinding
@@ -92,6 +86,11 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
             }
         })
 
+        viewModel.userTag.observe(viewLifecycleOwner, Observer {
+            Log.e("userTag", it.toString())
+            findNavController().navigate(MapsFragmentDirections.actionGlobalBranchUserDetailDialog(it))
+        })
+
         binding.cardMyLocation.setOnClickListener {
             myMap?.apply {
                 moveCamera(
@@ -115,28 +114,11 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
                 }
             }
             viewModel._episodeMarkerList.value = markerList
+            viewModel._userMarkerList.value?.forEach { it.remove() }
         }
 
         return binding.root
     }
-
-    override fun onPause() {
-        super.onPause()
-        Log.e("Pause","onPause")
-        viewModel._userMarkerList.value?.forEach { it.remove() }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.e("onStop","onStop")
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        Log.e("onDestroyView","onDestroyView")
-    }
-
-
 
     private fun getLocationPermission() {
         if (ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -233,18 +215,14 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
             it.let {
                 it.forEach {marker ->
                     myMap.let {
-
+                        Log.e("_userMarkerList", marker.tag.toString())
                         if (p0 != null) {
                             if (p0.tag == UserManager.email) {
                                 Toast.makeText(context, "我在這兒", Toast.LENGTH_SHORT).show()
                             }
                             if (p0.tag == marker.tag) {
                                 Toast.makeText(context, "${p0.tag}", Toast.LENGTH_SHORT).show()
-
                                 viewModel.findUserByIdTag(p0.tag.toString())
-                                viewModel.userTag.observe(viewLifecycleOwner, Observer {
-                                findNavController().navigate(MapsFragmentDirections.actionGlobalBranchUserDetailDialog(it))
-                                })
                             }
                         }
 
