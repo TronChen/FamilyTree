@@ -1,25 +1,28 @@
 package com.tron.familytree.profile.editepisode
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.gms.auth.api.Auth
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.widget.Autocomplete
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
+import com.tron.familytree.FamilyTreeApplication
 import com.tron.familytree.R
 import com.tron.familytree.databinding.FragmentEditEpisodeBinding
-import com.tron.familytree.databinding.FragmentEditUserBinding
 import com.tron.familytree.ext.getVmFactory
-import com.tron.familytree.profile.edituser.EditUserViewModel
 import java.util.*
+
+const val PLACE_API = 1111
 
 class EditEpisodeDialog : DialogFragment() {
 
@@ -63,12 +66,69 @@ class EditEpisodeDialog : DialogFragment() {
             Log.e("Episode", viewModel.setEpisode().toString())
         }
 
+        if (!Places.isInitialized()) {
+            activity?.let { Places.initialize(it,"AIzaSyCiCPmbflbA9FlcM46aRJ4istK6GfAA2GQ") }
+        }
+// Create a new Places client instance.
+// Create a new Places client instance.
+        val placesClient = activity?.let { Places.createClient(it) }
+
+        binding.textLocation.setOnClickListener {
+
+            // Set the fields to specify which types of place data to return.
+
+            val fields = Arrays.asList(
+                Place.Field.ID,
+                Place.Field.NAME,
+                Place.Field.ADDRESS,
+                Place.Field.LAT_LNG
+            )
+
+            val intent: Intent = Autocomplete.IntentBuilder(
+                AutocompleteActivityMode.OVERLAY, fields
+            ).setCountry("TW")
+                .build(requireContext())
+            startActivityForResult(intent, PLACE_API)
+        }
 
         return binding.root
     }
 
     private fun setDateFormat(year: Int, month: Int, day: Int): String {
         return "$year-${month + 1}-$day"
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+//    如果是的話 取得帳號資訊
+        if (requestCode == PLACE_API) {
+
+                Log.e("reqCode", requestCode.toString())
+                val place = data?.let { Autocomplete.getPlaceFromIntent(it) }
+            if (place != null) {
+                viewModel.editLocation.value = place.name
+                viewModel.latitude.value = place.latLng?.latitude
+                viewModel.longitude.value = place.latLng?.longitude
+            }
+                if (place != null) {
+                    Log.e(
+                        "PLACE_API",
+                        "Place: " + place.name + ", " + place.id + ", " + place.address
+                    )
+                }
+                if (place != null) {
+                    Toast.makeText(
+                        requireContext(),
+                        "ID: " + place.id + "address:" + place.address + "Name:" + place.name + " latlong: " + place.latLng,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+                val address = place?.address
+            if (place != null) {
+                Log.e("latLng", place.latLng?.latitude.toString())
+            }
+                // do query with address
+        }
     }
 
 }

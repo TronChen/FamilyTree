@@ -8,7 +8,6 @@ import com.tron.familytree.FamilyTreeApplication
 import com.tron.familytree.R
 import com.tron.familytree.data.AppResult
 import com.tron.familytree.data.Episode
-import com.tron.familytree.data.User
 import com.tron.familytree.network.LoadApiStatus
 import com.tron.familytree.util.UserManager
 import kotlinx.coroutines.CoroutineScope
@@ -30,6 +29,9 @@ class EditEpisodeViewModel(
     val editLocation = MutableLiveData<String>()
     val editContent = MutableLiveData<String>()
     var editDate = MutableLiveData<String>()
+
+    var longitude = MutableLiveData<Double>()
+    var latitude = MutableLiveData<Double>()
 
 
     // status: The internal MutableLiveData that stores the status of the most recent request
@@ -77,18 +79,20 @@ class EditEpisodeViewModel(
         _selectedProperty.value = episode
         editDate.value = episode.time
         editTitle.value = episode.title
-        editLocation.value = episode.location
+        editLocation.value = "請選擇位址"
         editContent.value = episode.content
     }
 
 
     fun setEpisode() : Episode{
         return Episode(
-            user = UserManager.email!!,
+            user = UserManager.name!!,
             title = editTitle.value!!,
             time = editDate.value!!,
             content = editContent.value!!,
-            location = editLocation.value!!
+            location = editLocation.value!!,
+            latitude = latitude.value,
+            longitude = longitude.value
         )
     }
 

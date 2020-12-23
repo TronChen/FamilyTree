@@ -111,7 +111,11 @@
         android:id="@+id/albumDetailFragment"
         android:name="com.tron.familytree.family.albumdetail.AlbumDetailFragment"
         android:label="fragment_album_detail"
-        tools:layout="@layout/fragment_album_detail" />
+        tools:layout="@layout/fragment_album_detail" >
+        <argument
+            android:name="eventProperties"
+            app:argType="com.tron.familytree.data.Event" />
+    </fragment>
     <action android:id="@+id/action_global_albumDetailFragment" app:destination="@id/albumDetailFragment" />
     <fragment
         android:id="@+id/chatRoomFragment"
@@ -163,4 +167,22 @@
         android:id="@+id/eventFragment"
         android:name="com.tron.familytree.family.event.EventFragment"
         android:label="EventFragment" /><action android:id="@+id/action_global_eventFragment" app:destination="@id/eventFragment"/>
+    <fragment
+        android:id="@+id/albumSinglePicFragment"
+        android:name="com.tron.familytree.family.album_single_pic.AlbumSinglePicFragment"
+        android:label="AlbumSinglePicFragment" >
+        <argument
+            android:name="photoProperties"
+            app:argType="com.tron.familytree.data.Photo" />
+    </fragment>
+    <action android:id="@+id/action_global_albumSinglePicFragment" app:destination="@id/albumSinglePicFragment" />
+    <dialog
+        android:id="@+id/episodeDetailDialog"
+        android:name="com.tron.familytree.profile.episode.episode_dialog.EpisodeDetailDialog"
+        android:label="EpisodeDetailDialog" >
+        <argument
+            android:name="episodeProperties"
+            app:argType="com.tron.familytree.data.Episode" />
+    </dialog>
+    <action android:id="@+id/action_global_episodeDetailDialog" app:destination="@id/episodeDetailDialog" />
 </navigation>

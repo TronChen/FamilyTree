@@ -8,14 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
-import com.tron.familytree.R
 import com.tron.familytree.data.Episode
 import com.tron.familytree.databinding.FragmentEpisodeBinding
-import com.tron.familytree.databinding.FragmentProfileBinding
 import com.tron.familytree.ext.getVmFactory
-import com.tron.familytree.family.event.EventAdapter
-import com.tron.familytree.profile.ProfileViewModel
 
 
 class EpisodeFragment() : Fragment() {
@@ -56,7 +51,7 @@ class EpisodeFragment() : Fragment() {
 
     fun createMock() : List<Episode>{
         val episode1 = Episode(
-            user  = "茶川川",
+            user = "茶川川",
             content = "當個快樂的博士生，每天睏霸上學當個快樂的博士生，每天睏霸上學當個快樂的博士生，每天睏霸上學當個快樂的博士生，每天睏霸上學當個快樂的博士生，每天睏霸上學當個快樂的博士生，每天睏霸上學當個快樂的博士生，每天睏霸上學",
             title = "博士畢業",
             time = "1984",
@@ -64,7 +59,7 @@ class EpisodeFragment() : Fragment() {
         )
 
         val episode2 = Episode(
-            user  = "茶川川",
+            user = "茶川川",
             content = "沒那麼快樂了，累累博士生當個快樂的博士生，每天睏霸上學當個快樂的博士生，每天睏霸上學當個快樂的博士生，每天睏霸上學當個快樂的博士生，每天睏霸上學當個快樂的博士生，每天睏霸上學當個快樂的博士生，每天睏霸上學當個快樂的博士生，每天睏霸上學",
             title = "雙博士畢業",
             time = "1986",

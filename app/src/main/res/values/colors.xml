@@ -4,12 +4,14 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="white">#FFFFFF</color>
+    <color name="trans_white">#B3FFFFFF</color>
     <color name="orange">#FC9A40</color>
     <color name="grey">#979797</color>
     <color name="lightGrey">#F8F8F8</color>
     <color name="black">#000000</color>
     <color name="transparent">#00000000</color>
     <color name="deep_yellow">#FDBB2C</color>
+    <color name="trans_deep_yellow">#95FDBB2C</color>
     <color name="deep_blue">#166BAD</color>
     <color name="deep_dark_yellow">#CF9312</color>
     <color name="trans_grey">#90C4C4C4</color>

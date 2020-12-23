@@ -2,6 +2,7 @@ package app.appworks.school.publisher.data.source
 
 import androidx.lifecycle.MutableLiveData
 import com.tron.familytree.data.*
+import com.tron.familytree.data.Map
 import com.tron.familytree.message.chatroom.MessageItem
 
 
@@ -133,5 +134,48 @@ class DefaultFamilyTreeRepository(private val remoteDataSource: FamilyTreeDataSo
         return remoteDataSource.getAttender(event)
     }
 
+    override suspend fun getEventByUserId(id: String): AppResult<List<Event>>{
+        return remoteDataSource.getEventByUserId(id)
+    }
+
+    override fun getLiveEventByUserId(id: String): MutableLiveData<List<Event>>{
+        return remoteDataSource.getLiveEventByUserId(id)
+    }
+
+    override suspend fun getEventByTime(date: String): AppResult<List<Event>>{
+        return remoteDataSource.getEventByTime(date)
+    }
+
+    override suspend fun addPhoto(event: Event,photo: Photo): AppResult<Boolean>{
+        return remoteDataSource.addPhoto(event,photo)
+    }
+
+    override fun getLiveAlbum(event: Event): MutableLiveData<List<Photo>>{
+        return remoteDataSource.getLiveAlbum(event)
+    }
+
+    override suspend fun getAlbum(event: Event): AppResult<List<Photo>>{
+        return remoteDataSource.getAlbum(event)
+    }
+
+    override suspend fun getUserLocation(): AppResult<List<Map>>{
+        return remoteDataSource.getUserLocation()
+    }
+
+    override fun getLiveUserLocation(): MutableLiveData<List<Map>>{
+        return remoteDataSource.getLiveUserLocation()
+    }
+
+    override suspend fun addLocation(map: Map): AppResult<Boolean>{
+        return remoteDataSource.addLocation(map)
+    }
+
+    override suspend fun getAllEpisode(): AppResult<List<Episode>>{
+        return remoteDataSource.getAllEpisode()
+    }
+
+    override suspend fun findEpisodeById(id: String): AppResult<Episode>{
+        return remoteDataSource.findEpisodeById(id)
+    }
 
 }
