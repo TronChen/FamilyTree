@@ -111,9 +111,9 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
             val map_pin = createDrawableFromView(requireContext(),bindingMapPin.imageView23)
             for (episode in viewModel.episode.value!!) {
                 myMap?.apply {
-                    val marker = addMarker(git
+                    val marker = addMarker(
                         MarkerOptions()
-                            .title(episode.title)
+//                            .title(episode.title)
                             .position(LatLng(episode.latitude!!, episode.longitude!!))
                             .icon(BitmapDescriptorFactory.fromBitmap(map_pin)))
                     marker.tag = episode.id

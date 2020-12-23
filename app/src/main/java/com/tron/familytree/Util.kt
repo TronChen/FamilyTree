@@ -2,7 +2,9 @@ package com.tron.familytree
 
 import android.util.Log
 import android.util.TimeFormatException
+import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContentProviderCompat.requireContext
@@ -12,11 +14,39 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.tron.familytree.data.User
+import com.tron.familytree.network.LoadApiStatus
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.time.ExperimentalTime
 import kotlin.time.hours
+
+/**
+ * According to [LoadApiStatus] to decide the visibility of [ProgressBar]
+ */
+@BindingAdapter("setupApiStatus")
+fun bindApiStatus(view: ProgressBar, status: LoadApiStatus?) {
+    when (status) {
+        LoadApiStatus.LOADING -> view.visibility = View.VISIBLE
+        LoadApiStatus.DONE, LoadApiStatus.ERROR -> view.visibility = View.GONE
+    }
+}
+
+/**
+ * According to [message] to decide the visibility of [ProgressBar]
+ */
+@BindingAdapter("setupApiErrorMessage")
+fun bindApiErrorMessage(view: TextView, message: String?) {
+    when (message) {
+        null, "" -> {
+            view.visibility = View.GONE
+        }
+        else -> {
+            view.text = message
+            view.visibility = View.VISIBLE
+        }
+    }
+}
 
 @BindingAdapter("mainImage")
 fun bindImage(imgView: ImageView, imgUrl: String?) {

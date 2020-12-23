@@ -176,7 +176,7 @@ class BranchViewModel : ViewModel() {
                         onlyMate.add(
                             TreeItem.MateAdd(User(name = "No mate", mateId = user.value?.name), false)
                         )
-                        getMockUsers()
+                        getBranchView()
                     }
                 }
                     //沒媽媽 有配偶
@@ -195,7 +195,7 @@ class BranchViewModel : ViewModel() {
                         onlyMate.add(
                             TreeItem.MateAdd(User(name = "No mate", mateId = user.value?.name), false)
                         )
-                        getMockUsers()
+                        getBranchView()
                     }
             }
     }
@@ -237,7 +237,7 @@ class BranchViewModel : ViewModel() {
                         )
                         Log.e("MateMother", parents.toString())
                         Log.e("MateMother", mateMotherId.value.toString())
-                        getMockUsers()
+                        getBranchView()
 
                 }
                     if (result.isEmpty){
@@ -246,7 +246,7 @@ class BranchViewModel : ViewModel() {
                                 TreeItem.ParentAdd(User(name = "No mateMother", motherId = mateId.value?.name), false, 5)
                             )
                         }
-                        getMockUsers()
+                        getBranchView()
                     }
             }
     }
@@ -260,7 +260,7 @@ class BranchViewModel : ViewModel() {
     }
 
 
-    fun getMockUsers(): MutableList<TreeItem> {
+    fun getBranchView(): MutableList<TreeItem> {
 
             //Parent
             for ((index, parent) in parents.withIndex()) {
