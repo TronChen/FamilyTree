@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.tron.familytree.R
 import com.tron.familytree.databinding.DialogEpisodeDetailBinding
 import com.tron.familytree.databinding.FragmentEditEpisodeBinding
@@ -37,6 +38,12 @@ class EpisodeDetailDialog : DialogFragment() {
 
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
+
+        viewModel.selectedProperty.observe(viewLifecycleOwner, Observer {
+            viewModel.findUserById(it.userId)
+        })
+
+
         // Inflate the layout for this fragment
         return binding.root
     }

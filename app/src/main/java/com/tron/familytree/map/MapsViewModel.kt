@@ -43,6 +43,10 @@ class MapsViewModel(
     val user: LiveData<User>
         get() = _user
 
+    val _episodeTag = MutableLiveData<Episode>()
+    val episodeTag: LiveData<Episode>
+        get() = _episodeTag
+
     val _userTag = MutableLiveData<User>()
     val userTag: LiveData<User>
         get() = _userTag
@@ -109,6 +113,31 @@ class MapsViewModel(
 
     }
 
+    fun findEpisodeById(id : String){
+        coroutineScope.launch {
+            _status.value = LoadApiStatus.LOADING
+
+            when (val result = repository.findEpisodeById(id)) {
+                is AppResult.Success -> {
+                    _error.value = null
+                    _status.value = LoadApiStatus.DONE
+                    _episodeTag.value = result.data
+                }
+                is AppResult.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is AppResult.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                else -> {
+                    _error.value = FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)
+                    _status.value = LoadApiStatus.ERROR
+                }
+            }
+        }
+    }
 
     fun findUserById(id : String){
         coroutineScope.launch {

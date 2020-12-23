@@ -29,6 +29,7 @@ import com.google.android.gms.maps.model.*
 import com.tron.familytree.R
 import com.tron.familytree.data.Map
 import com.tron.familytree.databinding.FragmentMapsBinding
+import com.tron.familytree.databinding.ItemMapPinBinding
 import com.tron.familytree.ext.getVmFactory
 import com.tron.familytree.util.UserManager
 
@@ -91,6 +92,11 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
             findNavController().navigate(MapsFragmentDirections.actionGlobalBranchUserDetailDialog(it))
         })
 
+        viewModel.episodeTag.observe(viewLifecycleOwner, Observer {
+            Log.e("userTag", it.toString())
+            findNavController().navigate(MapsFragmentDirections.actionGlobalEpisodeDetailDialog(it))
+        })
+
         binding.cardMyLocation.setOnClickListener {
             myMap?.apply {
                 moveCamera(
@@ -101,13 +107,15 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
 
         binding.cardEpisode.setOnClickListener {
             val markerList = mutableListOf<Marker>()
+            val bindingMapPin = ItemMapPinBinding.inflate(inflater)
+            val map_pin = createDrawableFromView(requireContext(),bindingMapPin.imageView23)
             for (episode in viewModel.episode.value!!) {
                 myMap?.apply {
                     val marker = addMarker(
                         MarkerOptions()
                             .title(episode.title)
                             .position(LatLng(episode.latitude!!, episode.longitude!!))
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.maps_and_flags)))
+                            .icon(BitmapDescriptorFactory.fromBitmap(map_pin)))
                     marker.tag = episode.id
                     markerList.add(marker)
                     Log.e("MarkerTag", marker.tag as String)
@@ -115,6 +123,13 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
             }
             viewModel._episodeMarkerList.value = markerList
             viewModel._userMarkerList.value?.forEach { it.remove() }
+        }
+
+        binding.cardMember.setOnClickListener {
+//            if (viewModel.userLocation.value?.isEmpty()!!){
+                viewModel.getUserLocation()
+//            }
+            viewModel._episodeMarkerList.value?.forEach { it.remove() }
         }
 
         return binding.root
@@ -240,6 +255,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
                         if (p0 != null) {
                             if (p0.tag == marker.tag) {
                                 Toast.makeText(context, "${p0.tag}", Toast.LENGTH_SHORT).show()
+                                viewModel.findEpisodeById(marker.tag.toString())
                             }
                         }
 
@@ -389,13 +405,13 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
         view.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels)
         view.buildDrawingCache()
         val bitmap = Bitmap.createBitmap(
-            1500,
-            1500,
+            1650,
+            1650,
             Bitmap.Config.ARGB_8888
         )
         val canvas = Canvas(bitmap)
         view.draw(canvas)
-        return bitmap.scale(120,120)
+        return bitmap.scale(150,150)
     }
 
 
