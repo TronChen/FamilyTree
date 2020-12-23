@@ -111,7 +111,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
             val map_pin = createDrawableFromView(requireContext(),bindingMapPin.imageView23)
             for (episode in viewModel.episode.value!!) {
                 myMap?.apply {
-                    val marker = addMarker(
+                    val marker = addMarker(git
                         MarkerOptions()
                             .title(episode.title)
                             .position(LatLng(episode.latitude!!, episode.longitude!!))
