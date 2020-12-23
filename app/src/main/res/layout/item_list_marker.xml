@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.tron.familytree.map.MapsViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/imageView8"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:scaleType="centerCrop"
+            mainImage="@{viewModel.user.userImage}"
+            app:civ_border_color="@color/orange"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -6,11 +6,13 @@ import app.appworks.school.publisher.data.source.FamilyTreeRepository
 import com.tron.familytree.MainActivityViewModel
 import com.tron.familytree.family.FamilyViewModel
 import com.tron.familytree.family.album.AlbumViewModel
+import com.tron.familytree.family.calendar.CalendarViewModel
 import com.tron.familytree.family.create_album.CreateAlbumViewModel
 import com.tron.familytree.family.create_event.CreateEventViewModel
 import com.tron.familytree.family.event.EventViewModel
 import com.tron.familytree.login.LogInViewModel
 import com.tron.familytree.map.MapViewModel
+import com.tron.familytree.map.MapsViewModel
 import com.tron.familytree.message.MessageViewModel
 import com.tron.familytree.profile.ProfileViewModel
 import com.tron.familytree.profile.editepisode.EditEpisodeViewModel
@@ -31,8 +33,8 @@ class ViewModelFactory constructor(
                 isAssignableFrom(MainActivityViewModel::class.java) ->
                     MainActivityViewModel(repository)
 
-                isAssignableFrom(MapViewModel::class.java) ->
-                    MapViewModel(repository)
+                isAssignableFrom(MapsViewModel::class.java) ->
+                    MapsViewModel(repository)
 
                 isAssignableFrom(ProfileViewModel::class.java) ->
                     ProfileViewModel(repository)
@@ -63,6 +65,9 @@ class ViewModelFactory constructor(
 
                 isAssignableFrom(QrCodeViewModel::class.java) ->
                     QrCodeViewModel(repository)
+
+                isAssignableFrom(CalendarViewModel::class.java) ->
+                    CalendarViewModel(repository)
 
 
                 else ->

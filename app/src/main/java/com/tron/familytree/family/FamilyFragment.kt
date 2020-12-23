@@ -38,8 +38,8 @@ class FamilyFragment : Fragment() {
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = when(position){
-                0 -> "活動"
-                1 -> "相簿"
+                0 -> "即將開始"
+                1 -> "已完成"
                 else -> null
             }
         }.attach()

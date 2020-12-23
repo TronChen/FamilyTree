@@ -3,6 +3,7 @@ package app.appworks.school.publisher.data.source
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.tron.familytree.data.*
+import com.tron.familytree.data.Map
 import com.tron.familytree.message.chatroom.MessageItem
 import com.tron.familytree.profile.member.MemberItem
 import kotlin.coroutines.Continuation
@@ -71,4 +72,26 @@ interface FamilyTreeDataSource {
     suspend fun getAttender(event: Event): AppResult<List<User>>
 
     suspend fun findChatroom(member: String, userId : String): AppResult<Boolean>
+
+    suspend fun getEventByUserId(id: String): AppResult<List<Event>>
+
+    fun getLiveEventByUserId(id: String): MutableLiveData<List<Event>>
+
+    suspend fun getEventByTime(date: String): AppResult<List<Event>>
+
+    suspend fun addPhoto(event: Event,photo: Photo): AppResult<Boolean>
+
+    fun getLiveAlbum(event: Event): MutableLiveData<List<Photo>>
+
+    suspend fun getAlbum(event: Event): AppResult<List<Photo>>
+
+    suspend fun getUserLocation(): AppResult<List<Map>>
+
+    fun getLiveUserLocation(): MutableLiveData<List<Map>>
+
+    suspend fun addLocation(map: Map): AppResult<Boolean>
+
+    suspend fun getAllEpisode(): AppResult<List<Episode>>
+
+    suspend fun findEpisodeById(id: String): AppResult<Episode>
 }

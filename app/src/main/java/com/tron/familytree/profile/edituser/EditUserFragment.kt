@@ -50,7 +50,7 @@ class EditUserFragment : Fragment() {
 
         binding.conAddEpisode.setOnClickListener {
             findNavController().navigate(EditUserFragmentDirections.actionGlobalEditEpisodeDialog(
-                Episode(title = "",time = "請選擇時間",location = "",content = "")))
+                Episode(title = "", time = "請選擇時間", location = "", content = "")))
         }
 
         binding.conBirth.setOnClickListener {

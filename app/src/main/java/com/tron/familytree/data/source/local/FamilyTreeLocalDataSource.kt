@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import app.appworks.school.publisher.data.source.FamilyTreeDataSource
 import com.tron.familytree.data.*
+import com.tron.familytree.data.Map
 import com.tron.familytree.message.chatroom.MessageItem
 import com.tron.familytree.profile.member.MemberItem
 
@@ -135,6 +136,50 @@ class FamilyTreeLocalDataSource(val context: Context) : FamilyTreeDataSource {
     }
 
     override suspend fun findChatroom(member: String, userId: String): AppResult<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getEventByUserId(id: String): AppResult<List<Event>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getLiveEventByUserId(id: String): MutableLiveData<List<Event>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getEventByTime(date: String): AppResult<List<Event>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun addPhoto(event: Event, photo: Photo): AppResult<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getLiveAlbum(event: Event): MutableLiveData<List<Photo>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getAlbum(event: Event): AppResult<List<Photo>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getUserLocation(): AppResult<List<Map>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getLiveUserLocation(): MutableLiveData<List<Map>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun addLocation(map: Map): AppResult<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getAllEpisode(): AppResult<List<Episode>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun findEpisodeById(id: String): AppResult<Episode> {
         TODO("Not yet implemented")
     }
 }
