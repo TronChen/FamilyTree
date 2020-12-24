@@ -94,4 +94,16 @@ interface FamilyTreeDataSource {
     suspend fun getAllEpisode(): AppResult<List<Episode>>
 
     suspend fun findEpisodeById(id: String): AppResult<Episode>
+
+    suspend fun addFamily(family : Family, user: User): AppResult<Boolean>
+
+    suspend fun getFamily(): AppResult<List<Family>>
+
+    fun getLiveFamily(): MutableLiveData<List<Family>>
+
+    suspend fun getFamilyMember(family: Family): AppResult<List<User>>
+
+    fun getLiveFamilyMember(family: Family): MutableLiveData<List<User>>
+
+    suspend fun updateFamily(family : Family, user: User): AppResult<Boolean>
 }

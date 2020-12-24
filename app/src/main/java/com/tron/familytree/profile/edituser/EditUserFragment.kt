@@ -97,6 +97,10 @@ class EditUserFragment : Fragment() {
                     .start(EDIT_USER)
         }
 
+        binding.conFamily.setOnClickListener {
+            findNavController().navigate(R.id.action_global_editFamilyFragment)
+        }
+
         viewModel.selectedProperty.observe(viewLifecycleOwner, Observer {
             Log.e("User", it.toString())
         })

@@ -15,6 +15,8 @@ import com.tron.familytree.map.MapViewModel
 import com.tron.familytree.map.MapsViewModel
 import com.tron.familytree.message.MessageViewModel
 import com.tron.familytree.profile.ProfileViewModel
+import com.tron.familytree.profile.edit_family.EditFamilyViewModel
+import com.tron.familytree.profile.edit_family.create_family.CreateFamilyViewModel
 import com.tron.familytree.profile.editepisode.EditEpisodeViewModel
 import com.tron.familytree.profile.edituser.EditUserViewModel
 import com.tron.familytree.profile.episode.EpisodeViewModel
@@ -68,6 +70,12 @@ class ViewModelFactory constructor(
 
                 isAssignableFrom(CalendarViewModel::class.java) ->
                     CalendarViewModel(repository)
+
+                isAssignableFrom(EditFamilyViewModel::class.java) ->
+                    EditFamilyViewModel(repository)
+
+                isAssignableFrom(CreateFamilyViewModel::class.java) ->
+                    CreateFamilyViewModel(repository)
 
 
                 else ->

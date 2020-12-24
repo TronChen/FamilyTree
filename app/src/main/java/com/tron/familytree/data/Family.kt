@@ -7,9 +7,11 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Family(
     var id: String = "",
-    var title: String = "",
-    var attender: String = "",
-    var episode: Episode? = null,
-    var event: Event? = null,
-    var photo: Photo? = null
+    var title: String = ""
+): Parcelable
+
+@Parcelize
+data class FamilyList(
+    var family: Family? = null,
+    var userList: List<User>? = mutableListOf<User>()
 ): Parcelable

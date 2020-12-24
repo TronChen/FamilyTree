@@ -182,4 +182,28 @@ class FamilyTreeLocalDataSource(val context: Context) : FamilyTreeDataSource {
     override suspend fun findEpisodeById(id: String): AppResult<Episode> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun addFamily(family : Family, user: User): AppResult<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getFamily(): AppResult<List<Family>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getLiveFamily(): MutableLiveData<List<Family>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getFamilyMember(family: Family): AppResult<List<User>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getLiveFamilyMember(family: Family): MutableLiveData<List<User>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun updateFamily(family: Family, user: User): AppResult<Boolean> {
+        TODO("Not yet implemented")
+    }
 }

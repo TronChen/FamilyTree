@@ -185,4 +185,13 @@
             app:argType="com.tron.familytree.data.Episode" />
     </dialog>
     <action android:id="@+id/action_global_episodeDetailDialog" app:destination="@id/episodeDetailDialog" />
+    <fragment
+        android:id="@+id/editFamilyFragment"
+        android:name="com.tron.familytree.profile.edit_family.EditFamilyFragment"
+        android:label="EditFamilyFragment" /><action android:id="@+id/action_global_editFamilyFragment" app:destination="@id/editFamilyFragment"/>
+    <dialog
+        android:id="@+id/createFamilyFragment"
+        android:name="com.tron.familytree.profile.edit_family.create_family.CreateFamilyFragment"
+        android:label="fragment_create_family"
+        tools:layout="@layout/fragment_create_family" /><action android:id="@+id/action_global_createFamilyFragment" app:destination="@id/createFamilyFragment"/>
 </navigation>

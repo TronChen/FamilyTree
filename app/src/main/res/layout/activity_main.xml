@@ -183,56 +183,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="28dp"
-            android:src="@drawable/family"
+            android:src="@drawable/pupulogo2"
             android:visibility="@{viewModel.currentFragmentType == CurrentFragmentType.LOGIN || viewModel.currentFragmentType == CurrentFragmentType.CHATROOM || viewModel.currentFragmentType == CurrentFragmentType.FAMILY ? View.GONE : View.VISIBLE}"
             app:fabCustomSize="60dp"
             app:layout_anchor="@id/bottom_bar"
-            app:maxImageSize="50dp" />
+            app:maxImageSize="30dp" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="@{viewModel.currentFragmentType == CurrentFragmentType.LOGIN || viewModel.currentFragmentType == CurrentFragmentType.CHATROOM ? View.GONE : View.VISIBLE}"
             android:background="@android:color/transparent">
-
-            <com.github.clans.fab.FloatingActionMenu
-                android:id="@+id/menu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="24dp"
-                android:visibility="@{viewModel.currentFragmentType == CurrentFragmentType.LOGIN || viewModel.currentFragmentType == CurrentFragmentType.CHATROOM ? View.GONE : View.VISIBLE}"
-                app:menu_backgroundColor="@android:color/transparent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:menu_colorNormal="@color/orange"
-                app:menu_colorPressed="@color/orange"
-                app:menu_labels_colorNormal="@color/orange"
-                app:menu_labels_position="right">
-
-                <com.github.clans.fab.FloatingActionButton
-                    android:id="@+id/menu_event"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_calendar_orange"
-                    app:fabCustomSize="60dp"
-                    app:fab_colorNormal="@color/orange"
-                    app:fab_colorPressed="@color/orange"
-                    app:maxImageSize="50dp" />
-
-                <com.github.clans.fab.FloatingActionButton
-                    android:id="@+id/menu_album"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_album_orange"
-                    app:fab_colorNormal="@color/orange"
-                    app:fab_colorPressed="@color/orange"
-                    app:maxImageSize="50dp" />
-
-            </com.github.clans.fab.FloatingActionMenu>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

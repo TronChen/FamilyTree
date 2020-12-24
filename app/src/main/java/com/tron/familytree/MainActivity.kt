@@ -21,8 +21,6 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.github.dhaval2404.imagepicker.ImagePicker
-import com.google.android.libraries.places.api.Places
-import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.tron.familytree.data.User
 import com.tron.familytree.databinding.ActivityMainBinding
@@ -95,9 +93,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (!Places.isInitialized()) {
-            let { Places.initialize(this,"AIzaSyCiCPmbflbA9FlcM46aRJ4istK6GfAA2GQ") }
-        }
+//        if (!Places.isInitialized()) {
+//            let { Places.initialize(this,"AIzaSyCiCPmbflbA9FlcM46aRJ4istK6GfAA2GQ") }
+//        }
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
@@ -111,22 +109,6 @@ class MainActivity : AppCompatActivity() {
             binding.imageScan.visibility = View.INVISIBLE
             binding.imageEdit.visibility = View.INVISIBLE
             navController.navigate(R.id.action_global_familyFragment)
-        }
-
-        binding.menuEvent.setOnClickListener {
-            binding.imageSearch.visibility = View.INVISIBLE
-            binding.imageCalendar.visibility = View.VISIBLE
-            binding.imageScan.visibility = View.INVISIBLE
-            binding.imageEdit.visibility = View.INVISIBLE
-            navController.navigate(R.id.action_global_createEventDialog)
-        }
-
-        binding.menuAlbum.setOnClickListener {
-            binding.imageSearch.visibility = View.INVISIBLE
-            binding.imageCalendar.visibility = View.VISIBLE
-            binding.imageScan.visibility = View.INVISIBLE
-            binding.imageEdit.visibility = View.INVISIBLE
-            navController.navigate(R.id.action_global_createAlbumDialog)
         }
 
         binding.imageCalendar.setOnClickListener {
