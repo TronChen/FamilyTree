@@ -27,7 +27,7 @@
                 android:layout_marginLeft="8dp"
                 mainImage="@{message.userImage}"
                 android:scaleType="centerCrop"
-                android:src="@drawable/pikachu"
+                android:background="@drawable/rounded_orange_radius65"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

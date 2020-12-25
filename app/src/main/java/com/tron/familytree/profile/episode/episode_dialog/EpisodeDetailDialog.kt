@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.tron.familytree.R
 import com.tron.familytree.databinding.DialogEpisodeDetailBinding
 import com.tron.familytree.databinding.FragmentEditEpisodeBinding
@@ -42,6 +43,10 @@ class EpisodeDetailDialog : DialogFragment() {
         viewModel.selectedProperty.observe(viewLifecycleOwner, Observer {
             viewModel.findUserById(it.userId)
         })
+
+        binding.imageCancel.setOnClickListener {
+            findNavController().navigateUp()
+        }
 
 
         // Inflate the layout for this fragment

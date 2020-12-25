@@ -80,7 +80,9 @@ class EventDialog : DialogFragment() {
             findNavController().navigate(EventDialogDirections.actionGlobalMessageFragment(viewModel.publisher.value))
         }
 
-
+        binding.imageCancel.setOnClickListener {
+            findNavController().navigateUp()
+        }
 
 
 

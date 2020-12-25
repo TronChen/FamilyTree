@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.Auth
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
@@ -89,6 +90,10 @@ class EditEpisodeDialog : DialogFragment() {
             ).setCountry("TW")
                 .build(requireContext())
             startActivityForResult(intent, PLACE_API)
+        }
+
+        binding.imageCancel.setOnClickListener {
+            findNavController().navigateUp()
         }
 
         return binding.root

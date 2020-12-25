@@ -235,10 +235,8 @@
                 android:background="@drawable/rounded_orange_radius65"
                 android:scaleType="centerCrop"
                 mainImage="@{viewModel.selectedProperty.userImage}"
-                app:civ_border_color="@color/orange"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:src="@tools:sample/avatars" />
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

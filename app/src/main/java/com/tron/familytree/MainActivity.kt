@@ -122,6 +122,10 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(R.id.action_global_qrCodeFragment)
         }
 
+        binding.imageBack.setOnClickListener {
+            navController.navigateUp()
+        }
+
 //        binding.imageEdit.setOnClickListener {
 //            navController.navigate(R.id.action_global_editUserFragment)
 //        }

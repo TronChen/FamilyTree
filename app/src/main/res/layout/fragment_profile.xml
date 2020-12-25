@@ -52,6 +52,7 @@
                 android:layout_marginTop="16dp"
                 android:background="@drawable/rounded_orange_radius65"
                 android:scaleType="centerCrop"
+                app:civ_border_color="@color/transparent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

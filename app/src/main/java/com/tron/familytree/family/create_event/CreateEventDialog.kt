@@ -11,6 +11,7 @@ import android.widget.AdapterView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.fragment.findNavController
 import com.tron.familytree.R
 import com.tron.familytree.data.Event
 import com.tron.familytree.databinding.DialogCreateEventBinding
@@ -92,6 +93,10 @@ class CreateEventDialog : DialogFragment() {
         binding.conConfirm.setOnClickListener {
             viewModel.addEvent(setEvent())
             Log.e("Event", setEvent().toString())
+        }
+
+        binding.imageCancel.setOnClickListener {
+            findNavController().navigateUp()
         }
 
 

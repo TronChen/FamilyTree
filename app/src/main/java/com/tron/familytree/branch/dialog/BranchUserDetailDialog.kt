@@ -62,6 +62,10 @@ class BranchUserDetailDialog : BottomSheetDialogFragment() {
             findNavController().navigate(BranchUserDetailDialogDirections.actionGlobalMessageFragment(viewModel.selectedProperty.value!!))
         }
 
+        binding.imageCancel.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
 
 
         return binding.root

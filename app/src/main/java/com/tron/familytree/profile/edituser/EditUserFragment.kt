@@ -85,17 +85,17 @@ class EditUserFragment : Fragment() {
             Log.e("Tron", viewModel.setUser().toString())
         }
 
-        binding.conImage.setOnClickListener {
-            getActivity()
-                ImagePicker.with(this)
-                    .crop()                    //Crop image(Optional), Check Customization for more option
-                    .compress(1024)            //Final image size will be less than 1 MB(Optional)
-                    .maxResultSize(
-                        1080,
-                        1080
-                    ) //Final image resolution will be less than 1080 x 1080(Optional)
-                    .start(EDIT_USER)
-        }
+//        binding.conImage.setOnClickListener {
+//            getActivity()
+//                ImagePicker.with(this)
+//                    .crop()                    //Crop image(Optional), Check Customization for more option
+//                    .compress(1024)            //Final image size will be less than 1 MB(Optional)
+//                    .maxResultSize(
+//                        1080,
+//                        1080
+//                    ) //Final image resolution will be less than 1080 x 1080(Optional)
+//                    .start(EDIT_USER)
+//        }
 
         binding.conFamily.setOnClickListener {
             findNavController().navigate(R.id.action_global_editFamilyFragment)

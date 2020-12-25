@@ -143,6 +143,10 @@ class AddPeopleDialog : DialogFragment() {
             }
         }
 
+        binding.imageCancel.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
 
         //得到選擇圖片的路徑upload到fire storage
         activity.viewModel.addUserImgPath.observe(viewLifecycleOwner, Observer {
