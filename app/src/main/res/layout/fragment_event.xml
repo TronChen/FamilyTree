@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View"/>
         <variable
             name="viewModel"
             type="com.tron.familytree.family.event.EventViewModel" />
@@ -27,6 +28,54 @@
             app:spanCount="2"
             tools:listitem="@layout/item_list_event" />
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="@{viewModel.liveEvent == null ? View.GONE : viewModel.liveEvent.size == 0 ? View.VISIBLE : View.GONE}">
+
+            <ImageView
+                android:id="@+id/imageView33"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="32dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/event_e" />
+
+            <TextView
+                android:id="@+id/textView51"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="185dp"
+                android:fontFamily="@font/noto_sans"
+                android:text="尚未新增活動"
+                android:textColor="@color/grey"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/textView53"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="新增活動與家人一同參與吧"
+                android:fontFamily="@font/noto_sans"
+                android:textColor="@color/grey"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="@+id/textView51"
+                app:layout_constraintStart_toStartOf="@+id/textView51"
+                app:layout_constraintTop_toBottomOf="@+id/textView51" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <com.github.clans.fab.FloatingActionMenu
             android:id="@+id/menu"
             android:layout_width="wrap_content"
@@ -49,16 +98,6 @@
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_calendar_orange"
                 app:fabCustomSize="60dp"
-                app:fab_colorNormal="@color/orange"
-                app:fab_colorPressed="@color/orange"
-                app:maxImageSize="50dp" />
-
-            <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/menu_album"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_album_orange"
                 app:fab_colorNormal="@color/orange"
                 app:fab_colorPressed="@color/orange"
                 app:maxImageSize="50dp" />
