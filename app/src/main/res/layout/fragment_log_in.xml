@@ -15,14 +15,13 @@
         android:background="@color/orange"
         tools:context=".login.LogInFragment">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background1"
+        tools:context=".login.LogInFragment">
 
-<!--        <com.airbnb.lottie.LottieAnimationView-->
-<!--            android:id="@+id/lottieAnimationView"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            app:lottie_autoPlay="true"-->
-<!--            app:lottie_fileName="build_of_love.json"-->
-<!--            app:lottie_loop="true" />-->
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
