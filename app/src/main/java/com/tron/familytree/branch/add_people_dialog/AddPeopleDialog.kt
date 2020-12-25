@@ -13,7 +13,9 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.tron.familytree.MainActivity
+import com.tron.familytree.NavigationDirections
 import com.tron.familytree.R
+import com.tron.familytree.check.CheckDialog
 import com.tron.familytree.databinding.DialogAddPeopleBinding
 import com.tron.familytree.ext.getVmFactory
 import java.util.*
@@ -132,6 +134,8 @@ class AddPeopleDialog : DialogFragment() {
                             viewModel.setMate()
                         )
                         viewModel.addMember(viewModel.setMate())
+                        findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
+                        findNavController().navigate(R.id.action_global_branchFragment)
                     }
 
                     "No father" -> {
@@ -140,6 +144,8 @@ class AddPeopleDialog : DialogFragment() {
                             viewModel.setParent()
                         )
                         viewModel.addMember(viewModel.setParent())
+                        findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
+                        findNavController().navigate(R.id.action_global_branchFragment)
                     }
                     "No mother" -> {
                         viewModel.updateMemberMotherId(
@@ -147,6 +153,8 @@ class AddPeopleDialog : DialogFragment() {
                             viewModel.setParent()
                         )
                         viewModel.addMember(viewModel.setParent())
+                        findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
+                        findNavController().navigate(R.id.action_global_branchFragment)
                     }
                     "No mateFather" -> {
                         viewModel.updateMemberFatherId(
@@ -154,6 +162,8 @@ class AddPeopleDialog : DialogFragment() {
                             viewModel.setParent()
                         )
                         viewModel.addMember(viewModel.setParent())
+                        findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
+                        findNavController().navigate(R.id.action_global_branchFragment)
                     }
                     "No mateMother" -> {
                         viewModel.updateMemberMotherId(
@@ -161,8 +171,14 @@ class AddPeopleDialog : DialogFragment() {
                             viewModel.setParent()
                         )
                         viewModel.addMember(viewModel.setParent())
+                        findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
+                        findNavController().navigate(R.id.action_global_branchFragment)
                     }
-                    "No child" -> viewModel.addMember(viewModel.setChild())
+                    "No child" -> {
+                        viewModel.addMember(viewModel.setChild())
+                        findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
+                        findNavController().navigate(R.id.action_global_branchFragment)
+                    }
                 }
             }else{
                 Toast.makeText(requireContext(),"還沒輸入完成唷",Toast.LENGTH_SHORT).show()

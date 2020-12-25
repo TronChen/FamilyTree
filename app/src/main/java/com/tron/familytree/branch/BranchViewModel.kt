@@ -567,6 +567,7 @@ class BranchViewModel : ViewModel() {
         motherId.value = null
         mateFatherId.value = null
         mateMotherId.value = null
+        itemClick.value = null
     }
 
 }

@@ -9,12 +9,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.fragment.app.DialogFragment
+import com.airbnb.lottie.Lottie
+import com.tron.familytree.FamilyTreeApplication
 import com.tron.familytree.R
 import com.tron.familytree.databinding.DialogCheckBinding
+import java.io.InputStream
 
 class CheckDialog : AppCompatDialogFragment() {
 
-    var iconRes: Drawable? = null
+    var iconRes: InputStream? = null
     var message: String? = null
     private val messageType by lazy {
         CheckDialogArgs.fromBundle(requireArguments()).messageTypeKey
@@ -22,14 +25,21 @@ class CheckDialog : AppCompatDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setStyle(DialogFragment.STYLE_NO_FRAME, R.style.MessageDialog)
+        setStyle(DialogFragment.STYLE_NO_FRAME, R.style.MessageDialog)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        init()
+//        init()
         val binding = DialogCheckBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.dialog = this
+
+        when(messageType){
+            MessageType.ADDED_SUCCESS ->{
+                binding.addSuccess.visibility = View.VISIBLE
+                message = getString(R.string.addto_success)
+            }
+        }
 
 
         return binding.root
@@ -38,7 +48,7 @@ class CheckDialog : AppCompatDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Handler().postDelayed({ this.dismiss() }, 2000)
+        Handler().postDelayed({ this.dismiss() }, 3000)
     }
 
     private fun init() {
@@ -48,8 +58,8 @@ class CheckDialog : AppCompatDialogFragment() {
 //                message = getString(R.string.login_success)
             }
             MessageType.ADDED_SUCCESS -> {
-//                iconRes = StylishApplication.instance.getDrawable(R.drawable.ic_success)
-//                message = getString(R.string.addto_success)
+                iconRes = FamilyTreeApplication.INSTANCE.assets.open("confirm.json")
+                message = getString(R.string.addto_success)
             }
             MessageType.MESSAGE -> {
 //                iconRes = StylishApplication.instance.getDrawable(R.drawable.ic_launcher_foreground)

@@ -28,5 +28,9 @@
         <item name="android:background">@drawable/round_layout</item>
     </style>
 
+    <style name="MessageDialog">
+        <item name="android:windowBackground">@color/translucent_80</item>
+    </style>
+
 
 </resources>

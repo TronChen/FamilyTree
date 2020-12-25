@@ -19,4 +19,6 @@
     <color name="light_red">#FFE9E9</color>
     <color name="dark_blue">#6360FF</color>
     <color name="dark_red">#FF8181</color>
+
+    <color name="translucent_80">#cc000000</color>
 </resources>

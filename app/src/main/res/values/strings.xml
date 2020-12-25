@@ -15,6 +15,8 @@
 
     <string name="you_know_nothing">You know nothing</string>
 
+    <string name="addto_success">新增成功</string>
+
 
     <string name="spinArray">選擇活動種類</string>
     <string name="eventType">活動種類</string>
