@@ -26,7 +26,6 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:scaleType="centerCrop"
-            android:src="@color/orange"
             android:background="@drawable/rounded_orange_radius65"
             app:layout_constraintBottom_toBottomOf="@+id/radioGender"
             app:layout_constraintStart_toStartOf="parent"

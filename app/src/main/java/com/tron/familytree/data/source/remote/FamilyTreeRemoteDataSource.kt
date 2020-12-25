@@ -1281,7 +1281,7 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
                                      collectionReference.document(fatherPath)
                                          .update("mateId",originUser.value!!.motherId)
                                          .addOnSuccessListener {
-                                             Log.e("updateComplete", it.toString())
+//                                             Log.e("updateComplete", it.toString())
                                          }
 
                                 }
@@ -1293,7 +1293,7 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
                                     collectionReference.document(fatherPath)
                                         .update("mateId",originUser.value!!.motherId)
                                         .addOnSuccessListener {
-                                            Log.e("updateComplete", it.toString())
+//                                            Log.e("updateComplete", it.toString())
                                         }
 
                                 }
@@ -1313,7 +1313,7 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
             .addOnSuccessListener {
                 for (index in it) {
                     path = index.id
-                    Log.e("FindMother", index.id)
+//                    Log.e("FindMother", index.id)
                     originUser.value = index.toObject(com.tron.familytree.data.User::class.java)
                     //找到原先user
                     val document = User.document(path)
@@ -1351,7 +1351,7 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
                                     User.document(fatherPath)
                                         .update("mateId",originUser.value!!.motherId)
                                         .addOnSuccessListener {
-                                            Log.e("updateComplete", it.toString())
+//                                            Log.e("updateComplete", it.toString())
                                         }
 
                                 }

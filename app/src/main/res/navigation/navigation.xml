@@ -193,5 +193,15 @@
         android:id="@+id/createFamilyFragment"
         android:name="com.tron.familytree.profile.edit_family.create_family.CreateFamilyFragment"
         android:label="fragment_create_family"
-        tools:layout="@layout/fragment_create_family" /><action android:id="@+id/action_global_createFamilyFragment" app:destination="@id/createFamilyFragment"/>
+        tools:layout="@layout/fragment_create_family" />
+    <action android:id="@+id/action_global_createFamilyFragment" app:destination="@id/createFamilyFragment" />
+    <dialog
+        android:id="@+id/checkDialog"
+        android:name="com.tron.familytree.check.CheckDialog"
+        android:label="CheckDialog" >
+        <argument
+            android:name="messageTypeKey"
+            app:argType="com.tron.familytree.check.CheckDialog$MessageType" />
+    </dialog>
+    <action android:id="@+id/action_global_checkDialog" app:destination="@id/checkDialog" />
 </navigation>

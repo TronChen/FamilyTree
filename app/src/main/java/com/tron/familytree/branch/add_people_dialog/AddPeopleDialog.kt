@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -114,33 +115,59 @@ class AddPeopleDialog : DialogFragment() {
         viewModel.userBirthLocation = binding.editBirthLocation.text.toString()
 
         binding.conConfirm.setOnClickListener {
-            //判斷 加入的類別
-            when (viewModel.selectedProperty.value?.name){
 
-                "No mate" ->{
-                    viewModel.updateMemberMateId(viewModel.selectedProperty.value!!, viewModel.setMate())
-                    viewModel.addMember(viewModel.setMate())
-                }
+            if (
+            viewModel.userEditName != "" &&
+            viewModel.birthDate != "" &&
+            viewModel.gender != "" &&
+            viewModel.userBirthLocation != ""
+                    ) {
 
-                "No father" -> {
-                    viewModel.updateMemberFatherId(viewModel.selectedProperty.value!!, viewModel.setParent())
-                    viewModel.addMember(viewModel.setParent())
-                }
-                "No mother" -> {
-                    viewModel.updateMemberMotherId(viewModel.selectedProperty.value!!, viewModel.setParent())
-                    viewModel.addMember(viewModel.setParent())
-                }
-                "No mateFather" -> {
-                    viewModel.updateMemberFatherId(viewModel.selectedProperty.value!!, viewModel.setParent())
-                    viewModel.addMember(viewModel.setParent())
-                }
-                "No mateMother" -> {
-                    viewModel.updateMemberMotherId(viewModel.selectedProperty.value!!, viewModel.setParent())
-                    viewModel.addMember(viewModel.setParent())
-                }
-                "No child" -> viewModel.addMember(viewModel.setChild())
+                //判斷 加入的類別
+                when (viewModel.selectedProperty.value?.name) {
 
+                    "No mate" -> {
+                        viewModel.updateMemberMateId(
+                            viewModel.selectedProperty.value!!,
+                            viewModel.setMate()
+                        )
+                        viewModel.addMember(viewModel.setMate())
+                    }
+
+                    "No father" -> {
+                        viewModel.updateMemberFatherId(
+                            viewModel.selectedProperty.value!!,
+                            viewModel.setParent()
+                        )
+                        viewModel.addMember(viewModel.setParent())
+                    }
+                    "No mother" -> {
+                        viewModel.updateMemberMotherId(
+                            viewModel.selectedProperty.value!!,
+                            viewModel.setParent()
+                        )
+                        viewModel.addMember(viewModel.setParent())
+                    }
+                    "No mateFather" -> {
+                        viewModel.updateMemberFatherId(
+                            viewModel.selectedProperty.value!!,
+                            viewModel.setParent()
+                        )
+                        viewModel.addMember(viewModel.setParent())
+                    }
+                    "No mateMother" -> {
+                        viewModel.updateMemberMotherId(
+                            viewModel.selectedProperty.value!!,
+                            viewModel.setParent()
+                        )
+                        viewModel.addMember(viewModel.setParent())
+                    }
+                    "No child" -> viewModel.addMember(viewModel.setChild())
+                }
+            }else{
+                Toast.makeText(requireContext(),"還沒輸入完成唷",Toast.LENGTH_SHORT).show()
             }
+
         }
 
         binding.imageCancel.setOnClickListener {
