@@ -48,29 +48,29 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
 
             R.id.navigation_branch -> {
-                binding.fab.visibility = View.VISIBLE
-                binding.imageSearch.visibility = View.VISIBLE
-                binding.imageCalendar.visibility = View.INVISIBLE
-                binding.imageScan.visibility = View.INVISIBLE
-                binding.imageEdit.visibility = View.INVISIBLE
+//                binding.fab.visibility = View.VISIBLE
+//                binding.imageSearch.visibility = View.VISIBLE
+//                binding.imageCalendar.visibility = View.INVISIBLE
+//                binding.imageScan.visibility = View.INVISIBLE
+//                binding.imageEdit.visibility = View.INVISIBLE
                 findNavController(R.id.myNavHostFragment).navigate(R.id.action_global_branchFragment)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_map-> {
-                binding.fab.visibility = View.VISIBLE
-                binding.imageSearch.visibility = View.INVISIBLE
-                binding.imageCalendar.visibility = View.INVISIBLE
-                binding.imageScan.visibility = View.INVISIBLE
-                binding.imageEdit.visibility = View.INVISIBLE
+//                binding.fab.visibility = View.VISIBLE
+//                binding.imageSearch.visibility = View.INVISIBLE
+//                binding.imageCalendar.visibility = View.INVISIBLE
+//                binding.imageScan.visibility = View.INVISIBLE
+//                binding.imageEdit.visibility = View.INVISIBLE
                 findNavController(R.id.myNavHostFragment).navigate(R.id.action_global_mapsFragment)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_message -> {
-                binding.fab.visibility = View.VISIBLE
-                binding.imageSearch.visibility = View.INVISIBLE
-                binding.imageCalendar.visibility = View.INVISIBLE
-                binding.imageScan.visibility = View.INVISIBLE
-                binding.imageEdit.visibility = View.INVISIBLE
+//                binding.fab.visibility = View.VISIBLE
+//                binding.imageSearch.visibility = View.INVISIBLE
+//                binding.imageCalendar.visibility = View.INVISIBLE
+//                binding.imageScan.visibility = View.INVISIBLE
+//                binding.imageEdit.visibility = View.INVISIBLE
                 findNavController(R.id.myNavHostFragment).navigate(MessageFragmentDirections.actionGlobalMessageFragment(
                     User(id = UserManager.email.toString(),
                     name = UserManager.name.toString())
@@ -78,12 +78,16 @@ class MainActivity : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_profile -> {
-                binding.fab.visibility = View.VISIBLE
-                binding.imageSearch.visibility = View.INVISIBLE
-                binding.imageCalendar.visibility = View.INVISIBLE
-                binding.imageScan.visibility = View.VISIBLE
-                binding.imageEdit.visibility = View.VISIBLE
+//                binding.fab.visibility = View.VISIBLE
+//                binding.imageSearch.visibility = View.INVISIBLE
+//                binding.imageCalendar.visibility = View.INVISIBLE
+//                binding.imageScan.visibility = View.VISIBLE
+//                binding.imageEdit.visibility = View.VISIBLE
                 findNavController(R.id.myNavHostFragment).navigate(R.id.action_global_profileFragment)
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.navigation_family -> {
+                findNavController(R.id.myNavHostFragment).navigate(R.id.action_global_familyFragment)
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -102,14 +106,13 @@ class MainActivity : AppCompatActivity() {
         binding.viewModel = viewModel
 
         val navController = this.findNavController(R.id.myNavHostFragment)
-        binding.fab.setOnClickListener {
-            binding.fab.visibility = View.INVISIBLE
-            binding.imageSearch.visibility = View.INVISIBLE
-            binding.imageCalendar.visibility = View.VISIBLE
-            binding.imageScan.visibility = View.INVISIBLE
-            binding.imageEdit.visibility = View.INVISIBLE
-            navController.navigate(R.id.action_global_familyFragment)
-        }
+//        binding.fab.setOnClickListener {
+////            binding.imageSearch.visibility = View.INVISIBLE
+////            binding.imageCalendar.visibility = View.VISIBLE
+////            binding.imageScan.visibility = View.INVISIBLE
+////            binding.imageEdit.visibility = View.INVISIBLE
+//            navController.navigate(R.id.action_global_familyFragment)
+//        }
 
         binding.imageCalendar.setOnClickListener {
             navController.navigate(R.id.action_global_calendarDialog)
@@ -131,7 +134,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         setupBottomNav()
-        setupDrawer()
+//        setupDrawer()
         setupNavController()
     }
 
@@ -165,107 +168,107 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun setupDrawer() {
-
-        // set up toolbar
-        val navController = this.findNavController(R.id.myNavHostFragment)
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.title = null
-
-        appBarConfiguration = AppBarConfiguration(navController.graph, binding.drawerLayout)
-        NavigationUI.setupWithNavController(binding.drawerNavView, navController)
-
-
-        binding.drawerNavView.setNavigationItemSelectedListener {
-            when(it.itemId){
-                R.id.navigation_branch -> {
-//                    viewModel.navigate.value = 1
-                    findNavController(R.id.myNavHostFragment).navigate(R.id.action_global_branchFragment)
-                    binding.drawerLayout.closeDrawer(GravityCompat.START)
-                    true
-                }
-                R.id.navigation_map->{
-//                    val bundle = bundleOf("type" to 0)
-                    findNavController(R.id.myNavHostFragment).navigate(R.id.action_global_mapFragment)
-                    binding.drawerLayout.closeDrawer(GravityCompat.START)
-//                    viewModel.currentFragmentType.value = CurrentFragmentType.READY_TO_SHIP
-                    true
-                }
-                R.id.navigation_message->{
-//                    val bundle = bundleOf("type" to 1)
-                    findNavController(R.id.myNavHostFragment).navigate(R.id.action_global_messageFragment)
-                    binding.drawerLayout.closeDrawer(GravityCompat.START)
-//                    viewModel.currentFragmentType.value = CurrentFragmentType.SHIPPING
-                    true
-                }
-                R.id.navigation_profile->{
-                    findNavController(R.id.myNavHostFragment).navigate(R.id.action_global_profileFragment)
-                    binding.drawerLayout.closeDrawer(GravityCompat.START)
-//                    viewModel.currentFragmentType.value = CurrentFragmentType.SHIPPED
-                    true
-                }
-                else -> false
-            }
-        }
-
-        binding.drawerLayout.fitsSystemWindows = true
-        binding.drawerLayout.clipToPadding = false
-
-        actionBarDrawerToggle = object : ActionBarDrawerToggle(
-            this, binding.drawerLayout, binding.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
-            override fun onDrawerOpened(drawerView: View) {
-                super.onDrawerOpened(drawerView)
-
-//                when (UserManager.isLoggedIn) { // check user login status when open drawer
-//                    true -> {
-//                        viewModel.checkUser()
-//                    }
-//                    else -> {
-//                        findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToLoginDialog())
-//                        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-//                            binding.drawerLayout.closeDrawer(GravityCompat.START)
-//                        }
-//                    }
-//                }
-
-            }
-        }.apply {
-            binding.drawerLayout.addDrawerListener(this)
-            syncState()
-        }
-
-        // Set up header of drawer ui using data binding
-        val bindingNavHeader = NavHeaderDrawerBinding.inflate(
-            LayoutInflater.from(this), binding.drawerNavView, false)
-
-        bindingNavHeader.lifecycleOwner = this
-//        bindingNavHeader.viewModel = viewModel
-        binding.drawerNavView.addHeaderView(bindingNavHeader.root)
-
-//        viewModel.navigate.observe(this, Observer {
-//            //navigate到指定頁面並變動bottomNavigation
-//            binding.bottomNavView.selectedItemId = R.id.navigation_cart
-//        })
-
-        // Observe current drawer toggle to set the navigation icon and behavior
-//        viewModel.currentDrawerToggleType.observe(this, Observer { type ->
+//    private fun setupDrawer() {
 //
-//            actionBarDrawerToggle?.isDrawerIndicatorEnabled = type.indicatorEnabled
-//            supportActionBar?.setDisplayHomeAsUpEnabled(!type.indicatorEnabled)
-//            binding.toolbar.setNavigationIcon(
-//                when (type) {
-//                    DrawerToggleType.BACK -> R.drawable.toolbar_back
-//                    else -> R.drawable.toolbar_menu
+//        // set up toolbar
+//        val navController = this.findNavController(R.id.myNavHostFragment)
+//        setSupportActionBar(binding.toolbar)
+//        supportActionBar?.title = null
+//
+//        appBarConfiguration = AppBarConfiguration(navController.graph, binding.drawerLayout)
+//        NavigationUI.setupWithNavController(binding.drawerNavView, navController)
+//
+//
+//        binding.drawerNavView.setNavigationItemSelectedListener {
+//            when(it.itemId){
+//                R.id.navigation_branch -> {
+////                    viewModel.navigate.value = 1
+//                    findNavController(R.id.myNavHostFragment).navigate(R.id.action_global_branchFragment)
+//                    binding.drawerLayout.closeDrawer(GravityCompat.START)
+//                    true
 //                }
-//            )
-//            actionBarDrawerToggle?.setToolbarNavigationClickListener {
-//                when (type) {
-//                    DrawerToggleType.BACK -> onBackPressed()
-//                    else -> {}
+//                R.id.navigation_map->{
+////                    val bundle = bundleOf("type" to 0)
+//                    findNavController(R.id.myNavHostFragment).navigate(R.id.action_global_mapFragment)
+//                    binding.drawerLayout.closeDrawer(GravityCompat.START)
+////                    viewModel.currentFragmentType.value = CurrentFragmentType.READY_TO_SHIP
+//                    true
 //                }
+//                R.id.navigation_message->{
+////                    val bundle = bundleOf("type" to 1)
+//                    findNavController(R.id.myNavHostFragment).navigate(R.id.action_global_messageFragment)
+//                    binding.drawerLayout.closeDrawer(GravityCompat.START)
+////                    viewModel.currentFragmentType.value = CurrentFragmentType.SHIPPING
+//                    true
+//                }
+//                R.id.navigation_profile->{
+//                    findNavController(R.id.myNavHostFragment).navigate(R.id.action_global_profileFragment)
+//                    binding.drawerLayout.closeDrawer(GravityCompat.START)
+////                    viewModel.currentFragmentType.value = CurrentFragmentType.SHIPPED
+//                    true
+//                }
+//                else -> false
 //            }
-//        })
-    }
+//        }
+//
+//        binding.drawerLayout.fitsSystemWindows = true
+//        binding.drawerLayout.clipToPadding = false
+//
+//        actionBarDrawerToggle = object : ActionBarDrawerToggle(
+//            this, binding.drawerLayout, binding.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+//            override fun onDrawerOpened(drawerView: View) {
+//                super.onDrawerOpened(drawerView)
+//
+////                when (UserManager.isLoggedIn) { // check user login status when open drawer
+////                    true -> {
+////                        viewModel.checkUser()
+////                    }
+////                    else -> {
+////                        findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToLoginDialog())
+////                        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+////                            binding.drawerLayout.closeDrawer(GravityCompat.START)
+////                        }
+////                    }
+////                }
+//
+//            }
+//        }.apply {
+//            binding.drawerLayout.addDrawerListener(this)
+//            syncState()
+//        }
+//
+//        // Set up header of drawer ui using data binding
+//        val bindingNavHeader = NavHeaderDrawerBinding.inflate(
+//            LayoutInflater.from(this), binding.drawerNavView, false)
+//
+//        bindingNavHeader.lifecycleOwner = this
+////        bindingNavHeader.viewModel = viewModel
+//        binding.drawerNavView.addHeaderView(bindingNavHeader.root)
+//
+////        viewModel.navigate.observe(this, Observer {
+////            //navigate到指定頁面並變動bottomNavigation
+////            binding.bottomNavView.selectedItemId = R.id.navigation_cart
+////        })
+//
+//        // Observe current drawer toggle to set the navigation icon and behavior
+////        viewModel.currentDrawerToggleType.observe(this, Observer { type ->
+////
+////            actionBarDrawerToggle?.isDrawerIndicatorEnabled = type.indicatorEnabled
+////            supportActionBar?.setDisplayHomeAsUpEnabled(!type.indicatorEnabled)
+////            binding.toolbar.setNavigationIcon(
+////                when (type) {
+////                    DrawerToggleType.BACK -> R.drawable.toolbar_back
+////                    else -> R.drawable.toolbar_menu
+////                }
+////            )
+////            actionBarDrawerToggle?.setToolbarNavigationClickListener {
+////                when (type) {
+////                    DrawerToggleType.BACK -> onBackPressed()
+////                    else -> {}
+////                }
+////            }
+////        })
+//    }
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

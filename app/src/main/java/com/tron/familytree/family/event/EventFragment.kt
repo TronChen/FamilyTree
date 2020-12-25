@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.tron.familytree.R
 import com.tron.familytree.data.Event
 import com.tron.familytree.databinding.FragmentEventBinding
 import com.tron.familytree.ext.getVmFactory
@@ -38,6 +39,10 @@ class EventFragment(val position: Int) : Fragment() {
             findNavController().navigate(EventFragmentDirections.actionGlobalEventDialog(it))
         })
         binding.recyclerEvent.adapter = adapter
+
+        binding.menuEvent.setOnClickListener {
+            findNavController().navigate(R.id.action_global_createEventDialog)
+        }
 
         viewModel.liveEvent.observe(viewLifecycleOwner, Observer {
             it?.let {
