@@ -106,6 +106,7 @@ class BranchFragment : Fragment() {
             }
             if (viewModel.itemClick.value == 200){
                viewModel.reQuery()
+                viewModel.TreeList.value = null
                 Log.e("treeFinalList", viewModel.treeFinalList.toString())
                 viewModel.userId.value = viewModel.itemSelected.value!!.name
             }
