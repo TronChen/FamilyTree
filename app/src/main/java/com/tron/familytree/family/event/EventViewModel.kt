@@ -115,4 +115,10 @@ class EventViewModel(
         _status.value = LoadApiStatus.DONE
         _refreshStatus.value = false
     }
+
+    fun refresh() {
+        if (status.value != LoadApiStatus.LOADING) {
+            getEvent()
+        }
+    }
 }

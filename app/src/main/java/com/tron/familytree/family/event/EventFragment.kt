@@ -59,6 +59,16 @@ class EventFragment(val position: Int) : Fragment() {
             }
         })
 
+        binding.layoutSwipeRefreshHome.setOnRefreshListener {
+            viewModel.refresh()
+        }
+
+        viewModel.refreshStatus.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                binding.layoutSwipeRefreshHome.isRefreshing = it
+            }
+        })
+
 //        binding.imageView8.setImageResource(R.drawable.sport)
 
 

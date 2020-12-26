@@ -15,6 +15,15 @@
         android:layout_height="match_parent"
         tools:context=".family.album.AlbumFragment">
 
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/layout_swipe_refresh_home"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recComAlbum"
             android:layout_width="match_parent"
@@ -28,6 +37,8 @@
             tools:listitem="@layout/item_list_album">
 
         </androidx.recyclerview.widget.RecyclerView>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="300dp"

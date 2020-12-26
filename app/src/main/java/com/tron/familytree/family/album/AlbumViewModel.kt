@@ -114,4 +114,10 @@ class AlbumViewModel(
         _refreshStatus.value = false
     }
 
+    fun refresh() {
+        if (status.value != LoadApiStatus.LOADING) {
+            getEvent()
+        }
+    }
+
 }

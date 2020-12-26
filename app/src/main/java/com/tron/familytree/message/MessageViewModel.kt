@@ -252,4 +252,10 @@ class MessageViewModel(
             attenderName = listOf(_chatMember.value!!.name, UserManager.name.toString())
         )
     }
+
+    fun refresh() {
+        if (status.value != LoadApiStatus.LOADING) {
+            getChatroom()
+        }
+    }
 }
