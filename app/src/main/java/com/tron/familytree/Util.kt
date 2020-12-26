@@ -7,9 +7,11 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
+import com.airbnb.lottie.Lottie
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.github.dhaval2404.imagepicker.ImagePicker
@@ -26,6 +28,14 @@ import kotlin.time.hours
  */
 @BindingAdapter("setupApiStatus")
 fun bindApiStatus(view: ProgressBar, status: LoadApiStatus?) {
+    when (status) {
+        LoadApiStatus.LOADING -> view.visibility = View.VISIBLE
+        LoadApiStatus.DONE, LoadApiStatus.ERROR -> view.visibility = View.GONE
+    }
+}
+
+@BindingAdapter("setupApiStatusForLottie")
+fun bindApiStatus(view: ConstraintLayout, status: LoadApiStatus?) {
     when (status) {
         LoadApiStatus.LOADING -> view.visibility = View.VISIBLE
         LoadApiStatus.DONE, LoadApiStatus.ERROR -> view.visibility = View.GONE
