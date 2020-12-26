@@ -13,6 +13,8 @@ import com.tron.familytree.R
 import com.tron.familytree.data.Event
 import com.tron.familytree.databinding.FragmentEventBinding
 import com.tron.familytree.ext.getVmFactory
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
 import java.util.*
 
 

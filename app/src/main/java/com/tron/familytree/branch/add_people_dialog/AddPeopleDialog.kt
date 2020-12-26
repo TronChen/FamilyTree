@@ -181,7 +181,7 @@ class AddPeopleDialog : DialogFragment() {
                     }
                 }
             }else{
-                Toast.makeText(requireContext(),"還沒輸入完成唷",Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(),"請輸入完整訊息",Toast.LENGTH_SHORT).show()
             }
 
         }

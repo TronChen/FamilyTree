@@ -90,8 +90,10 @@ class CalendarFragment : Fragment() {
                 CalendarDay.from(year, month, day))
         )
             }
+        })
+
+        viewModel.selectedUserEvent.observe(viewLifecycleOwner, Observer {
                 adapter.submitList(it)
-            adapter.notifyDataSetChanged()
         })
 
         bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomCalendar.conBottomSheet)

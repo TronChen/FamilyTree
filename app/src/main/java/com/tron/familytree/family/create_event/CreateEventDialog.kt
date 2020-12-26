@@ -8,11 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
+import com.tron.familytree.NavigationDirections
 import com.tron.familytree.R
+import com.tron.familytree.check.CheckDialog
 import com.tron.familytree.data.Event
 import com.tron.familytree.databinding.DialogCreateEventBinding
 import com.tron.familytree.ext.getVmFactory
@@ -91,8 +94,28 @@ class CreateEventDialog : DialogFragment() {
         }
 
         binding.conConfirm.setOnClickListener {
-            viewModel.addEvent(setEvent())
-            Log.e("Event", setEvent().toString())
+
+            if (viewModel.editTitle.value != null &&
+                viewModel.editTime.value != "選擇時間" &&
+                viewModel.editDate.value != "選擇日期" &&
+                viewModel.editContent.value != null &&
+                viewModel.editLocation.value != null    ){
+                if (viewModel.eventType.value != EventType.BIG_THING ||
+                    viewModel.eventType.value != EventType.SPORT ||
+                    viewModel.eventType.value != EventType.MEAL ||
+                    viewModel.eventType.value != EventType.CASUAL){
+
+                    viewModel.addEvent(setEvent())
+                    findNavController().navigate(
+                        NavigationDirections.actionGlobalCheckDialog(
+                            CheckDialog.MessageType.ADDED_SUCCESS))
+                    findNavController().navigate(R.id.action_global_familyFragment)
+                    Log.e("Event", setEvent().toString())
+
+                }
+            } else{
+                Toast.makeText(requireContext(),"請輸入完整訊息", Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding.imageCancel.setOnClickListener {
