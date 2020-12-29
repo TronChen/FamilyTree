@@ -8,6 +8,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -22,6 +24,9 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import com.tron.familytree.data.User
 import com.tron.familytree.databinding.ActivityMainBinding
 import com.tron.familytree.databinding.NavHeaderDrawerBinding
@@ -39,6 +44,8 @@ const val PLACE_API = 1111
 class MainActivity : AppCompatActivity() {
 
     val viewModel by viewModels<MainActivityViewModel> { getVmFactory() }
+
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     private lateinit var binding: ActivityMainBinding
     private var actionBarDrawerToggle: ActionBarDrawerToggle? = null
@@ -104,6 +111,8 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
+
+        firebaseAnalytics = Firebase.analytics
 
         val navController = this.findNavController(R.id.myNavHostFragment)
 //        binding.fab.setOnClickListener {
