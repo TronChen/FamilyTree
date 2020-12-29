@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View"/>
         <variable
             name="viewModel"
             type="com.tron.familytree.profile.edituser.EditUserViewModel" />
@@ -24,8 +25,8 @@
             android:layout_width="135dp"
             android:layout_height="135dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:scaleType="centerCrop"
+            app:civ_border_color="@color/orange"
+            app:layout_constraintBottom_toBottomOf="@+id/radioGender"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/conFamily" />
 
@@ -61,12 +62,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"
             android:fontFamily="@font/noto_sans"
             android:text="性別"
             android:textColor="@color/black"
             android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/radioGender"
             app:layout_constraintStart_toStartOf="@+id/editTextＦistName"
             app:layout_constraintTop_toBottomOf="@+id/editTextＦistName" />
 
@@ -74,9 +73,10 @@
             android:id="@+id/radioGender"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/conImage"
+            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="@+id/editTextＦistName"
-            app:layout_constraintStart_toStartOf="@+id/editTextＦistName">
+            app:layout_constraintStart_toStartOf="@+id/editTextＦistName"
+            app:layout_constraintTop_toBottomOf="@+id/textView50">
 
             <RadioButton
                 android:id="@+id/radioMale"
@@ -119,7 +119,7 @@
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/conImage" />
+            app:layout_constraintTop_toBottomOf="@+id/radioGender" />
 
         <TextView
             android:id="@+id/textView27"
@@ -193,6 +193,43 @@
             app:layout_constraintBottom_toBottomOf="@+id/imageView21"
             app:layout_constraintStart_toEndOf="@+id/imageView21"
             app:layout_constraintTop_toTopOf="@+id/imageView21" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/rounded_light_grey_radius_24"
+            android:visibility="@{viewModel.liveEpisodes == null ? View.GONE : viewModel.liveEpisodes.size == 0 ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="@+id/recyclerEditEpisode"
+            app:layout_constraintEnd_toEndOf="@+id/recyclerEditEpisode"
+            app:layout_constraintStart_toStartOf="@+id/recyclerEditEpisode"
+            app:layout_constraintTop_toTopOf="@+id/recyclerEditEpisode">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottieAnimationView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="@{viewModel.liveEpisodes == null ? View.GONE : viewModel.liveEpisodes.size == 0 ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:lottie_autoPlay="true"
+                app:lottie_fileName="book_loop.json"
+                app:lottie_loop="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="60dp"
+                android:fontFamily="@font/noto_sans"
+                android:text="尚未新增事蹟"
+                android:textColor="@color/grey"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/conComplete"
@@ -351,32 +388,6 @@
                 android:letterSpacing="0.2"
                 android:text="選擇家族"
                 android:textColor="@color/black"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/conImage"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/rounded_orange_radius65"
-            app:layout_constraintEnd_toEndOf="@+id/circularImageView"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/circularImageView">
-
-            <TextView
-                android:id="@+id/textView11"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/noto_sans"
-                android:letterSpacing="0.2"
-                android:text="選擇頭貼"
-                android:textColor="@color/white"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

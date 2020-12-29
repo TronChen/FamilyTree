@@ -11,6 +11,7 @@ import com.tron.familytree.data.AppResult
 import com.tron.familytree.data.Episode
 import com.tron.familytree.data.User
 import com.tron.familytree.network.LoadApiStatus
+import com.tron.familytree.util.UserManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -154,7 +155,7 @@ class EditUserViewModel(
             deathDate = userDeath.value,
             birthLocation = userBirthLocation.value,
             gender = userGender,
-            userImage = userImage.value
+            userImage = UserManager.photo.toString()
         )
     }
 

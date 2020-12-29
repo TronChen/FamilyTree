@@ -8,9 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.tron.familytree.MainActivity
 import com.tron.familytree.data.Message
 import com.tron.familytree.databinding.FragmentChatRoomBinding
 import com.tron.familytree.ext.getVmFactory
+import com.tron.familytree.util.UserManager
+import java.util.Locale.filter
 
 class ChatRoomFragment : Fragment() {
 
@@ -23,6 +26,8 @@ class ChatRoomFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        val activity = activity as MainActivity
 
         val binding = FragmentChatRoomBinding.inflate(inflater, container, false)
 
@@ -45,6 +50,18 @@ class ChatRoomFragment : Fragment() {
         viewModel.liveMessage.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
         })
+
+        viewModel.selectedProperty.observe(viewLifecycleOwner, Observer {
+            viewModel.selectedProperty.value?.attenderName?.let{listName ->
+                val attenderName = listName.filter { it != UserManager.name }
+                var personName: String
+                attenderName.forEach {
+                    personName = it
+                    activity.viewModel.currentFragmentType.value?.value = personName
+                }
+            }
+        })
+
 
 
         // Inflate the layout for this fragment

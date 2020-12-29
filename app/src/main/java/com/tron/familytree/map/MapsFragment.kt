@@ -113,7 +113,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
                 myMap?.apply {
                     val marker = addMarker(
                         MarkerOptions()
-                            .title(episode.title)
+//                            .title(episode.title)
                             .position(LatLng(episode.latitude!!, episode.longitude!!))
                             .icon(BitmapDescriptorFactory.fromBitmap(map_pin)))
                     marker.tag = episode.id
@@ -233,7 +233,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
                         Log.e("_userMarkerList", marker.tag.toString())
                         if (p0 != null) {
                             if (p0.tag == UserManager.email) {
-                                Toast.makeText(context, "我在這兒", Toast.LENGTH_SHORT).show()
+//                                Toast.makeText(context, "我在這兒", Toast.LENGTH_SHORT).show()
                             }
                             if (p0.tag == marker.tag) {
 //                                Toast.makeText(context, "${p0.tag}", Toast.LENGTH_SHORT).show()
@@ -254,7 +254,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
 
                         if (p0 != null) {
                             if (p0.tag == marker.tag) {
-                                Toast.makeText(context, "${p0.tag}", Toast.LENGTH_SHORT).show()
+//                                Toast.makeText(context, "${p0.tag}", Toast.LENGTH_SHORT).show()
                                 viewModel.findEpisodeById(marker.tag.toString())
                             }
                         }

@@ -26,6 +26,8 @@ class AlbumDetailViewModel(
 
     var liveAlbum = MutableLiveData<List<Photo>>()
 
+    var addPhotoPath = MutableLiveData<String>()
+
     val _album = MutableLiveData<List<Photo>>()
     val album: LiveData<List<Photo>>
         get() = _album
@@ -80,6 +82,7 @@ class AlbumDetailViewModel(
         } else {
             getAlbum(event)
         }
+
     }
 
     fun getAlbum(event: Event) {

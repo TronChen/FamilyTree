@@ -96,7 +96,7 @@ class BranchFragment : Fragment() {
         })
 
         viewModel.itemClick.observe(viewLifecycleOwner, Observer {
-            Log.e("itemClick", it.toString())
+//            Log.e("itemClick", it.toString())
             if (viewModel.itemClick.value == 100) {
                 findNavController().navigate(
                     BranchFragmentDirections.actionGlobalBranchUserDetailDialog(
@@ -106,6 +106,7 @@ class BranchFragment : Fragment() {
             }
             if (viewModel.itemClick.value == 200){
                viewModel.reQuery()
+                viewModel.TreeList.value = null
                 Log.e("treeFinalList", viewModel.treeFinalList.toString())
                 viewModel.userId.value = viewModel.itemSelected.value!!.name
             }
@@ -115,6 +116,8 @@ class BranchFragment : Fragment() {
                         viewModel.itemSelected.value!!
                     )
                 )
+                viewModel.reQuery()
+
             }
         })
 

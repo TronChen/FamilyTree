@@ -14,6 +14,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 class CalendarViewModel(
     private val repository: FamilyTreeRepository
@@ -38,6 +40,8 @@ class CalendarViewModel(
 
 
     var liveUserEvent = MutableLiveData<List<Event>>()
+
+    var selectedUserEvent = MutableLiveData<List<Event>>()
 
     val _userEvent = MutableLiveData<List<Event>>()
     val userEvent: LiveData<List<Event>>
@@ -93,6 +97,8 @@ class CalendarViewModel(
         } else {
             getEventByUserId(UserManager.email.toString())
         }
+
+        getEventByTime(SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().timeInMillis))
     }
 
     fun getEventByUserId(id : String) {
@@ -137,7 +143,7 @@ class CalendarViewModel(
 
             val result = repository.getEventByTime(date)
 
-            liveUserEvent.value = when (result) {
+            selectedUserEvent.value = when (result) {
                 is AppResult.Success -> {
                     _error.value = null
                     _status.value = LoadApiStatus.DONE

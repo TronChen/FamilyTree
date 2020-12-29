@@ -1,12 +1,18 @@
 package com.tron.familytree.branch
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.tron.familytree.data.User
+import com.tron.familytree.network.LoadApiStatus
 import com.tron.familytree.util.UserManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class BranchViewModel : ViewModel() {
 
@@ -33,110 +39,168 @@ class BranchViewModel : ViewModel() {
 
     var treeFinalList = mutableListOf<TreeItem>()
 
+    // status: The internal MutableLiveData that stores the status of the most recent request
+    private val _status = MutableLiveData<LoadApiStatus>()
+
+    val status: LiveData<LoadApiStatus>
+        get() = _status
+
+    // error: The internal MutableLiveData that stores the error of the most recent request
+    private val _error = MutableLiveData<String>()
+
+    val error: LiveData<String>
+        get() = _error
+
+    // status for the loading icon of swl
+    private val _refreshStatus = MutableLiveData<Boolean>()
+
+    val refreshStatus: LiveData<Boolean>
+        get() = _refreshStatus
+
+    private val _leave = MutableLiveData<Boolean>()
+
+    val leave: LiveData<Boolean>
+        get() = _leave
+
+    // Create a Coroutine scope using a job to be able to cancel when needed
+    private var viewModelJob = Job()
+
+    // the Coroutine runs using the Main (UI) dispatcher
+    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+
+
+
+    /**
+     * When the [ViewModel] is finished, we cancel our coroutine [viewModelJob], which tells the
+     * Retrofit service to stop.
+     */
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
+    }
+
     init {
         userId.value = UserManager.name
     }
 
     fun getUser(){
-        db.collection("User")
+        coroutineScope.launch {
+            _status.value = LoadApiStatus.LOADING
+            db.collection("User")
 //            .document("${userId.value}")
-            .whereEqualTo("name","${userId.value}")
-            .get()
-            .addOnSuccessListener {
-                for (index in it) {
-                    user.value = index.toObject(User::class.java)
-                    if (user.value!!.mateId != null) {
-                        getUserFather()
-                        getUserMate()
-                        meAndMate.add(
-                            TreeItem.Mate(user.value!!, true)
-                        )
-                    } else {
-                        getUserFather()
-                        meAndMate.add(
-                            TreeItem.Mate(user.value!!, true)
-                        )
-                    }
-                }
-            }
-    }
-
-    fun getUserMate(){
-        Log.e("user.value?.mateId", user.value?.mateId.toString())
-        db.collection("User").whereEqualTo("name", user.value?.mateId)
-            .get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    mateId.value = document.toObject(User::class.java)
-                    meAndMate.add(
-                        TreeItem.Mate((mateId.value!!),false)
-                    )
-                    Log.e("Mate", meAndMate.toString())
-                    getUserChildren()
-                }
-            }
-    }
-
-    fun getUserChildren(){
-        if (user.value?.gender == "male") {
-            db.collection("User").whereEqualTo("fatherId", user.value?.name)
+                .whereEqualTo("name", "${userId.value}")
                 .get()
-                .addOnSuccessListener { result ->
-                    for ((index, document) in result.withIndex()) {
-                        val child = document.toObject(User::class.java)
-                        if (result.size() > 2) {
-                            children.add(
-                                TreeItem.Children(child, index)
+                .addOnSuccessListener {
+                    for (index in it) {
+                        user.value = index.toObject(User::class.java)
+                        if (user.value!!.mateId != null) {
+                            getUserFather()
+                            getUserMate()
+                            meAndMate.add(
+                                TreeItem.Mate(user.value!!, true)
                             )
                         } else {
-                            children.add(
-                                TreeItem.ChildrenMid(child, index)
+                            getUserFather()
+                            meAndMate.add(
+                                TreeItem.Mate(user.value!!, true)
                             )
                         }
-                    }
-                    if (result.isEmpty){
-                        children.add(
-                            TreeItem.ChildrenAdd(User(
-                                name = "No child",
-                                fatherId = user.value?.name , motherId = mateId.value?.name), 0)
-                        )
                     }
                 }
         }
+    }
 
-        if (user.value?.gender == "female") {
-            db.collection("User").whereEqualTo("motherId", user.value?.name)
+    fun getUserMate(){
+        coroutineScope.launch {
+            _status.value = LoadApiStatus.LOADING
+            Log.e("user.value?.mateId", user.value?.mateId.toString())
+            db.collection("User").whereEqualTo("name", user.value?.mateId)
                 .get()
                 .addOnSuccessListener { result ->
-                    for ((index, document) in result.withIndex()) {
-                        val child = document.toObject(User::class.java)
-                        if (result.size() > 2) {
+                    for (document in result) {
+                        mateId.value = document.toObject(User::class.java)
+                        meAndMate.add(
+                            TreeItem.Mate((mateId.value!!), false)
+                        )
+                        Log.e("Mate", meAndMate.toString())
+                        getUserChildren()
+                    }
+                }
+        }
+    }
+
+    fun getUserChildren(){
+        coroutineScope.launch {
+            _status.value = LoadApiStatus.LOADING
+            if (user.value?.gender == "male") {
+                db.collection("User").whereEqualTo("fatherId", user.value?.name)
+                    .get()
+                    .addOnSuccessListener { result ->
+                        for ((index, document) in result.withIndex()) {
+                            val child = document.toObject(User::class.java)
+                            if (result.size() > 2) {
+                                children.add(
+                                    TreeItem.Children(child, index)
+                                )
+                            } else {
+                                children.add(
+                                    TreeItem.ChildrenMid(child, index)
+                                )
+                            }
+                        }
+                        if (result.isEmpty) {
                             children.add(
-                                TreeItem.Children(child, index)
-                            )
-                        } else {
-                            children.add(
-                                TreeItem.ChildrenMid(child, index)
+                                TreeItem.ChildrenAdd(
+                                    User(
+                                        name = "No child",
+                                        fatherId = user.value?.name, motherId = mateId.value?.name
+                                    ), 0
+                                )
                             )
                         }
                     }
-                    if (result.isEmpty){
-                        children.add(
-                            TreeItem.ChildrenAdd(User(
-                                name = "No child" ,
-                                motherId = user.value?.name , fatherId = mateId.value?.name), 0)
-                        )
+            }
+
+            if (user.value?.gender == "female") {
+                db.collection("User").whereEqualTo("motherId", user.value?.name)
+                    .get()
+                    .addOnSuccessListener { result ->
+                        for ((index, document) in result.withIndex()) {
+                            val child = document.toObject(User::class.java)
+                            if (result.size() > 2) {
+                                children.add(
+                                    TreeItem.Children(child, index)
+                                )
+                            } else {
+                                children.add(
+                                    TreeItem.ChildrenMid(child, index)
+                                )
+                            }
+                        }
+                        if (result.isEmpty) {
+                            children.add(
+                                TreeItem.ChildrenAdd(
+                                    User(
+                                        name = "No child",
+                                        motherId = user.value?.name, fatherId = mateId.value?.name
+                                    ), 0
+                                )
+                            )
+                        }
+                        Log.e("treeChildrenList", children.toString())
                     }
-                    Log.e("treeChildrenList", children.toString())
-                }
+            }
         }
     }
 
     fun getUserFather(){
-        db.collection("User").whereEqualTo("name", user.value?.fatherId).whereEqualTo("gender","male")
-            .get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
+        coroutineScope.launch {
+            _status.value = LoadApiStatus.LOADING
+            db.collection("User").whereEqualTo("name", user.value?.fatherId)
+                .whereEqualTo("gender", "male")
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
                         fatherId.value = document.toObject(User::class.java)
                         parents.add(
                             TreeItem.Parent(fatherId.value!!, true, 0)
@@ -144,68 +208,99 @@ class BranchViewModel : ViewModel() {
                         Log.e("Father", parents.toString())
                         getUserMother()
 
-                }
-                    if (result.isEmpty){
+                    }
+                    if (result.isEmpty) {
                         parents.add(
-                        TreeItem.ParentAdd(User(name = "No father", fatherId = user.value?.name),true,0)
+                            TreeItem.ParentAdd(
+                                User(
+                                    name = "No father",
+                                    fatherId = user.value?.name
+                                ), true, 0
+                            )
                         )
                         getUserMother()
                     }
-            }
+                }
+        }
     }
 
     fun getUserMother(){
-        db.collection("User").whereEqualTo("name", user.value?.motherId).whereEqualTo("gender","female")
-            .get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    //有媽媽 有配偶
-                    if (user.value?.mateId != null) {
-                        motherId.value = document.toObject(User::class.java)
-                        parents.add(
-                            TreeItem.Parent(motherId.value!!, true, 1)
-                        )
-                        getMateFather()
-                        Log.e("Mother", parents.toString())
-                    //有媽媽 沒配偶
-                    } else {
-                        motherId.value = document.toObject(User::class.java)
-                        parents.add(
-                            TreeItem.Parent(motherId.value!!, true, 1)
-                        )
-                        onlyMate.add(
-                            TreeItem.MateAdd(User(name = "No mate", mateId = user.value?.name), false)
-                        )
-                        getMockUsers()
+        coroutineScope.launch {
+            _status.value = LoadApiStatus.LOADING
+            db.collection("User").whereEqualTo("name", user.value?.motherId)
+                .whereEqualTo("gender", "female")
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        //有媽媽 有配偶
+                        if (user.value?.mateId != null) {
+                            motherId.value = document.toObject(User::class.java)
+                            parents.add(
+                                TreeItem.Parent(motherId.value!!, true, 1)
+                            )
+                            getMateFather()
+                            Log.e("Mother", parents.toString())
+                            //有媽媽 沒配偶
+                        } else {
+                            motherId.value = document.toObject(User::class.java)
+                            parents.add(
+                                TreeItem.Parent(motherId.value!!, true, 1)
+                            )
+                            onlyMate.add(
+                                TreeItem.MateAdd(
+                                    User(name = "No mate", mateId = user.value?.name),
+                                    false
+                                )
+                            )
+                            getBranchView()
+                            _status.value = LoadApiStatus.DONE
+                        }
                     }
-                }
                     //沒媽媽 有配偶
-                    if (result.isEmpty && user.value?.mateId != null){
+                    if (result.isEmpty && user.value?.mateId != null) {
                         parents.add(
-                            TreeItem.ParentAdd(User(name = "No mother", motherId = user.value?.name), true, 1)
+                            TreeItem.ParentAdd(
+                                User(
+                                    name = "No mother",
+                                    motherId = user.value?.name
+                                ), true, 1
+                            )
                         )
                         getMateFather()
                     }
                     //有媽媽 沒配偶
-                    if (result.isEmpty && user.value?.mateId == null){
+                    if (result.isEmpty && user.value?.mateId == null) {
                         parents.add(
-                            TreeItem.ParentAdd(User(name = "No mother", motherId = user.value?.name), true, 1)
+                            TreeItem.ParentAdd(
+                                User(
+                                    name = "No mother",
+                                    motherId = user.value?.name
+                                ), true, 1
+                            )
                         )
 
                         onlyMate.add(
-                            TreeItem.MateAdd(User(name = "No mate", mateId = user.value?.name), false)
+                            TreeItem.MateAdd(
+                                User(name = "No mate", mateId = user.value?.name),
+                                false
+                            )
                         )
-                        getMockUsers()
+                        getBranchView()
+                        _status.value = LoadApiStatus.DONE
                     }
-            }
+                }
+        }
     }
 
     fun getMateFather(){
-        mateId.value?.let { Log.e("MateID", it.toString()) }
-        db.collection("User").whereEqualTo("name", mateId.value?.fatherId).whereEqualTo("gender","male")
-            .get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
+        coroutineScope.launch {
+            _status.value = LoadApiStatus.LOADING
+            mateId.value?.let { Log.e("MateID", it.toString()) }
+            db.collection("User").whereEqualTo("name", mateId.value?.fatherId)
+                .whereEqualTo("gender", "male")
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
 
                         mateFatherId.value = document.toObject(User::class.java)
                         parents.add(
@@ -213,40 +308,57 @@ class BranchViewModel : ViewModel() {
                         )
                         getMateMother()
 
-                }
-                    if (result.isEmpty){
-                        if (mateId.value != null){
+                    }
+                    if (result.isEmpty) {
+                        if (mateId.value != null) {
                             parents.add(
-                                TreeItem.ParentAdd(User(name = "No mateFather", fatherId = mateId.value?.name),false,4)
+                                TreeItem.ParentAdd(
+                                    User(
+                                        name = "No mateFather",
+                                        fatherId = mateId.value?.name
+                                    ), false, 4
+                                )
                             )
                         }
                         getMateMother()
                     }
-            }
+                }
+        }
     }
 
         fun getMateMother(){
-        db.collection("User").whereEqualTo("name", mateId.value?.motherId).whereEqualTo("gender","female")
-            .get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
+            coroutineScope.launch {
+                _status.value = LoadApiStatus.LOADING
+                db.collection("User").whereEqualTo("name", mateId.value?.motherId)
+                    .whereEqualTo("gender", "female")
+                    .get()
+                    .addOnSuccessListener { result ->
+                        for (document in result) {
 
-                        mateMotherId.value = document.toObject(User::class.java)
-                        parents.add(
-                            TreeItem.Parent(mateMotherId.value!!, false, 3)
-                        )
-                        Log.e("MateMother", parents.toString())
-                        Log.e("MateMother", mateMotherId.value.toString())
-                        getMockUsers()
-
-                }
-                    if (result.isEmpty){
-                        if (mateId.value != null) {
+                            mateMotherId.value = document.toObject(User::class.java)
                             parents.add(
-                                TreeItem.ParentAdd(User(name = "No mateMother", motherId = mateId.value?.name), false, 5)
+                                TreeItem.Parent(mateMotherId.value!!, false, 3)
                             )
+                            Log.e("MateMother", parents.toString())
+                            Log.e("MateMother", mateMotherId.value.toString())
+                            getBranchView()
+                            _status.value = LoadApiStatus.DONE
+
                         }
-                        getMockUsers()
+                        if (result.isEmpty) {
+                            if (mateId.value != null) {
+                                parents.add(
+                                    TreeItem.ParentAdd(
+                                        User(
+                                            name = "No mateMother",
+                                            motherId = mateId.value?.name
+                                        ), false, 5
+                                    )
+                                )
+                            }
+                            getBranchView()
+                            _status.value = LoadApiStatus.DONE
+                        }
                     }
             }
     }
@@ -260,7 +372,7 @@ class BranchViewModel : ViewModel() {
     }
 
 
-    fun getMockUsers(): MutableList<TreeItem> {
+    fun getBranchView(): MutableList<TreeItem> {
 
             //Parent
             for ((index, parent) in parents.withIndex()) {
@@ -522,6 +634,7 @@ class BranchViewModel : ViewModel() {
         motherId.value = null
         mateFatherId.value = null
         mateMotherId.value = null
+        itemClick.value = null
     }
 
 }

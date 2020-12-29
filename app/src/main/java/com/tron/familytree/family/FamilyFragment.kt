@@ -32,6 +32,8 @@ class FamilyFragment : Fragment() {
 
 
 
+
+
         val tabLayout = binding.tabs
         val viewPager = binding.viewpager
         viewPager.adapter = FamilyViewPagerAdapter(this)

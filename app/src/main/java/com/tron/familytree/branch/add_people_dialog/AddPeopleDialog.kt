@@ -6,13 +6,16 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.tron.familytree.MainActivity
+import com.tron.familytree.NavigationDirections
 import com.tron.familytree.R
+import com.tron.familytree.check.CheckDialog
 import com.tron.familytree.databinding.DialogAddPeopleBinding
 import com.tron.familytree.ext.getVmFactory
 import java.util.*
@@ -114,33 +117,77 @@ class AddPeopleDialog : DialogFragment() {
         viewModel.userBirthLocation = binding.editBirthLocation.text.toString()
 
         binding.conConfirm.setOnClickListener {
-            //判斷 加入的類別
-            when (viewModel.selectedProperty.value?.name){
 
-                "No mate" ->{
-                    viewModel.updateMemberMateId(viewModel.selectedProperty.value!!, viewModel.setMate())
-                    viewModel.addMember(viewModel.setMate())
-                }
+            if (
+            viewModel.userEditName != "" &&
+            viewModel.birthDate != "" &&
+            viewModel.gender != "" &&
+            viewModel.userBirthLocation != ""
+                    ) {
 
-                "No father" -> {
-                    viewModel.updateMemberFatherId(viewModel.selectedProperty.value!!, viewModel.setParent())
-                    viewModel.addMember(viewModel.setParent())
-                }
-                "No mother" -> {
-                    viewModel.updateMemberMotherId(viewModel.selectedProperty.value!!, viewModel.setParent())
-                    viewModel.addMember(viewModel.setParent())
-                }
-                "No mateFather" -> {
-                    viewModel.updateMemberFatherId(viewModel.selectedProperty.value!!, viewModel.setParent())
-                    viewModel.addMember(viewModel.setParent())
-                }
-                "No mateMother" -> {
-                    viewModel.updateMemberMotherId(viewModel.selectedProperty.value!!, viewModel.setParent())
-                    viewModel.addMember(viewModel.setParent())
-                }
-                "No child" -> viewModel.addMember(viewModel.setChild())
+                //判斷 加入的類別
+                when (viewModel.selectedProperty.value?.name) {
 
+                    "No mate" -> {
+                        viewModel.updateMemberMateId(
+                            viewModel.selectedProperty.value!!,
+                            viewModel.setMate()
+                        )
+                        viewModel.addMember(viewModel.setMate())
+                        findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
+                        findNavController().navigate(R.id.action_global_branchFragment)
+                    }
+
+                    "No father" -> {
+                        viewModel.updateMemberFatherId(
+                            viewModel.selectedProperty.value!!,
+                            viewModel.setParent()
+                        )
+                        viewModel.addMember(viewModel.setParent())
+                        findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
+                        findNavController().navigate(R.id.action_global_branchFragment)
+                    }
+                    "No mother" -> {
+                        viewModel.updateMemberMotherId(
+                            viewModel.selectedProperty.value!!,
+                            viewModel.setParent()
+                        )
+                        viewModel.addMember(viewModel.setParent())
+                        findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
+                        findNavController().navigate(R.id.action_global_branchFragment)
+                    }
+                    "No mateFather" -> {
+                        viewModel.updateMemberFatherId(
+                            viewModel.selectedProperty.value!!,
+                            viewModel.setParent()
+                        )
+                        viewModel.addMember(viewModel.setParent())
+                        findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
+                        findNavController().navigate(R.id.action_global_branchFragment)
+                    }
+                    "No mateMother" -> {
+                        viewModel.updateMemberMotherId(
+                            viewModel.selectedProperty.value!!,
+                            viewModel.setParent()
+                        )
+                        viewModel.addMember(viewModel.setParent())
+                        findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
+                        findNavController().navigate(R.id.action_global_branchFragment)
+                    }
+                    "No child" -> {
+                        viewModel.addMember(viewModel.setChild())
+                        findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
+                        findNavController().navigate(R.id.action_global_branchFragment)
+                    }
+                }
+            }else{
+                Toast.makeText(requireContext(),"請輸入完整訊息",Toast.LENGTH_SHORT).show()
             }
+
+        }
+
+        binding.imageCancel.setOnClickListener {
+            findNavController().navigateUp()
         }
 
 

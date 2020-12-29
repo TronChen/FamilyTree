@@ -73,6 +73,17 @@ class MessageFragment : Fragment() {
                 }
             }
 
+        binding.layoutSwipeRefreshHome.setOnRefreshListener {
+            viewModel.refresh()
+        }
+
+        viewModel.refreshStatus.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            it?.let {
+                binding.layoutSwipeRefreshHome.isRefreshing = it
+            }
+        })
+
+
         return binding.root
     }
 

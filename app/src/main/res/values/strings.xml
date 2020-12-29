@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FamilyTree</string>
+    <string name="app_name">譜譜</string>
     <string name="profile">Profile</string>
     <string name="message">Message</string>
     <string name="map">Map</string>
@@ -14,6 +14,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="you_know_nothing">You know nothing</string>
+
+    <string name="addto_success">新增成功</string>
 
 
     <string name="spinArray">選擇活動種類</string>

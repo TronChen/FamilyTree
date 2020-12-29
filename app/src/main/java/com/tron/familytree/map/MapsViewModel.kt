@@ -290,7 +290,7 @@ class MapsViewModel(
 
                                 val marker = addMarker(
                                     MarkerOptions()
-                                        .title(myLocation.userId)
+//                                        .title(myLocation.userId)
                                         .position(LatLng(myLocation.latitude!!, myLocation.longitude!!))
                                         .icon(BitmapDescriptorFactory.fromBitmap(resource)))
                                 marker.tag = myLocation.userId
