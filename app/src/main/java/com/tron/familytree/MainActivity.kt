@@ -307,19 +307,19 @@ class MainActivity : AppCompatActivity() {
                             }
 
                         }
-                        ADD_PHOTO ->{
-                            if (data != null) {
-                                if (filePath.isNotEmpty()) {
-                                    viewModel.addPhotoPath.value = filePath
-                                    Log.e("data", data.toString())
-                                    Log.e("reqCode", requestCode.toString())
-                                    Log.e("rstCode", resultCode.toString())
-                                    Toast.makeText(this@MainActivity, viewModel.addUserImgPath.value, Toast.LENGTH_SHORT)
-                                        .show()
-                                }
-                            }
-
-                        }
+//                        ADD_PHOTO ->{
+//                            if (data != null) {
+//                                if (filePath.isNotEmpty()) {
+//                                    viewModel.addPhotoPath.value = filePath
+//                                    Log.e("data", data.toString())
+//                                    Log.e("reqCode", requestCode.toString())
+//                                    Log.e("rstCode", resultCode.toString())
+//                                    Toast.makeText(this@MainActivity, viewModel.addUserImgPath.value, Toast.LENGTH_SHORT)
+//                                        .show()
+//                                }
+//                            }
+//
+//                        }
                     }
 //                     else {
 //                        Toast.makeText(this@MainActivity, "load_img_fail", Toast.LENGTH_SHORT)

@@ -13,6 +13,5 @@ class MainActivityViewModel(
 
     var addUserImgPath = MutableLiveData<String>()
     var editUserImgPath = MutableLiveData<String>()
-    var addPhotoPath = MutableLiveData<String>()
 
 }

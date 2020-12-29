@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View"/>
         <variable
             name="viewModel"
             type="com.tron.familytree.profile.edituser.EditUserViewModel" />
@@ -24,9 +25,7 @@
             android:layout_width="135dp"
             android:layout_height="135dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:scaleType="centerCrop"
-            android:background="@drawable/rounded_orange_radius65"
+            app:civ_border_color="@color/orange"
             app:layout_constraintBottom_toBottomOf="@+id/radioGender"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/conFamily" />
@@ -194,6 +193,43 @@
             app:layout_constraintBottom_toBottomOf="@+id/imageView21"
             app:layout_constraintStart_toEndOf="@+id/imageView21"
             app:layout_constraintTop_toTopOf="@+id/imageView21" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/rounded_light_grey_radius_24"
+            android:visibility="@{viewModel.liveEpisodes == null ? View.GONE : viewModel.liveEpisodes.size == 0 ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="@+id/recyclerEditEpisode"
+            app:layout_constraintEnd_toEndOf="@+id/recyclerEditEpisode"
+            app:layout_constraintStart_toStartOf="@+id/recyclerEditEpisode"
+            app:layout_constraintTop_toTopOf="@+id/recyclerEditEpisode">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottieAnimationView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="@{viewModel.liveEpisodes == null ? View.GONE : viewModel.liveEpisodes.size == 0 ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:lottie_autoPlay="true"
+                app:lottie_fileName="book_loop.json"
+                app:lottie_loop="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="60dp"
+                android:fontFamily="@font/noto_sans"
+                android:text="尚未新增事蹟"
+                android:textColor="@color/grey"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/conComplete"

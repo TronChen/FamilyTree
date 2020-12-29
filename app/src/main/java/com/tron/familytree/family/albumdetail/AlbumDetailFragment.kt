@@ -1,15 +1,19 @@
 package com.tron.familytree.family.albumdetail
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.github.dhaval2404.imagepicker.ImagePicker
+import com.tron.familytree.ADD_USER
 import com.tron.familytree.MainActivity
 import com.tron.familytree.R
 import com.tron.familytree.data.Photo
@@ -22,7 +26,7 @@ import com.tron.familytree.family.event_dialog.EventDialogViewModel
 import com.tron.familytree.profile.edituser.EDIT_USER
 import com.tron.familytree.util.UserManager
 
-const val ADD_PHOTO = 333
+var ADD_PHOTO = 333
 
 class AlbumDetailFragment : Fragment() {
 
@@ -57,6 +61,7 @@ class AlbumDetailFragment : Fragment() {
                     ) //Final image resolution will be less than 1080 x 1080(Optional)
                     .start(ADD_PHOTO)
             }else{
+                viewModel.photoPath.value = null
                 findNavController().navigate(AlbumDetailFragmentDirections.actionGlobalAlbumSinglePicFragment(it))
             }
         })
@@ -74,13 +79,18 @@ class AlbumDetailFragment : Fragment() {
             adapter.submitList(photoList)
         })
 
-        activity.viewModel.addPhotoPath.observe(viewLifecycleOwner, Observer {
+        viewModel.addPhotoPath.observe(viewLifecycleOwner, Observer {
             Log.e("AddPhotoFilePath", it)
-            viewModel.uploadImage(it)
+            if (it != null) {
+                viewModel.uploadImage(it)
+            }
         })
 
         viewModel.photoPath.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                Log.e("photoPath", it)
             viewModel.addPhoto(viewModel.selectedProperty.value!!,setPhoto())
+            }
         })
 
 
@@ -88,11 +98,36 @@ class AlbumDetailFragment : Fragment() {
         return binding.root
     }
 
+    override fun onPause() {
+        super.onPause()
+        Log.e("onPause","onPause")
+        viewModel.photoPath.value = null
+    }
+
     fun setPhoto() : Photo{
         return Photo(
             publisher = UserManager.email.toString(),
             photo = viewModel.photoPath.value
         )
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (resultCode) {
+            Activity.RESULT_OK -> {
+
+                var filePath: String = ImagePicker.getFilePath(data) ?: ""
+                when (requestCode and 0x0000ffff) {
+                    com.tron.familytree.ADD_PHOTO -> {
+                        if (data != null) {
+                            if (filePath.isNotEmpty()) {
+                                viewModel.addPhotoPath.value = filePath
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }

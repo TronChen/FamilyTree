@@ -1,5 +1,6 @@
 package com.tron.familytree.family.albumdetail
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -99,6 +100,7 @@ class AlbumDetailAdapter(private val itemClickListener: AlbumDetailOnItemClickLi
     class AlbumDetailAddViewHolder(val binding: ItemListAlbumDetailAddBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(photo: Photo) {
+            Log.e("addPhotoAdapter",photo.toString())
             binding.photo = photo
             // This is important, because it forces the data binding to execute immediately,
             // which allows the RecyclerView to make the correct view size measurements

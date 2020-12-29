@@ -18,9 +18,12 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.tron.familytree.FamilyTreeApplication
+import com.tron.familytree.NavigationDirections
 import com.tron.familytree.R
+import com.tron.familytree.check.CheckDialog
 import com.tron.familytree.databinding.FragmentEditEpisodeBinding
 import com.tron.familytree.ext.getVmFactory
+import com.tron.familytree.util.UserManager
 import java.util.*
 
 const val PLACE_API = 1111
@@ -63,8 +66,21 @@ class EditEpisodeDialog : DialogFragment() {
         }
 
         binding.conConfirm.setOnClickListener {
-            viewModel.addUserEpisode(viewModel.setEpisode())
-            Log.e("Episode", viewModel.setEpisode().toString())
+            if (
+                viewModel.editTitle.value!! != "" &&
+            viewModel.editDate.value!! != "" &&
+            viewModel.editContent.value!! != "" &&
+            viewModel.editLocation.value!! != "請選擇位址"){
+                viewModel.addUserEpisode(viewModel.setEpisode())
+                findNavController().navigate(
+                    NavigationDirections.actionGlobalCheckDialog(
+                        CheckDialog.MessageType.ADDED_SUCCESS))
+                findNavController().navigateUp()
+                Log.e("Episode", viewModel.setEpisode().toString())
+            }else{
+                Toast.makeText(requireContext(),"請輸入完整訊息", Toast.LENGTH_SHORT).show()
+            }
+
         }
 
         if (!Places.isInitialized()) {
