@@ -33,6 +33,11 @@ class AddPeopleViewModel(
     val newMother: LiveData<User>
         get() = _newMother
 
+    private val _newMate = MutableLiveData<User>()
+    // The external LiveData for the SelectedProperty
+    val newMate: LiveData<User>
+        get() = _newMate
+
     private val _selectedProperty = MutableLiveData<User>()
     // The external LiveData for the SelectedProperty
     val selectedProperty: LiveData<User>
@@ -255,6 +260,33 @@ class AddPeopleViewModel(
         }
     }
 
+    fun addMateReturnUser(user:User){
+        coroutineScope.launch {
+
+            _status.value = LoadApiStatus.LOADING
+
+            when (val result = repository.addMemberReturnUser(user)) {
+                is AppResult.Success -> {
+                    _error.value = null
+                    _status.value = LoadApiStatus.DONE
+                    _newMate.value = result.data
+                }
+                is AppResult.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is AppResult.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                else -> {
+                    _error.value = FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)
+                    _status.value = LoadApiStatus.ERROR
+                }
+            }
+        }
+    }
+
     fun addMember(user: User){
         coroutineScope.launch {
 
@@ -415,7 +447,7 @@ class AddPeopleViewModel(
             gender = gender,
             deathDate = deathDate,
             birthLocation = userBirthLocation,
-            mateId = selectedProperty.value?.mateId,
+            mateId = _user.value?.id,
             familyId = _user.value?.familyId
         )
         Log.e("Add user", user.toString())

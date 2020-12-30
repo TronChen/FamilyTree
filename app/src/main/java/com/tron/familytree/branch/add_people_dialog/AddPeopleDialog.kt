@@ -129,13 +129,14 @@ class AddPeopleDialog : DialogFragment() {
                 when (viewModel.selectedProperty.value?.name) {
 
                     "No mate" -> {
-                        viewModel.addMember(viewModel.setMate())
-                        viewModel.updateMemberMateId(
-                            viewModel.selectedProperty.value!!,
-                            viewModel.setMate()
-                        )
-                        findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
-                        findNavController().navigate(R.id.action_global_branchFragment)
+                        viewModel.addMateReturnUser(viewModel.setMate())
+//                        viewModel.addMember(viewModel.setMate())
+//                        viewModel.updateMemberMateId(
+//                            viewModel.selectedProperty.value!!,
+//                            viewModel.setMate()
+//                        )
+//                        findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
+//                        findNavController().navigate(R.id.action_global_branchFragment)
                     }
 
                     "No father" -> {
@@ -148,23 +149,9 @@ class AddPeopleDialog : DialogFragment() {
 
                     "No mateFather" -> {
                         viewModel.addFatherReturnUser(viewModel.setParent())
-//                        viewModel.addMember(viewModel.setParent())
-//                        viewModel.updateMemberFatherId(
-//                            viewModel.selectedProperty.value!!,
-//                            viewModel.setParent()
-//                        )
-//                        findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
-//                        findNavController().navigate(R.id.action_global_branchFragment)
                     }
                     "No mateMother" -> {
                         viewModel.addMotherReturnUser(viewModel.setParent())
-//                        viewModel.addMember(viewModel.setParent())
-//                        viewModel.updateMemberMotherId(
-//                            viewModel.selectedProperty.value!!,
-//                            viewModel.setParent()
-//                        )
-//                        findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
-//                        findNavController().navigate(R.id.action_global_branchFragment)
                     }
                     "No child" -> {
                         viewModel.addMember(viewModel.setChild())
@@ -204,6 +191,12 @@ class AddPeopleDialog : DialogFragment() {
 
         viewModel.newMother.observe(viewLifecycleOwner, Observer {
             viewModel.updateMemberMotherId(viewModel.user.value!!, it)
+            findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
+            findNavController().navigate(R.id.action_global_branchFragment)
+        })
+
+        viewModel.newMate.observe(viewLifecycleOwner, Observer {
+            viewModel.updateMemberMateId(viewModel.user.value!!, it)
             findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
             findNavController().navigate(R.id.action_global_branchFragment)
         })

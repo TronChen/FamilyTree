@@ -1267,33 +1267,17 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
 
     override suspend fun updateMemberMateId(user: User, newMember : User): AppResult<Boolean> = suspendCoroutine { continuation ->
         val User = FirebaseFirestore.getInstance().collection(PATH_USER)
-        var path: String = ""
 
-        User.whereEqualTo("name",user.mateId)
-            .get()
+        User.document(user.id)
+            .update("mateId",newMember.id)
             .addOnSuccessListener {
-                for (index in it) {
-                    path = index.id
-                    Log.e("FindMate", index.id)
-                    //找到原先user
-                    val document = User.document(path)
-
-                    document
-                        .update("mateId",newMember.name)
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                continuation.resume(AppResult.Success(true))
-                            } else {
-                                task.exception?.let {
-                                    continuation.resume(AppResult.Error(it))
-                                    return@addOnCompleteListener
-                                }
-                                continuation.resume(AppResult.Fail(FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)))
-                            }
-                        }
-                }
+                continuation.resume(AppResult.Success(true))
+            }
+            .addOnFailureListener {
+                continuation.resume(AppResult.Error(it))
             }
     }
+
 
 
     override suspend fun updateMemberFatherId(user: User, newMember : User): AppResult<Boolean> = suspendCoroutine { continuation ->
