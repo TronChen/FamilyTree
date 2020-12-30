@@ -130,23 +130,13 @@ class AddPeopleDialog : DialogFragment() {
 
                     "No mate" -> {
                         viewModel.addMateReturnUser(viewModel.setMate())
-//                        viewModel.addMember(viewModel.setMate())
-//                        viewModel.updateMemberMateId(
-//                            viewModel.selectedProperty.value!!,
-//                            viewModel.setMate()
-//                        )
-//                        findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
-//                        findNavController().navigate(R.id.action_global_branchFragment)
                     }
-
                     "No father" -> {
                         viewModel.addFatherReturnUser(viewModel.setParent())
                     }
-
                     "No mother" -> {
                         viewModel.addMotherReturnUser(viewModel.setParent())
                     }
-
                     "No mateFather" -> {
                         viewModel.addFatherReturnUser(viewModel.setParent())
                     }
@@ -201,27 +191,10 @@ class AddPeopleDialog : DialogFragment() {
             findNavController().navigate(R.id.action_global_branchFragment)
         })
 
-
-
-
-
-
-
-
-
         return binding.root
     }
 
     private fun setDateFormat(year: Int, month: Int, day: Int): String {
         return "$year/${month + 1}/$day"
     }
-
-//    private fun downloadImg(ref: String) {
-//        FirebaseStorage.getInstance().reference.child(ref)
-//            .downloadUrl
-//            .addOnSuccessListener {
-//                viewModel._userImage.value = it.toString()
-//                Log.e("URL", it.toString())
-//            }
-//    }
 }
