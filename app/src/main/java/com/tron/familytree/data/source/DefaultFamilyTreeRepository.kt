@@ -38,6 +38,10 @@ class DefaultFamilyTreeRepository(private val remoteDataSource: FamilyTreeDataSo
         return remoteDataSource.findUserById(id)
     }
 
+    override suspend fun findUserByName(name: String): AppResult<User>{
+        return remoteDataSource.findUserByName(name)
+    }
+
     override suspend fun addUserToFirebase(user: User): AppResult<Boolean>{
         return remoteDataSource.addUserToFirebase(user)
     }

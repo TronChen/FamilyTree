@@ -67,6 +67,10 @@ class FamilyTreeLocalDataSource(val context: Context) : FamilyTreeDataSource {
         TODO("Not yet implemented")
     }
 
+    override suspend fun findUserByName(name: String): AppResult<User> {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun updateChild(user: User, newMember: User): AppResult<Boolean> {
         TODO("Not yet implemented")
     }

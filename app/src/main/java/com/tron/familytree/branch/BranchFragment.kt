@@ -12,6 +12,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.tron.familytree.databinding.FragmentBranchBinding
 
+const val DETAIL = 100
+const val QUERY = 200
+const val ADD_PEOPLE = 300
 
 class BranchFragment : Fragment() {
 
@@ -97,20 +100,20 @@ class BranchFragment : Fragment() {
 
         viewModel.itemClick.observe(viewLifecycleOwner, Observer {
 //            Log.e("itemClick", it.toString())
-            if (viewModel.itemClick.value == 100) {
+            if (viewModel.itemClick.value == DETAIL) {
                 findNavController().navigate(
                     BranchFragmentDirections.actionGlobalBranchUserDetailDialog(
                         viewModel.itemSelected.value!!
                     )
                 )
             }
-            if (viewModel.itemClick.value == 200){
+            if (viewModel.itemClick.value == QUERY){
                viewModel.reQuery()
                 viewModel.TreeList.value = null
                 Log.e("treeFinalList", viewModel.treeFinalList.toString())
                 viewModel.userId.value = viewModel.itemSelected.value!!.name
             }
-            if (viewModel.itemClick.value == 300) {
+            if (viewModel.itemClick.value == ADD_PEOPLE) {
                 findNavController().navigate(
                     BranchFragmentDirections.actionGlobalAddPeopleDialog(
                         viewModel.itemSelected.value!!

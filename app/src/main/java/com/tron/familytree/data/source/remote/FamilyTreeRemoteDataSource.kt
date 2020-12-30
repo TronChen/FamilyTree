@@ -1044,6 +1044,24 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
             }
     }
 
+    override suspend fun findUserByName(name: String): AppResult<User> = suspendCoroutine { continuation ->
+        val userCollection = FirebaseFirestore.getInstance().collection(PATH_USER)
+        userCollection
+            .whereEqualTo("name", name)
+            .get()
+            .addOnSuccessListener {
+                if (it != null){
+                    for (index in it) {
+                        val user = index.toObject(User::class.java)
+                        continuation.resume(AppResult.Success(user))
+                    }
+                }
+            }
+            .addOnFailureListener {
+                continuation.resume(AppResult.Error(it))
+            }
+    }
+
     override suspend fun findUser(name: String): AppResult<User> = suspendCoroutine { continuation ->
         val userCollection = FirebaseFirestore.getInstance().collection(PATH_USER)
         userCollection
