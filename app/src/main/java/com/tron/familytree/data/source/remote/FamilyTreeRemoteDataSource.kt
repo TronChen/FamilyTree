@@ -1124,15 +1124,49 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
     }
 
 
-    override suspend fun addMember(user: User): AppResult<Boolean> = suspendCoroutine { continuation ->
-        val User = FirebaseFirestore.getInstance().collection(PATH_USER)
-        val document = User.document()
+    override suspend fun addMemberReturnUser(user: User): AppResult<User> = suspendCoroutine { continuation ->
+
+        val userPath = FirebaseFirestore.getInstance().collection(PATH_USER)
+        val document = userPath.document()
         user.id = document.id
+
+        fun getUser(){
+            userPath.document(user.id)
+                .get()
+                .addOnSuccessListener {result ->
+                    val newMember : User
+                    if (result != null) {
+                        newMember = result.toObject(User::class.java)!!
+                        continuation.resume(AppResult.Success(newMember))
+                    }
+                }
+        }
+
         document
             .set(user)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    getUser()
+                } else {
+                    task.exception?.let {
+                        continuation.resume(AppResult.Error(it))
+                        return@addOnCompleteListener
+                    }
+                    continuation.resume(AppResult.Fail(FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)))
+                }
+            }
+    }
 
+    override suspend fun addMember(user: User): AppResult<Boolean> = suspendCoroutine { continuation ->
+
+        val userPath = FirebaseFirestore.getInstance().collection(PATH_USER)
+        val document = userPath.document()
+        user.id = document.id
+
+        document
+            .set(user)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
                     continuation.resume(AppResult.Success(true))
                 } else {
                     task.exception?.let {
@@ -1245,176 +1279,97 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
 
 
     override suspend fun updateMemberFatherId(user: User, newMember : User): AppResult<Boolean> = suspendCoroutine { continuation ->
-        val collectionReference = FirebaseFirestore.getInstance().collection(PATH_USER)
-        var path: String = ""
-        val originUser = MutableLiveData<User>()
-        collectionReference.whereEqualTo("name",user.fatherId)
-            .get()
-            .addOnSuccessListener {
-                for (index in it) {
-                    //找到原先user
-                    //確認原先的user有沒有媽媽
-                    originUser.value = index.toObject(User::class.java)
+        val User = FirebaseFirestore.getInstance().collection(PATH_USER)
+        val userFather = MutableLiveData<User>()
 
-                    path = index.id
-                    Log.e("FindFather", index.id)
-                    val document = collectionReference.document(path)
-                        //update找到的user
-                    document
-                        .update("fatherId",newMember.name)
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                continuation.resume(AppResult.Success(true))
-                            } else {
-                                task.exception?.let {
-                                    continuation.resume(AppResult.Error(it))
-                                    return@addOnCompleteListener
-                                }
-                                continuation.resume(AppResult.Fail(FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)))
-                            }
+        fun updateFather(){
+            User.document(user.id)
+                .update("fatherId",newMember.id)
+                .addOnSuccessListener {
+
+                }
+        }
+
+        fun updateFatherMate(){
+            User.document(newMember.id)
+                .update("mateId",user.motherId)
+                .addOnSuccessListener {
+
+                }
+        }
+
+        fun updateMotherMate(){
+            User.document(user.motherId!!)
+                .update("mateId",newMember.id)
+                .addOnSuccessListener {
+                    continuation.resume(AppResult.Success(true))
+                }
+        }
+
+        fun findFatherById(){
+            User.whereEqualTo("id",newMember.id)
+                .get()
+                .addOnSuccessListener {
+                    for (result in it){
+                        userFather.value = result.toObject(com.tron.familytree.data.User::class.java)
+                        if (user.motherId != null){
+                            updateFatherMate()
+                            updateMotherMate()
                         }
-                    if (originUser.value!!.motherId != null){
-                        collectionReference.whereEqualTo("name",newMember.name)
-                            .get().addOnSuccessListener {task ->
-                                for (fatherIndex in task){
-                                    val fatherPath = fatherIndex.id
-                                     collectionReference.document(fatherPath)
-                                         .update("mateId",originUser.value!!.motherId)
-                                         .addOnSuccessListener {
-//                                             Log.e("updateComplete", it.toString())
-                                         }
 
-                                }
-                            }
-                        collectionReference.whereEqualTo("name",originUser.value!!.motherId)
-                            .get().addOnSuccessListener {task ->
-                                for (fatherIndex in task){
-                                    val fatherPath = fatherIndex.id
-                                    collectionReference.document(fatherPath)
-                                        .update("mateId",originUser.value!!.motherId)
-                                        .addOnSuccessListener {
-//                                            Log.e("updateComplete", it.toString())
-                                        }
-
-                                }
-                            }
                     }
+                }
+        }
 
-                     }
-            }
+
+        updateFather()
+        findFatherById()
     }
 
     override suspend fun updateMemberMotherId(user: User, newMember : User): AppResult<Boolean> = suspendCoroutine { continuation ->
         val User = FirebaseFirestore.getInstance().collection(PATH_USER)
-        var path: String = ""
-        val originUser = MutableLiveData<User>()
-        User.whereEqualTo("name",user.motherId)
-            .get()
-            .addOnSuccessListener {
-                for (index in it) {
-                    path = index.id
-//                    Log.e("FindMother", index.id)
-                    originUser.value = index.toObject(com.tron.familytree.data.User::class.java)
-                    //找到原先user
-                    val document = User.document(path)
+        val userMother = MutableLiveData<User>()
 
-                    document
-                        .update("motherId",newMember.name)
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                continuation.resume(AppResult.Success(true))
-                            } else {
-                                task.exception?.let {
-                                    continuation.resume(AppResult.Error(it))
-                                    return@addOnCompleteListener
-                                }
-                                continuation.resume(AppResult.Fail(FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)))
-                            }
+        fun updateMother(){
+            User.document(user.id)
+                .update("motherId",newMember.id)
+                .addOnSuccessListener {
+
+                }
+        }
+
+        fun updateMotherMate(){
+            User.document(newMember.id)
+                .update("mateId",user.fatherId)
+                .addOnSuccessListener {
+
+                }
+        }
+
+        fun updateFatherMate(){
+            User.document(user.fatherId!!)
+                .update("mateId",newMember.id)
+                .addOnSuccessListener {
+                    continuation.resume(AppResult.Success(true))
+                }
+        }
+
+        fun findMotherById(){
+            User.whereEqualTo("id",newMember.id)
+                .get()
+                .addOnSuccessListener {
+                    for (result in it){
+                        userMother.value = result.toObject(com.tron.familytree.data.User::class.java)
+                        if (user.fatherId != null){
+                            updateMotherMate()
+                            updateFatherMate()
                         }
-                    if (originUser.value!!.fatherId != null){
-                        User.whereEqualTo("name",newMember.name)
-                            .get().addOnSuccessListener {task ->
-                                for (fatherIndex in task){
-                                    val fatherPath = fatherIndex.id
-                                    User.document(fatherPath)
-                                        .update("mateId",originUser.value!!.fatherId)
-                                        .addOnSuccessListener {
-//                                            Log.e("updateComplete", it.toString())
-                                        }
-
-                                }
-                            }
-                        User.whereEqualTo("name",originUser.value!!.motherId)
-                            .get().addOnSuccessListener {task ->
-                                for (fatherIndex in task){
-                                    val fatherPath = fatherIndex.id
-                                    User.document(fatherPath)
-                                        .update("mateId",originUser.value!!.motherId)
-                                        .addOnSuccessListener {
-//                                            Log.e("updateComplete", it.toString())
-                                        }
-
-                                }
-                            }
                     }
                 }
-            }
+        }
+
+
+        updateMother()
+        findMotherById()
     }
-
-
-    override suspend fun getArticles(): AppResult<List<User>> = suspendCoroutine { continuation ->
-        FirebaseFirestore.getInstance()
-            .collection(PATH_ARTICLES)
-            .orderBy(KEY_CREATED_TIME, Query.Direction.DESCENDING)
-            .get()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val list = mutableListOf<User>()
-                    for (document in task.result!!) {
-//                        Logger.d(document.id + " => " + document.data)
-
-                        val article = document.toObject(User::class.java)
-                        list.add(article)
-                    }
-                    continuation.resume(AppResult.Success(list))
-                } else {
-                    task.exception?.let {
-
-//                        Logger.w("[${this::class.simpleName}] Error getting documents. ${it.message}")
-                        continuation.resume(AppResult.Error(it))
-                        return@addOnCompleteListener
-                    }
-                    continuation.resume(AppResult.Fail(FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)))
-                }
-            }
-    }
-
-    override fun getLiveArticles(): MutableLiveData<List<User>> {
-
-        val liveData = MutableLiveData<List<User>>()
-
-        FirebaseFirestore.getInstance()
-            .collection(PATH_ARTICLES)
-            .orderBy(KEY_CREATED_TIME, Query.Direction.DESCENDING)
-            .addSnapshotListener { snapshot, exception ->
-
-//                Logger.i("addSnapshotListener detect")
-
-                exception?.let {
-//                    Logger.w("[${this::class.simpleName}] Error getting documents. ${it.message}")
-                }
-
-                val list = mutableListOf<User>()
-                for (document in snapshot!!) {
-//                    Logger.d(document.id + " => " + document.data)
-
-                    val article = document.toObject(User::class.java)
-                    list.add(article)
-                }
-
-                liveData.value = list
-            }
-        return liveData
-    }
-
 }

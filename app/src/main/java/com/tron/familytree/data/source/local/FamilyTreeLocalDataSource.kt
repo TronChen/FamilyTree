@@ -15,15 +15,11 @@ import com.tron.familytree.profile.member.MemberItem
  */
 class FamilyTreeLocalDataSource(val context: Context) : FamilyTreeDataSource {
 
-    override suspend fun getArticles(): AppResult<List<User>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun getLiveArticles(): MutableLiveData<List<User>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
     override suspend fun uploadImage(path: String): AppResult<String> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun addMemberReturnUser(user: User): AppResult<User> {
         TODO("Not yet implemented")
     }
 

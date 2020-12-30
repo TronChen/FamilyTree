@@ -10,16 +10,12 @@ class DefaultFamilyTreeRepository(private val remoteDataSource: FamilyTreeDataSo
                                   private val localDataSource: FamilyTreeDataSource
 ) : FamilyTreeRepository {
 
-    override suspend fun getArticles(): AppResult<List<User>> {
-        return remoteDataSource.getArticles()
-    }
-
-    override fun getLiveArticles(): MutableLiveData<List<User>> {
-        return remoteDataSource.getLiveArticles()
-    }
-
     override suspend fun uploadImage(path: String) : AppResult<String> {
         return remoteDataSource.uploadImage(path)
+    }
+
+    override suspend fun addMemberReturnUser(user: User): AppResult<User>{
+        return remoteDataSource.addMemberReturnUser(user)
     }
 
     override suspend fun addMember(user: User): AppResult<Boolean>{

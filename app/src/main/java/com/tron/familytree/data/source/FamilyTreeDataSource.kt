@@ -11,13 +11,11 @@ import kotlin.coroutines.Continuation
 
 interface FamilyTreeDataSource {
 
-    suspend fun getArticles(): AppResult<List<User>>
-
-    fun getLiveArticles(): MutableLiveData<List<User>>
-
     suspend fun uploadImage(path: String) : AppResult<String>
 
-    suspend fun addMember(user: User) : AppResult<Boolean>
+    suspend fun addMemberReturnUser(user: User) : AppResult<User>
+
+    suspend fun addMember(user: User): AppResult<Boolean>
 
     suspend fun updateMemberMotherId(user: User, newMember : User): AppResult<Boolean>
 

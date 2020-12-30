@@ -129,48 +129,38 @@ class AddPeopleDialog : DialogFragment() {
                 when (viewModel.selectedProperty.value?.name) {
 
                     "No mate" -> {
+                        viewModel.addMember(viewModel.setMate())
                         viewModel.updateMemberMateId(
                             viewModel.selectedProperty.value!!,
                             viewModel.setMate()
                         )
-                        viewModel.addMember(viewModel.setMate())
                         findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
                         findNavController().navigate(R.id.action_global_branchFragment)
                     }
 
                     "No father" -> {
-                        viewModel.updateMemberFatherId(
-                            viewModel.selectedProperty.value!!,
-                            viewModel.setParent()
-                        )
-                        viewModel.addMember(viewModel.setParent())
-                        findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
-                        findNavController().navigate(R.id.action_global_branchFragment)
+                        viewModel.addFatherReturnUser(viewModel.setParent())
                     }
+
                     "No mother" -> {
-                        viewModel.updateMemberMotherId(
-                            viewModel.selectedProperty.value!!,
-                            viewModel.setParent()
-                        )
-                        viewModel.addMember(viewModel.setParent())
-                        findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
-                        findNavController().navigate(R.id.action_global_branchFragment)
+                        viewModel.addMotherReturnUser(viewModel.setParent())
                     }
+
                     "No mateFather" -> {
+                        viewModel.addMember(viewModel.setParent())
                         viewModel.updateMemberFatherId(
                             viewModel.selectedProperty.value!!,
                             viewModel.setParent()
                         )
-                        viewModel.addMember(viewModel.setParent())
                         findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
                         findNavController().navigate(R.id.action_global_branchFragment)
                     }
                     "No mateMother" -> {
+                        viewModel.addMember(viewModel.setParent())
                         viewModel.updateMemberMotherId(
                             viewModel.selectedProperty.value!!,
                             viewModel.setParent()
                         )
-                        viewModel.addMember(viewModel.setParent())
                         findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
                         findNavController().navigate(R.id.action_global_branchFragment)
                     }
@@ -202,6 +192,18 @@ class AddPeopleDialog : DialogFragment() {
             if (it != null) {
                 Log.e("URLLL", it)
             }
+        })
+
+        viewModel.newFather.observe(viewLifecycleOwner, Observer {
+            viewModel.updateMemberFatherId(viewModel.user.value!!, it)
+            findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
+            findNavController().navigate(R.id.action_global_branchFragment)
+        })
+
+        viewModel.newMother.observe(viewLifecycleOwner, Observer {
+            viewModel.updateMemberMotherId(viewModel.user.value!!, it)
+            findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
+            findNavController().navigate(R.id.action_global_branchFragment)
         })
 
 
