@@ -113,7 +113,9 @@ class BranchViewModel : ViewModel() {
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
             Log.e("user.value?.mateId", user.value?.mateId.toString())
-            db.collection("User").whereEqualTo("id", user.value?.mateId)
+            db.collection("User")
+                .whereEqualTo("familyId",user.value?.familyId)
+                .whereEqualTo("id", user.value?.mateId)
                 .get()
                 .addOnSuccessListener { result ->
                     for (document in result) {
@@ -132,7 +134,9 @@ class BranchViewModel : ViewModel() {
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
             if (user.value?.gender == "male") {
-                db.collection("User").whereEqualTo("fatherId", user.value?.id)
+                db.collection("User")
+                    .whereEqualTo("familyId",user.value?.familyId)
+                    .whereEqualTo("fatherId", user.value?.id)
                     .get()
                     .addOnSuccessListener { result ->
                         for ((index, document) in result.withIndex()) {
@@ -161,7 +165,9 @@ class BranchViewModel : ViewModel() {
             }
 
             if (user.value?.gender == "female") {
-                db.collection("User").whereEqualTo("motherId", user.value?.id)
+                db.collection("User")
+                    .whereEqualTo("familyId",user.value?.familyId)
+                    .whereEqualTo("motherId", user.value?.id)
                     .get()
                     .addOnSuccessListener { result ->
                         for ((index, document) in result.withIndex()) {
@@ -195,7 +201,9 @@ class BranchViewModel : ViewModel() {
     fun getUserFather(){
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
-            db.collection("User").whereEqualTo("id", user.value?.fatherId)
+            db.collection("User")
+                .whereEqualTo("familyId",user.value?.familyId)
+                .whereEqualTo("id", user.value?.fatherId)
                 .whereEqualTo("gender", "male")
                 .get()
                 .addOnSuccessListener { result ->
@@ -226,7 +234,9 @@ class BranchViewModel : ViewModel() {
     fun getUserMother(){
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
-            db.collection("User").whereEqualTo("id", user.value?.motherId)
+            db.collection("User")
+                .whereEqualTo("familyId",user.value?.familyId)
+                .whereEqualTo("id", user.value?.motherId)
                 .whereEqualTo("gender", "female")
                 .get()
                 .addOnSuccessListener { result ->
@@ -295,7 +305,9 @@ class BranchViewModel : ViewModel() {
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
             mateId.value?.let { Log.e("MateID", it.toString()) }
-            db.collection("User").whereEqualTo("id", mateId.value?.fatherId)
+            db.collection("User")
+                .whereEqualTo("familyId",user.value?.familyId)
+                .whereEqualTo("id", mateId.value?.fatherId)
                 .whereEqualTo("gender", "male")
                 .get()
                 .addOnSuccessListener { result ->
@@ -328,7 +340,9 @@ class BranchViewModel : ViewModel() {
         fun getMateMother(){
             coroutineScope.launch {
                 _status.value = LoadApiStatus.LOADING
-                db.collection("User").whereEqualTo("id", mateId.value?.motherId)
+                db.collection("User")
+                    .whereEqualTo("familyId",user.value?.familyId)
+                    .whereEqualTo("id", mateId.value?.motherId)
                     .whereEqualTo("gender", "female")
                     .get()
                     .addOnSuccessListener { result ->
