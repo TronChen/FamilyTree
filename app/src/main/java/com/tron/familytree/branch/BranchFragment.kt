@@ -111,7 +111,7 @@ class BranchFragment : Fragment() {
                viewModel.reQuery()
                 viewModel.TreeList.value = null
                 Log.e("treeFinalList", viewModel.treeFinalList.toString())
-                viewModel.userId.value = viewModel.itemSelected.value!!.name
+                viewModel.userId.value = viewModel.itemSelected.value!!.id
             }
             if (viewModel.itemClick.value == ADD_PEOPLE) {
                 findNavController().navigate(

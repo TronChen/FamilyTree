@@ -80,15 +80,14 @@ class BranchViewModel : ViewModel() {
     }
 
     init {
-        userId.value = UserManager.name
+        userId.value = UserManager.email
     }
 
     fun getUser(){
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
             db.collection("User")
-//            .document("${userId.value}")
-                .whereEqualTo("name", "${userId.value}")
+                .whereEqualTo("id", "${userId.value}")
                 .get()
                 .addOnSuccessListener {
                     for (index in it) {
@@ -114,7 +113,7 @@ class BranchViewModel : ViewModel() {
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
             Log.e("user.value?.mateId", user.value?.mateId.toString())
-            db.collection("User").whereEqualTo("name", user.value?.mateId)
+            db.collection("User").whereEqualTo("id", user.value?.mateId)
                 .get()
                 .addOnSuccessListener { result ->
                     for (document in result) {
@@ -133,7 +132,7 @@ class BranchViewModel : ViewModel() {
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
             if (user.value?.gender == "male") {
-                db.collection("User").whereEqualTo("fatherId", user.value?.name)
+                db.collection("User").whereEqualTo("fatherId", user.value?.id)
                     .get()
                     .addOnSuccessListener { result ->
                         for ((index, document) in result.withIndex()) {
@@ -153,7 +152,7 @@ class BranchViewModel : ViewModel() {
                                 TreeItem.ChildrenAdd(
                                     User(
                                         name = "No child",
-                                        fatherId = user.value?.name, motherId = mateId.value?.name
+                                        fatherId = user.value?.id, motherId = mateId.value?.id
                                     ), 0
                                 )
                             )
@@ -162,7 +161,7 @@ class BranchViewModel : ViewModel() {
             }
 
             if (user.value?.gender == "female") {
-                db.collection("User").whereEqualTo("motherId", user.value?.name)
+                db.collection("User").whereEqualTo("motherId", user.value?.id)
                     .get()
                     .addOnSuccessListener { result ->
                         for ((index, document) in result.withIndex()) {
@@ -182,7 +181,7 @@ class BranchViewModel : ViewModel() {
                                 TreeItem.ChildrenAdd(
                                     User(
                                         name = "No child",
-                                        motherId = user.value?.name, fatherId = mateId.value?.name
+                                        motherId = user.value?.id, fatherId = mateId.value?.id
                                     ), 0
                                 )
                             )
@@ -196,7 +195,7 @@ class BranchViewModel : ViewModel() {
     fun getUserFather(){
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
-            db.collection("User").whereEqualTo("name", user.value?.fatherId)
+            db.collection("User").whereEqualTo("id", user.value?.fatherId)
                 .whereEqualTo("gender", "male")
                 .get()
                 .addOnSuccessListener { result ->
@@ -214,7 +213,7 @@ class BranchViewModel : ViewModel() {
                             TreeItem.ParentAdd(
                                 User(
                                     name = "No father",
-                                    fatherId = user.value?.name
+                                    fatherId = user.value?.id
                                 ), true, 0
                             )
                         )
@@ -227,7 +226,7 @@ class BranchViewModel : ViewModel() {
     fun getUserMother(){
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
-            db.collection("User").whereEqualTo("name", user.value?.motherId)
+            db.collection("User").whereEqualTo("id", user.value?.motherId)
                 .whereEqualTo("gender", "female")
                 .get()
                 .addOnSuccessListener { result ->
@@ -248,7 +247,7 @@ class BranchViewModel : ViewModel() {
                             )
                             onlyMate.add(
                                 TreeItem.MateAdd(
-                                    User(name = "No mate", mateId = user.value?.name),
+                                    User(name = "No mate", mateId = user.value?.id),
                                     false
                                 )
                             )
@@ -262,7 +261,7 @@ class BranchViewModel : ViewModel() {
                             TreeItem.ParentAdd(
                                 User(
                                     name = "No mother",
-                                    motherId = user.value?.name
+                                    motherId = user.value?.id
                                 ), true, 1
                             )
                         )
@@ -274,14 +273,14 @@ class BranchViewModel : ViewModel() {
                             TreeItem.ParentAdd(
                                 User(
                                     name = "No mother",
-                                    motherId = user.value?.name
+                                    motherId = user.value?.id
                                 ), true, 1
                             )
                         )
 
                         onlyMate.add(
                             TreeItem.MateAdd(
-                                User(name = "No mate", mateId = user.value?.name),
+                                User(name = "No mate", mateId = user.value?.id),
                                 false
                             )
                         )
@@ -296,7 +295,7 @@ class BranchViewModel : ViewModel() {
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
             mateId.value?.let { Log.e("MateID", it.toString()) }
-            db.collection("User").whereEqualTo("name", mateId.value?.fatherId)
+            db.collection("User").whereEqualTo("id", mateId.value?.fatherId)
                 .whereEqualTo("gender", "male")
                 .get()
                 .addOnSuccessListener { result ->
@@ -315,7 +314,7 @@ class BranchViewModel : ViewModel() {
                                 TreeItem.ParentAdd(
                                     User(
                                         name = "No mateFather",
-                                        fatherId = mateId.value?.name
+                                        fatherId = mateId.value?.id
                                     ), false, 4
                                 )
                             )
@@ -329,7 +328,7 @@ class BranchViewModel : ViewModel() {
         fun getMateMother(){
             coroutineScope.launch {
                 _status.value = LoadApiStatus.LOADING
-                db.collection("User").whereEqualTo("name", mateId.value?.motherId)
+                db.collection("User").whereEqualTo("id", mateId.value?.motherId)
                     .whereEqualTo("gender", "female")
                     .get()
                     .addOnSuccessListener { result ->
@@ -351,7 +350,7 @@ class BranchViewModel : ViewModel() {
                                     TreeItem.ParentAdd(
                                         User(
                                             name = "No mateMother",
-                                            motherId = mateId.value?.name
+                                            motherId = mateId.value?.id
                                         ), false, 5
                                     )
                                 )
@@ -530,12 +529,12 @@ class BranchViewModel : ViewModel() {
                     )
                     if (user.value?.gender == "male"){
                         treeFinalList.add(
-                            TreeItem.ChildrenAdd(User(name = "No child", fatherId = user.value?.name , motherId = mateId.value?.name), 1)
+                            TreeItem.ChildrenAdd(User(name = "No child", fatherId = user.value?.id , motherId = mateId.value?.id), 1)
                         )
                     }
                     if (user.value?.gender == "female"){
                         treeFinalList.add(
-                            TreeItem.ChildrenAdd(User(name = "No child", motherId = user.value?.name , fatherId = mateId.value?.name), 1)
+                            TreeItem.ChildrenAdd(User(name = "No child", motherId = user.value?.id , fatherId = mateId.value?.id), 1)
                         )
                     }
                 }
@@ -560,12 +559,12 @@ class BranchViewModel : ViewModel() {
             }
                 if (user.value?.gender == "male"){
             treeFinalList.add(
-                TreeItem.ChildrenAdd(User(name = "No child", fatherId = user.value?.name , motherId = mateId.value?.name), 1)
+                TreeItem.ChildrenAdd(User(name = "No child", fatherId = user.value?.id , motherId = mateId.value?.id), 1)
             )
                 }
             if (user.value?.gender == "female"){
                 treeFinalList.add(
-                    TreeItem.ChildrenAdd(User(name = "No child", motherId = user.value?.name , fatherId = mateId.value?.name), 1)
+                    TreeItem.ChildrenAdd(User(name = "No child", motherId = user.value?.id , fatherId = mateId.value?.id), 1)
                 )
             }
 
@@ -577,12 +576,12 @@ class BranchViewModel : ViewModel() {
             }
             if (user.value?.gender == "male"){
                 treeFinalList.add(
-                    TreeItem.ChildrenAdd(User(name = "No child", fatherId = user.value?.name , motherId = mateId.value?.name), 3)
+                    TreeItem.ChildrenAdd(User(name = "No child", fatherId = user.value?.id , motherId = mateId.value?.id), 3)
                 )
             }
             if (user.value?.gender == "female"){
                 treeFinalList.add(
-                    TreeItem.ChildrenAdd(User(name = "No child", motherId = user.value?.name , fatherId = mateId.value?.name), 3)
+                    TreeItem.ChildrenAdd(User(name = "No child", motherId = user.value?.id , fatherId = mateId.value?.id), 3)
                 )
             }
         }
@@ -593,12 +592,12 @@ class BranchViewModel : ViewModel() {
             }
             if (user.value?.gender == "male"){
                 treeFinalList.add(
-                    TreeItem.ChildrenAdd(User(name = "No child", fatherId = user.value?.name , motherId = mateId.value?.name), 10000)
+                    TreeItem.ChildrenAdd(User(name = "No child", fatherId = user.value?.id , motherId = mateId.value?.id), 10000)
                 )
             }
             if (user.value?.gender == "female"){
                 treeFinalList.add(
-                    TreeItem.ChildrenAdd(User(name = "No child", motherId = user.value?.name , fatherId = mateId.value?.name), 10000)
+                    TreeItem.ChildrenAdd(User(name = "No child", motherId = user.value?.id , fatherId = mateId.value?.id), 10000)
                 )
             }
         }

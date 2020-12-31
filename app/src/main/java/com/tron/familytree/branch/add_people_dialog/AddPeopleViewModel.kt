@@ -114,11 +114,11 @@ class AddPeopleViewModel(
     init {
         _selectedProperty.value = userProperties
         when (userProperties.name){
-            "No father" -> findUserByName(userProperties.fatherId!!)
-            "No mother" -> findUserByName(userProperties.motherId!!)
-            "No mateFather" -> findUserByName(userProperties.fatherId!!)
-            "No mateMother" -> findUserByName(userProperties.motherId!!)
-            "No mate" -> findUserByName(userProperties.mateId!!)
+            "No father" -> findUserById(userProperties.fatherId!!)
+            "No mother" -> findUserById(userProperties.motherId!!)
+            "No mateFather" -> findUserById(userProperties.fatherId!!)
+            "No mateMother" -> findUserById(userProperties.motherId!!)
+            "No mate" -> findUserById(userProperties.mateId!!)
         }
     }
 
@@ -129,34 +129,6 @@ class AddPeopleViewModel(
             _status.value = LoadApiStatus.LOADING
 
             when (val result = repository.findUserById(id)) {
-                is AppResult.Success -> {
-                    _error.value = null
-                    _status.value = LoadApiStatus.DONE
-                    _user.value = result.data
-                }
-                is AppResult.Fail -> {
-                    _error.value = result.error
-                    _status.value = LoadApiStatus.ERROR
-                }
-                is AppResult.Error -> {
-                    _error.value = result.exception.toString()
-                    _status.value = LoadApiStatus.ERROR
-                }
-                else -> {
-                    _error.value = FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)
-                    _status.value = LoadApiStatus.ERROR
-                }
-            }
-        }
-    }
-
-    fun findUserByName(name : String){
-
-        coroutineScope.launch {
-
-            _status.value = LoadApiStatus.LOADING
-
-            when (val result = repository.findUserByName(name)) {
                 is AppResult.Success -> {
                     _error.value = null
                     _status.value = LoadApiStatus.DONE
