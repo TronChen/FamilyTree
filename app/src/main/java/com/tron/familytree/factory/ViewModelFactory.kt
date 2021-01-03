@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import app.appworks.school.publisher.data.source.FamilyTreeRepository
 import com.tron.familytree.MainActivityViewModel
+import com.tron.familytree.branch.BranchViewModel
 import com.tron.familytree.family.FamilyViewModel
 import com.tron.familytree.family.album.AlbumViewModel
 import com.tron.familytree.family.calendar.CalendarViewModel
@@ -76,6 +77,9 @@ class ViewModelFactory constructor(
 
                 isAssignableFrom(CreateFamilyViewModel::class.java) ->
                     CreateFamilyViewModel(repository)
+
+                isAssignableFrom(BranchViewModel::class.java) ->
+                    BranchViewModel(repository)
 
 
                 else ->

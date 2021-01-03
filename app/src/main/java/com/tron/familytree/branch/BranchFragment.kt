@@ -6,11 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.tron.familytree.branch.add_people_dialog.AddPeopleDialogArgs
+import com.tron.familytree.branch.add_people_dialog.AddPeopleViewModel
 import com.tron.familytree.databinding.FragmentBranchBinding
+import com.tron.familytree.ext.getVmFactory
 
 const val DETAIL = 100
 const val QUERY = 200
@@ -18,9 +22,7 @@ const val ADD_PEOPLE = 300
 
 class BranchFragment : Fragment() {
 
-    private val viewModel: BranchViewModel by lazy {
-        ViewModelProvider(this).get(BranchViewModel::class.java)
-    }
+    private val viewModel by viewModels<BranchViewModel> {getVmFactory()}
 
 
     override fun onCreateView(
@@ -48,9 +50,9 @@ class BranchFragment : Fragment() {
 
 
 
-        viewModel.userId.observe(viewLifecycleOwner, Observer {
-            viewModel.getUser()
-        })
+//        viewModel.userId.observe(viewLifecycleOwner, Observer {
+//            viewModel.getUser()
+//        })
 
 
         viewModel.TreeList.observe(viewLifecycleOwner, Observer {

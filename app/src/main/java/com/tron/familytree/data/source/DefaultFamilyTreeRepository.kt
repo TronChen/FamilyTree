@@ -1,6 +1,7 @@
 package app.appworks.school.publisher.data.source
 
 import androidx.lifecycle.MutableLiveData
+import com.tron.familytree.branch.TreeItem
 import com.tron.familytree.data.*
 import com.tron.familytree.data.Map
 import com.tron.familytree.message.chatroom.MessageItem
@@ -200,6 +201,14 @@ class DefaultFamilyTreeRepository(private val remoteDataSource: FamilyTreeDataSo
 
     override suspend fun updateFamily(family : Family, user: User): AppResult<Boolean>{
         return remoteDataSource.updateFamily(family,user)
+    }
+
+    override suspend fun searchBranchUser(id: String): AppResult<List<TreeItem>>{
+        return remoteDataSource.searchBranchUser(id)
+    }
+
+    override suspend fun getBranch(id: String): AppResult<List<TreeItem>>{
+        return remoteDataSource.getBranch(id)
     }
 
 }

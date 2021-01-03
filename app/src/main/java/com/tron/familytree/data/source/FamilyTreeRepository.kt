@@ -2,6 +2,7 @@ package app.appworks.school.publisher.data.source
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.tron.familytree.branch.TreeItem
 import com.tron.familytree.data.*
 import com.tron.familytree.data.Map
 import com.tron.familytree.message.chatroom.MessageItem
@@ -104,4 +105,8 @@ interface FamilyTreeRepository {
     fun getLiveFamilyMember(family: Family): MutableLiveData<List<User>>
 
     suspend fun updateFamily(family : Family, user: User): AppResult<Boolean>
+
+    suspend fun searchBranchUser(id: String): AppResult<List<TreeItem>>
+
+    suspend fun getBranch(id: String): AppResult<List<TreeItem>>
 }
