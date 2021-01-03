@@ -13,8 +13,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.tron.familytree.branch.add_people_dialog.AddPeopleDialogArgs
 import com.tron.familytree.branch.add_people_dialog.AddPeopleViewModel
+import com.tron.familytree.data.User
 import com.tron.familytree.databinding.FragmentBranchBinding
 import com.tron.familytree.ext.getVmFactory
+import kotlin.math.sign
 
 const val DETAIL = 100
 const val QUERY = 200
@@ -54,9 +56,15 @@ class BranchFragment : Fragment() {
             viewModel.searchBranchUser(it)
         })
 
+        viewModel.children.observe(viewLifecycleOwner, Observer {
+//            viewModel.searchBranchUser(viewModel.userId.value!!)
+            Log.e("childrenSize", it.toString())
+        })
 
         viewModel.TreeList.observe(viewLifecycleOwner, Observer {
-            val layoutManager = GridLayoutManager(requireContext(),viewModel.getSpanCount(viewModel.children.size))
+            Log.e("TreeList.size", it.size.toString())
+
+            val layoutManager = GridLayoutManager(requireContext(),viewModel.getSpanCount(viewModel.children.value!!))
             binding.recyclerBranch.layoutManager = layoutManager
             layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {

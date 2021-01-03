@@ -12,6 +12,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageMetadata
 import com.tron.familytree.FamilyTreeApplication
 import com.tron.familytree.R
+import com.tron.familytree.branch.BranchViewModel
 import com.tron.familytree.branch.TreeItem
 import com.tron.familytree.data.*
 import com.tron.familytree.data.Map
@@ -34,7 +35,73 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
     private const val ALBUM = "Album"
     private const val MAP = "Map"
 
-    override suspend fun searchBranchUser(id: String): AppResult<List<TreeItem>> = suspendCoroutine{ continuation ->
+    override suspend fun searchBranchUserChildren(id: String): AppResult<Int> = suspendCoroutine { continuation ->
+        val db = Firebase.firestore
+        val mChildren = mutableListOf<User>()
+        val _children = MutableLiveData<List<User>>()
+        val _user = MutableLiveData<User>()
+        var aaa = 0
+
+        fun getChildren() {
+            if (_user.value?.gender == "male") {
+                db.collection("User")
+                    .whereEqualTo("familyId", _user.value?.familyId)
+                    .whereEqualTo("fatherId", _user.value?.id)
+                    .get()
+                    .addOnSuccessListener { result ->
+                        val children = result.toObjects(User::class.java)
+                        for (child in children) {
+                            mChildren.add(child)
+                        }
+                        if (result.isEmpty) {
+                            continuation.resume(AppResult.Success(0))
+                        }
+                        _children.value = mChildren
+                        aaa += 1
+                        if (aaa == result.size()) {
+                            continuation.resume(AppResult.Success(_children.value!!.size))
+                        }
+                    }
+            }
+
+            if (_user.value?.gender == "female") {
+                db.collection("User")
+                    .whereEqualTo("familyId", _user.value?.familyId)
+                    .whereEqualTo("motherId", _user.value?.id)
+                    .get()
+                    .addOnSuccessListener { result ->
+                        val children = result.toObjects(User::class.java)
+                        for (child in children) {
+                            mChildren.add(child)
+                            continuation.resume(AppResult.Success(mChildren.size))
+                        }
+                        if (result.isEmpty) {
+                            continuation.resume(AppResult.Success(0))
+                        }
+                    }
+            }
+        }
+
+        fun getUser(id: String) {
+            db.collection("User")
+                .whereEqualTo("id", id)
+                .get()
+                .addOnSuccessListener {
+                    for (index in it) {
+                        _user.value = index.toObject(User::class.java)
+                       getChildren()
+                    }
+                }
+                .addOnFailureListener {
+                    continuation.resume(AppResult.Error(it))
+                }
+        }
+
+        getUser(id)
+    }
+
+
+    override suspend fun searchBranchUser(id: String,viewModel: BranchViewModel): AppResult<List<TreeItem>> = suspendCoroutine{ continuation ->
         val db = Firebase.firestore
 
         val user = MutableLiveData<User>()
@@ -55,7 +122,7 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
         val treeFinalList = mutableListOf<TreeItem>()
 
         fun getBranchView() {
-
+            viewModel.children.value = children.size
             //Parent
             for ((index, parent) in parents.withIndex()) {
 

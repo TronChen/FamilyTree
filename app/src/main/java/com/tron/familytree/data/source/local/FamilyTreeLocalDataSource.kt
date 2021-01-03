@@ -3,6 +3,7 @@ package app.appworks.school.publisher.data.source.local
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import app.appworks.school.publisher.data.source.FamilyTreeDataSource
+import com.tron.familytree.branch.BranchViewModel
 import com.tron.familytree.branch.TreeItem
 import com.tron.familytree.data.*
 import com.tron.familytree.data.Map
@@ -208,7 +209,11 @@ class FamilyTreeLocalDataSource(val context: Context) : FamilyTreeDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend fun searchBranchUser(id: String): AppResult<List<TreeItem>> {
+    override suspend fun searchBranchUser(id: String,viewModel: BranchViewModel): AppResult<List<TreeItem>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun searchBranchUserChildren(id: String): AppResult<Int> {
         TODO("Not yet implemented")
     }
 }

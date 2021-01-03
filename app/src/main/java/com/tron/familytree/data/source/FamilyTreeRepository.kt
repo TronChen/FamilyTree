@@ -2,6 +2,7 @@ package app.appworks.school.publisher.data.source
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.tron.familytree.branch.BranchViewModel
 import com.tron.familytree.branch.TreeItem
 import com.tron.familytree.data.*
 import com.tron.familytree.data.Map
@@ -106,5 +107,7 @@ interface FamilyTreeRepository {
 
     suspend fun updateFamily(family : Family, user: User): AppResult<Boolean>
 
-    suspend fun searchBranchUser(id: String): AppResult<List<TreeItem>>
+    suspend fun searchBranchUser(id: String,viewModel: BranchViewModel): AppResult<List<TreeItem>>
+
+    suspend fun searchBranchUserChildren(id: String): AppResult<Int>
 }
