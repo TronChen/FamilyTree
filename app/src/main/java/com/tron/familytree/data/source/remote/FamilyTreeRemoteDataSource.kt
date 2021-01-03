@@ -16,9 +16,7 @@ import com.tron.familytree.branch.TreeItem
 import com.tron.familytree.data.*
 import com.tron.familytree.data.Map
 import com.tron.familytree.message.chatroom.MessageItem
-import com.tron.familytree.network.LoadApiStatus
 import com.tron.familytree.util.UserManager
-import kotlinx.coroutines.launch
 import java.io.File
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -1591,10 +1589,10 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
             }
     }
 
-    override suspend fun findUser(name: String): AppResult<User> = suspendCoroutine { continuation ->
+    override suspend fun findUser(id: String): AppResult<User> = suspendCoroutine { continuation ->
         val userCollection = FirebaseFirestore.getInstance().collection(PATH_USER)
         userCollection
-            .whereEqualTo("name", name)
+            .whereEqualTo("id", id)
             .get()
             .addOnSuccessListener {
                 if (it != null){

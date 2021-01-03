@@ -7,7 +7,6 @@ import app.appworks.school.publisher.data.source.FamilyTreeRepository
 import com.tron.familytree.FamilyTreeApplication
 import com.tron.familytree.R
 import com.tron.familytree.data.AppResult
-import com.tron.familytree.data.Episode
 import com.tron.familytree.data.User
 import com.tron.familytree.network.LoadApiStatus
 import com.tron.familytree.util.UserManager
@@ -68,15 +67,15 @@ class ProfileViewModel(
 
 
     init {
-        UserManager.name?.let { findUser(it) }
+        UserManager.email?.let { findUser(it) }
     }
 
 
-    fun findUser(name : String){
+    fun findUser(id : String){
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
 
-            when (val result = repository.findUser(name)) {
+            when (val result = repository.findUser(id)) {
                 is AppResult.Success -> {
                     _error.value = null
                     _status.value = LoadApiStatus.DONE
