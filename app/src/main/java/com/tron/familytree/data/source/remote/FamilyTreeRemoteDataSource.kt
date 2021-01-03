@@ -35,71 +35,6 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
     private const val ALBUM = "Album"
     private const val MAP = "Map"
 
-    override suspend fun searchBranchUserChildren(id: String): AppResult<Int> = suspendCoroutine { continuation ->
-        val db = Firebase.firestore
-        val mChildren = mutableListOf<User>()
-        val _children = MutableLiveData<List<User>>()
-        val _user = MutableLiveData<User>()
-        var aaa = 0
-
-        fun getChildren() {
-            if (_user.value?.gender == "male") {
-                db.collection("User")
-                    .whereEqualTo("familyId", _user.value?.familyId)
-                    .whereEqualTo("fatherId", _user.value?.id)
-                    .get()
-                    .addOnSuccessListener { result ->
-                        val children = result.toObjects(User::class.java)
-                        for (child in children) {
-                            mChildren.add(child)
-                        }
-                        if (result.isEmpty) {
-                            continuation.resume(AppResult.Success(0))
-                        }
-                        _children.value = mChildren
-                        aaa += 1
-                        if (aaa == result.size()) {
-                            continuation.resume(AppResult.Success(_children.value!!.size))
-                        }
-                    }
-            }
-
-            if (_user.value?.gender == "female") {
-                db.collection("User")
-                    .whereEqualTo("familyId", _user.value?.familyId)
-                    .whereEqualTo("motherId", _user.value?.id)
-                    .get()
-                    .addOnSuccessListener { result ->
-                        val children = result.toObjects(User::class.java)
-                        for (child in children) {
-                            mChildren.add(child)
-                            continuation.resume(AppResult.Success(mChildren.size))
-                        }
-                        if (result.isEmpty) {
-                            continuation.resume(AppResult.Success(0))
-                        }
-                    }
-            }
-        }
-
-        fun getUser(id: String) {
-            db.collection("User")
-                .whereEqualTo("id", id)
-                .get()
-                .addOnSuccessListener {
-                    for (index in it) {
-                        _user.value = index.toObject(User::class.java)
-                       getChildren()
-                    }
-                }
-                .addOnFailureListener {
-                    continuation.resume(AppResult.Error(it))
-                }
-        }
-
-        getUser(id)
-    }
-
 
     override suspend fun searchBranchUser(id: String,viewModel: BranchViewModel): AppResult<List<TreeItem>> = suspendCoroutine{ continuation ->
         val db = Firebase.firestore
@@ -266,8 +201,30 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
 
 
             //Children
-            Log.e("children",children.toString())
+            Log.e("children",children.size.toString())
+            if (children.isEmpty()) {
+                treeFinalList.add(
+                    TreeItem.Empty(-1)
+                )
+                treeFinalList.add(
+                    TreeItem.EmptyLine(-1)
+                )
+                if (user.value?.gender == "male"){
+                    treeFinalList.add(
+                        TreeItem.ChildrenAdd(User(name = "No child", fatherId = user.value?.id , motherId = mateId.value?.id , gender = user.value?.gender), 1)
+                    )
+                }
+                if (user.value?.gender == "female"){
+                    treeFinalList.add(
+                        TreeItem.ChildrenAdd(User(name = "No child", motherId = user.value?.id , fatherId = mateId.value?.id , gender = user.value?.gender), 1)
+                    )
+                }
+                treeFinalList.add(
+                    TreeItem.EmptyLine(-1)
+                )
+            }
             for ((index, child) in children.withIndex()) {
+
                 if (children.size == 1) {
                     when (index) {
                         0 -> treeFinalList.add(
@@ -367,14 +324,14 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
                                 }
                             }
                             if (result.isEmpty) {
-                                children.add(
-                                    TreeItem.ChildrenAdd(
-                                        User(
-                                            name = "No child",
-                                            fatherId = user.value?.id, motherId = mateId.value?.id , gender = user.value?.gender
-                                        ), 0
-                                    )
-                                )
+//                                children.add(
+//                                    TreeItem.ChildrenAdd(
+//                                        User(
+//                                            name = "No child",
+//                                            fatherId = user.value?.id, motherId = mateId.value?.id , gender = user.value?.gender
+//                                        ), 0
+//                                    )
+//                                )
                             }
                             Log.e("treeChildrenList", children.toString())
                         }
@@ -399,14 +356,14 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
                                 }
                             }
                             if (result.isEmpty) {
-                                children.add(
-                                    TreeItem.ChildrenAdd(
-                                        User(
-                                            name = "No child",
-                                            motherId = user.value?.id, fatherId = mateId.value?.id , gender = user.value?.gender
-                                        ), 0
-                                    )
-                                )
+//                                children.add(
+//                                    TreeItem.ChildrenAdd(
+//                                        User(
+//                                            name = "No child",
+//                                            motherId = user.value?.id, fatherId = mateId.value?.id , gender = user.value?.gender
+//                                        ), 0
+//                                    )
+//                                )
                             }
                             Log.e("treeChildrenList", children.toString())
                         }

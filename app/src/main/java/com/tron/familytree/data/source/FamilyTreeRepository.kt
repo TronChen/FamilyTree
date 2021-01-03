@@ -109,5 +109,4 @@ interface FamilyTreeRepository {
 
     suspend fun searchBranchUser(id: String,viewModel: BranchViewModel): AppResult<List<TreeItem>>
 
-    suspend fun searchBranchUserChildren(id: String): AppResult<Int>
 }

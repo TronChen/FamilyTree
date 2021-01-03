@@ -208,8 +208,4 @@ class DefaultFamilyTreeRepository(private val remoteDataSource: FamilyTreeDataSo
         return remoteDataSource.searchBranchUser(id,viewModel)
     }
 
-    override suspend fun searchBranchUserChildren(id: String): AppResult<Int>{
-        return remoteDataSource.searchBranchUserChildren(id)
-    }
-
 }

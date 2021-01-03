@@ -118,34 +118,34 @@ class BranchViewModel(
     }
 
 
-    fun searchBranchUserChildren(id: String){
-
-        coroutineScope.launch {
-
-            _status.value = LoadApiStatus.LOADING
-
-            when (val result = repository.searchBranchUserChildren(id)) {
-                is AppResult.Success -> {
-                    _error.value = null
-                    _status.value = LoadApiStatus.DONE
-                    children.value = result.data
-                    Log.e("TreeList",result.data.toString())
-                }
-                is AppResult.Fail -> {
-                    _error.value = result.error
-                    _status.value = LoadApiStatus.ERROR
-                }
-                is AppResult.Error -> {
-                    _error.value = result.exception.toString()
-                    _status.value = LoadApiStatus.ERROR
-                }
-                else -> {
-                    _error.value = FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)
-                    _status.value = LoadApiStatus.ERROR
-                }
-            }
-        }
-    }
+//    fun searchBranchUserChildren(id: String){
+//
+//        coroutineScope.launch {
+//
+//            _status.value = LoadApiStatus.LOADING
+//
+//            when (val result = repository.searchBranchUserChildren(id)) {
+//                is AppResult.Success -> {
+//                    _error.value = null
+//                    _status.value = LoadApiStatus.DONE
+//                    children.value = result.data
+//                    Log.e("TreeList",result.data.toString())
+//                }
+//                is AppResult.Fail -> {
+//                    _error.value = result.error
+//                    _status.value = LoadApiStatus.ERROR
+//                }
+//                is AppResult.Error -> {
+//                    _error.value = result.exception.toString()
+//                    _status.value = LoadApiStatus.ERROR
+//                }
+//                else -> {
+//                    _error.value = FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)
+//                    _status.value = LoadApiStatus.ERROR
+//                }
+//            }
+//        }
+//    }
 
 
     fun getSpanCount(size: Int): Int{
