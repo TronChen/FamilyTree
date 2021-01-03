@@ -202,26 +202,42 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
 
             //Children
             Log.e("children",children.size.toString())
-            if (children.isEmpty()) {
-                treeFinalList.add(
-                    TreeItem.Empty(-1)
-                )
-                treeFinalList.add(
-                    TreeItem.EmptyLine(-1)
-                )
-                if (user.value?.gender == "male"){
+            if (user.value?.mateId != null) {
+                if (children.isEmpty()) {
                     treeFinalList.add(
-                        TreeItem.ChildrenAdd(User(name = "No child", fatherId = user.value?.id , motherId = mateId.value?.id , gender = user.value?.gender), 1)
+                        TreeItem.Empty(-1)
+                    )
+                    treeFinalList.add(
+                        TreeItem.EmptyLine(-1)
+                    )
+                    if (user.value?.gender == "male") {
+                        treeFinalList.add(
+                            TreeItem.ChildrenAdd(
+                                User(
+                                    name = "No child",
+                                    fatherId = user.value?.id,
+                                    motherId = mateId.value?.id,
+                                    gender = user.value?.gender
+                                ), 1
+                            )
+                        )
+                    }
+                    if (user.value?.gender == "female") {
+                        treeFinalList.add(
+                            TreeItem.ChildrenAdd(
+                                User(
+                                    name = "No child",
+                                    motherId = user.value?.id,
+                                    fatherId = mateId.value?.id,
+                                    gender = user.value?.gender
+                                ), 1
+                            )
+                        )
+                    }
+                    treeFinalList.add(
+                        TreeItem.EmptyLine(-1)
                     )
                 }
-                if (user.value?.gender == "female"){
-                    treeFinalList.add(
-                        TreeItem.ChildrenAdd(User(name = "No child", motherId = user.value?.id , fatherId = mateId.value?.id , gender = user.value?.gender), 1)
-                    )
-                }
-                treeFinalList.add(
-                    TreeItem.EmptyLine(-1)
-                )
             }
             for ((index, child) in children.withIndex()) {
 
