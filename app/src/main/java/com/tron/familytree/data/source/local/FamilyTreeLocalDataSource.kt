@@ -211,8 +211,4 @@ class FamilyTreeLocalDataSource(val context: Context) : FamilyTreeDataSource {
     override suspend fun searchBranchUser(id: String): AppResult<List<TreeItem>> {
         TODO("Not yet implemented")
     }
-
-    override suspend fun getBranch(id: String): AppResult<List<TreeItem>> {
-        TODO("Not yet implemented")
-    }
 }

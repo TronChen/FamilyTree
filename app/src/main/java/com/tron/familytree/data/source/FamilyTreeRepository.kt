@@ -107,6 +107,4 @@ interface FamilyTreeRepository {
     suspend fun updateFamily(family : Family, user: User): AppResult<Boolean>
 
     suspend fun searchBranchUser(id: String): AppResult<List<TreeItem>>
-
-    suspend fun getBranch(id: String): AppResult<List<TreeItem>>
 }

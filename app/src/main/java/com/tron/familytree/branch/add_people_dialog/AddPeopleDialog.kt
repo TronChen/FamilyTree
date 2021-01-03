@@ -145,6 +145,7 @@ class AddPeopleDialog : DialogFragment() {
                     }
                     "No child" -> {
                         viewModel.addMember(viewModel.setChild())
+                        Log.e("setChild()",viewModel.setChild().toString())
                         findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
                         findNavController().navigate(R.id.action_global_branchFragment)
                     }
@@ -189,6 +190,10 @@ class AddPeopleDialog : DialogFragment() {
             viewModel.updateMemberMateId(viewModel.user.value!!, it)
             findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
             findNavController().navigate(R.id.action_global_branchFragment)
+        })
+
+        viewModel.user.observe(viewLifecycleOwner, Observer {
+            Log.e("AddPeopleDialogUser", it.toString())
         })
 
         return binding.root

@@ -36,34 +36,6 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
     private const val ALBUM = "Album"
     private const val MAP = "Map"
 
-    override suspend fun getBranch(id: String): AppResult<List<TreeItem>> = suspendCoroutine { continuation ->
-        val db = Firebase.firestore
-        val meAndMate = mutableListOf<TreeItem>()
-        val mMeAndMate = MutableLiveData<List<TreeItem>>()
-        val user = MutableLiveData<User>()
-        db.collection("User")
-            .document(id)
-            .get()
-            .addOnSuccessListener {
-                    user.value = it.toObject(User::class.java)
-                    if (user.value!!.mateId != null) {
-//                        getUserFather()
-//                        getUserMate()
-                        meAndMate.add(
-                            TreeItem.Mate(user.value!!, true)
-                        )
-                    } else {
-//                        getUserFather()
-                        meAndMate.add(
-                            TreeItem.Mate(user.value!!, true)
-                        )
-                    }
-                mMeAndMate.value = meAndMate
-                continuation.resume(AppResult.Success(mMeAndMate.value!!))
-            }
-
-    }
-
     override suspend fun searchBranchUser(id: String): AppResult<List<TreeItem>> = suspendCoroutine{ continuation ->
         val db = Firebase.firestore
 
@@ -229,6 +201,7 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
 
 
             //Children
+            Log.e("children",children.toString())
             for ((index, child) in children.withIndex()) {
                 if (children.size == 1) {
                     when (index) {
@@ -242,12 +215,12 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
                     )
                     if (user.value?.gender == "male"){
                         treeFinalList.add(
-                            TreeItem.ChildrenAdd(User(name = "No child", fatherId = user.value?.id , motherId = mateId.value?.id), 1)
+                            TreeItem.ChildrenAdd(User(name = "No child", fatherId = user.value?.id , motherId = mateId.value?.id , gender = user.value?.gender), 1)
                         )
                     }
                     if (user.value?.gender == "female"){
                         treeFinalList.add(
-                            TreeItem.ChildrenAdd(User(name = "No child", motherId = user.value?.id , fatherId = mateId.value?.id), 1)
+                            TreeItem.ChildrenAdd(User(name = "No child", motherId = user.value?.id , fatherId = mateId.value?.id , gender = user.value?.gender), 1)
                         )
                     }
                 }
@@ -259,12 +232,12 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
                 }
                 if (user.value?.gender == "male"){
                     treeFinalList.add(
-                        TreeItem.ChildrenAdd(User(name = "No child", fatherId = user.value?.id , motherId = mateId.value?.id), 1)
+                        TreeItem.ChildrenAdd(User(name = "No child", fatherId = user.value?.id , motherId = mateId.value?.id , gender = user.value?.gender), 1)
                     )
                 }
                 if (user.value?.gender == "female"){
                     treeFinalList.add(
-                        TreeItem.ChildrenAdd(User(name = "No child", motherId = user.value?.id , fatherId = mateId.value?.id), 1)
+                        TreeItem.ChildrenAdd(User(name = "No child", motherId = user.value?.id , fatherId = mateId.value?.id , gender = user.value?.gender), 1)
                     )
                 }
 
@@ -276,12 +249,12 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
                 }
                 if (user.value?.gender == "male"){
                     treeFinalList.add(
-                        TreeItem.ChildrenAdd(User(name = "No child", fatherId = user.value?.id , motherId = mateId.value?.id), 3)
+                        TreeItem.ChildrenAdd(User(name = "No child", fatherId = user.value?.id , motherId = mateId.value?.id , gender = user.value?.gender), 3)
                     )
                 }
                 if (user.value?.gender == "female"){
                     treeFinalList.add(
-                        TreeItem.ChildrenAdd(User(name = "No child", motherId = user.value?.id , fatherId = mateId.value?.id), 3)
+                        TreeItem.ChildrenAdd(User(name = "No child", motherId = user.value?.id , fatherId = mateId.value?.id , gender = user.value?.gender), 3)
                     )
                 }
             }
@@ -292,12 +265,12 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
                 }
                 if (user.value?.gender == "male"){
                     treeFinalList.add(
-                        TreeItem.ChildrenAdd(User(name = "No child", fatherId = user.value?.id , motherId = mateId.value?.id), 10000)
+                        TreeItem.ChildrenAdd(User(name = "No child", fatherId = user.value?.id , motherId = mateId.value?.id , gender = user.value?.gender), 10000)
                     )
                 }
                 if (user.value?.gender == "female"){
                     treeFinalList.add(
-                        TreeItem.ChildrenAdd(User(name = "No child", motherId = user.value?.id , fatherId = mateId.value?.id), 10000)
+                        TreeItem.ChildrenAdd(User(name = "No child", motherId = user.value?.id , fatherId = mateId.value?.id , gender = user.value?.gender), 10000)
                     )
                 }
             }
@@ -333,11 +306,12 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
                                     TreeItem.ChildrenAdd(
                                         User(
                                             name = "No child",
-                                            fatherId = user.value?.id, motherId = mateId.value?.id
+                                            fatherId = user.value?.id, motherId = mateId.value?.id , gender = user.value?.gender
                                         ), 0
                                     )
                                 )
                             }
+                            Log.e("treeChildrenList", children.toString())
                         }
                 }
 
@@ -364,7 +338,7 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
                                     TreeItem.ChildrenAdd(
                                         User(
                                             name = "No child",
-                                            motherId = user.value?.id, fatherId = mateId.value?.id
+                                            motherId = user.value?.id, fatherId = mateId.value?.id , gender = user.value?.gender
                                         ), 0
                                     )
                                 )
@@ -372,6 +346,7 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
                             Log.e("treeChildrenList", children.toString())
                         }
                 }
+            Log.e("treeChildrenList", children.toString())
         }
 
         fun getMateMother(){
@@ -547,9 +522,12 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
                         meAndMate.add(
                             TreeItem.Mate((mateId.value!!), false)
                         )
-                        Log.e("Mate", meAndMate.toString())
+                        Log.e("MMMMMMate", meAndMate.toString())
                         getUserChildren()
                     }
+                }
+                .addOnFailureListener {
+                    Log.e("MateFail", it.toString())
                 }
         }
 
@@ -566,7 +544,7 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
                             meAndMate.add(
                                 TreeItem.Mate(user.value!!, true)
                             )
-
+                            Log.e("UUUUUser",user.value!!.toString())
                         } else {
                             getUserFather()
                             meAndMate.add(

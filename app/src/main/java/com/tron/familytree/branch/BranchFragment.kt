@@ -50,9 +50,9 @@ class BranchFragment : Fragment() {
 
 
 
-//        viewModel.userId.observe(viewLifecycleOwner, Observer {
-//            viewModel.getUser()
-//        })
+        viewModel.userId.observe(viewLifecycleOwner, Observer {
+            viewModel.searchBranchUser(it)
+        })
 
 
         viewModel.TreeList.observe(viewLifecycleOwner, Observer {

@@ -119,6 +119,14 @@ class AddPeopleViewModel(
             "No mateFather" -> findUserById(userProperties.fatherId!!)
             "No mateMother" -> findUserById(userProperties.motherId!!)
             "No mate" -> findUserById(userProperties.mateId!!)
+            "No child" -> {
+                if (userProperties.gender == "male") {
+                    findUserById(userProperties.fatherId!!)
+                }
+                if (userProperties.gender == "female") {
+                    findUserById(userProperties.motherId!!)
+                }
+            }
         }
     }
 
@@ -380,13 +388,13 @@ class AddPeopleViewModel(
 
     fun setChild() : User{
             val user = User(
-            name = userEditName,
-            birth = birthDate,
-            id = "",
-            userImage = userImage.value,
-            gender = gender,
-            deathDate = deathDate,
-            birthLocation = userBirthLocation,
+                name = userEditName,
+                birth = birthDate,
+                id = "",
+                userImage = userImage.value,
+                gender = gender,
+                deathDate = deathDate,
+                birthLocation = userBirthLocation,
                 fatherId = selectedProperty.value?.fatherId,
                 motherId = selectedProperty.value?.motherId,
                 familyId = _user.value?.familyId

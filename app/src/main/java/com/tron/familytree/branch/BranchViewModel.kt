@@ -88,7 +88,7 @@ class BranchViewModel(
 
     init {
         userId.value = UserManager.email
-        searchBranchUser(UserManager.email.toString())
+        searchBranchUser(userId.value!!)
     }
 
     fun searchBranchUser(id : String){
