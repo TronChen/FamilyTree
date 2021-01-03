@@ -23,6 +23,9 @@ class AddPeopleViewModel(
     val user: LiveData<User>
         get() = _user
 
+    var _mateName = MutableLiveData<String>()
+    var _userName = MutableLiveData<String>()
+
     private val _newFather = MutableLiveData<User>()
     // The external LiveData for the SelectedProperty
     val newFather: LiveData<User>
@@ -122,9 +125,39 @@ class AddPeopleViewModel(
             "No child" -> {
                 if (userProperties.gender == "male") {
                     findUserById(userProperties.fatherId!!)
+                    findMateById(userProperties.motherId!!)
                 }
                 if (userProperties.gender == "female") {
                     findUserById(userProperties.motherId!!)
+                    findMateById(userProperties.fatherId!!)
+                }
+            }
+        }
+    }
+
+    fun findMateById(id : String){
+
+        coroutineScope.launch {
+
+            _status.value = LoadApiStatus.LOADING
+
+            when (val result = repository.findUserById(id)) {
+                is AppResult.Success -> {
+                    _error.value = null
+                    _status.value = LoadApiStatus.DONE
+                    _mateName.value = result.data.name
+                }
+                is AppResult.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is AppResult.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                else -> {
+                    _error.value = FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)
+                    _status.value = LoadApiStatus.ERROR
                 }
             }
         }
@@ -141,6 +174,7 @@ class AddPeopleViewModel(
                     _error.value = null
                     _status.value = LoadApiStatus.DONE
                     _user.value = result.data
+                    _userName.value = result.data.name
                 }
                 is AppResult.Fail -> {
                     _error.value = result.error

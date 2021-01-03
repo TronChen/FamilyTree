@@ -62,7 +62,7 @@ class BranchFragment : Fragment() {
         })
 
         viewModel.TreeList.observe(viewLifecycleOwner, Observer {
-            Log.e("TreeList.size", it.size.toString())
+//            Log.e("TreeList.size", it.size.toString())
 
             val layoutManager = GridLayoutManager(requireContext(),viewModel.getSpanCount(viewModel.children.value!!))
             binding.recyclerBranch.layoutManager = layoutManager
