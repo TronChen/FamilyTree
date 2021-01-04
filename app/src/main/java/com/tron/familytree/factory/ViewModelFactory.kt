@@ -8,7 +8,6 @@ import com.tron.familytree.branch.BranchViewModel
 import com.tron.familytree.family.FamilyViewModel
 import com.tron.familytree.family.album.AlbumViewModel
 import com.tron.familytree.family.calendar.CalendarViewModel
-import com.tron.familytree.family.create_album.CreateAlbumViewModel
 import com.tron.familytree.family.create_event.CreateEventViewModel
 import com.tron.familytree.family.event.EventViewModel
 import com.tron.familytree.login.LogInViewModel
@@ -46,9 +45,6 @@ class ViewModelFactory constructor(
 
                 isAssignableFrom(CreateEventViewModel::class.java) ->
                     CreateEventViewModel(repository)
-
-                isAssignableFrom(CreateAlbumViewModel::class.java) ->
-                    CreateAlbumViewModel(repository)
 
                 isAssignableFrom(EventViewModel::class.java) ->
                     EventViewModel(repository)
