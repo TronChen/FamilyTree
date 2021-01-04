@@ -1665,6 +1665,22 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
             }
     }
 
+    override suspend fun findFamilyById(id: String): AppResult<Family> = suspendCoroutine { continuation ->
+        val userCollection = FirebaseFirestore.getInstance().collection(FAMILY)
+        userCollection
+            .document(id)
+            .get()
+            .addOnSuccessListener {
+                if (it != null){
+                        val user = it.toObject(Family::class.java)
+                        continuation.resume(AppResult.Success(user!!))
+                }
+            }
+            .addOnFailureListener {
+                continuation.resume(AppResult.Error(it))
+            }
+    }
+
     override suspend fun findUserByName(name: String): AppResult<User> = suspendCoroutine { continuation ->
         val userCollection = FirebaseFirestore.getInstance().collection(PATH_USER)
         userCollection

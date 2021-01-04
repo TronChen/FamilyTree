@@ -115,4 +115,6 @@ interface FamilyTreeDataSource {
 
     suspend fun searchBranchUser(id: String,viewModel: BranchViewModel): AppResult<List<TreeItem>>
 
+    suspend fun findFamilyById(id: String): AppResult<Family>
+
 }

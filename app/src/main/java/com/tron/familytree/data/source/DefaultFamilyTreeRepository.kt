@@ -6,6 +6,7 @@ import com.tron.familytree.branch.TreeItem
 import com.tron.familytree.data.*
 import com.tron.familytree.data.Map
 import com.tron.familytree.message.chatroom.MessageItem
+import kotlin.coroutines.suspendCoroutine
 
 
 class DefaultFamilyTreeRepository(private val remoteDataSource: FamilyTreeDataSource,
@@ -214,6 +215,10 @@ class DefaultFamilyTreeRepository(private val remoteDataSource: FamilyTreeDataSo
 
     override suspend fun searchBranchUser(id: String,viewModel: BranchViewModel): AppResult<List<TreeItem>>{
         return remoteDataSource.searchBranchUser(id,viewModel)
+    }
+
+    override suspend fun findFamilyById(id: String): AppResult<Family>{
+        return remoteDataSource.findFamilyById(id)
     }
 
 }

@@ -93,7 +93,11 @@ class EditUserFragment : Fragment() {
             ){
                 viewModel.updateMember(viewModel.setUser())
                 Log.e("Tron", viewModel.setUser().toString())
-            }else{
+            }
+            if (viewModel.selectedProperty.value?.familyId == null){
+                Toast.makeText(requireContext(),"請選擇家族", Toast.LENGTH_SHORT).show()
+            }
+            else{
                 Toast.makeText(requireContext(),"請輸入完整訊息", Toast.LENGTH_SHORT).show()
             }
         }
@@ -116,7 +120,9 @@ class EditUserFragment : Fragment() {
 
         viewModel.selectedProperty.observe(viewLifecycleOwner, Observer {
             Log.e("User", it.toString())
-
+            if (it.familyId != null){
+                viewModel.updateMember(it.familyId!!)
+            }
             when(it.gender){
                 "male" -> (binding.radioGender.getChildAt(0) as RadioButton).isChecked = true
                 "female" -> (binding.radioGender.getChildAt(1) as RadioButton).isChecked = true
