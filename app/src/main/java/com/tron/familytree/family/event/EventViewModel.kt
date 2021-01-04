@@ -9,7 +9,9 @@ import com.tron.familytree.R
 import com.tron.familytree.data.AppResult
 import com.tron.familytree.data.ChatRoom
 import com.tron.familytree.data.Event
+import com.tron.familytree.data.User
 import com.tron.familytree.network.LoadApiStatus
+import com.tron.familytree.util.UserManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -25,6 +27,15 @@ class EventViewModel(
     val _event = MutableLiveData<List<Event>>()
     val event: LiveData<List<Event>>
         get() = _event
+
+    private var _user = MutableLiveData<User>()
+
+    val user : LiveData<User>
+        get() = _user
+
+    val _userEvent = MutableLiveData<List<Event>>()
+    val userEvent: LiveData<List<Event>>
+        get() = _userEvent
 
 
     // status: The internal MutableLiveData that stores the status of the most recent request
@@ -73,6 +84,40 @@ class EventViewModel(
             getLiveEvent()
         } else {
             getEvent()
+        }
+    }
+
+    fun getEventByFamilyId(user: User) {
+
+        coroutineScope.launch {
+
+            _status.value = LoadApiStatus.LOADING
+
+            val result = repository.getEventByFamilyId(user)
+
+            _userEvent.value = when (result) {
+                is AppResult.Success -> {
+                    _error.value = null
+                    _status.value = LoadApiStatus.DONE
+                    result.data
+                }
+                is AppResult.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                    null
+                }
+                is AppResult.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                    null
+                }
+                else -> {
+                    _error.value = FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)
+                    _status.value = LoadApiStatus.ERROR
+                    null
+                }
+            }
+            _refreshStatus.value = false
         }
     }
 

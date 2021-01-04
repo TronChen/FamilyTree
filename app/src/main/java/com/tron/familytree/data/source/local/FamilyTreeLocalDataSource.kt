@@ -141,7 +141,15 @@ class FamilyTreeLocalDataSource(val context: Context) : FamilyTreeDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getEventByUserId(id: String): AppResult<List<Event>> {
+    override suspend fun getEventByUserId(user: User): AppResult<List<Event>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getEventByFamilyId(user: User): AppResult<List<Event>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getLiveEventByFamilyId(user: User): MutableLiveData<List<Event>> {
         TODO("Not yet implemented")
     }
 

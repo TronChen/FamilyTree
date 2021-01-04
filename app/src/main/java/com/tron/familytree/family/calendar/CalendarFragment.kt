@@ -96,6 +96,10 @@ class CalendarFragment : Fragment() {
                 adapter.submitList(it)
         })
 
+        viewModel.user.observe(viewLifecycleOwner, Observer {
+            viewModel.getEventByUserId(it)
+        })
+
         bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomCalendar.conBottomSheet)
 
         bottomSheetBehavior.setBottomSheetCallback(object :

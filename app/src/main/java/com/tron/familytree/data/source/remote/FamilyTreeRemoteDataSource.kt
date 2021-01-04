@@ -1076,11 +1076,12 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
         return liveData
     }
 
-    override suspend fun getEventByUserId(id: String): AppResult<List<Event>> = suspendCoroutine { continuation ->
+    override suspend fun getEventByUserId(user: User): AppResult<List<Event>> = suspendCoroutine { continuation ->
         FirebaseFirestore.getInstance()
             .collection(PATH_USER)
-            .document(id)
+            .document(user.id)
             .collection(EVENT)
+            .whereEqualTo("familyId",user.familyId)
             .orderBy("eventTime",Query.Direction.DESCENDING)
             .get()
             .addOnCompleteListener { task ->
@@ -1103,6 +1104,59 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
                     continuation.resume(AppResult.Fail(FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)))
                 }
             }
+    }
+
+    override suspend fun getEventByFamilyId(user: User): AppResult<List<Event>> = suspendCoroutine { continuation ->
+        FirebaseFirestore.getInstance()
+            .collection(EVENT)
+            .whereEqualTo("publisherFamilyId",user.familyId)
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val list = mutableListOf<Event>()
+                    for (document in task.result!!) {
+                        Log.d("Tron",document.id + " => " + document.data)
+
+                        val event = document.toObject(Event::class.java)
+                        list.add(event)
+                    }
+                    continuation.resume(AppResult.Success(list))
+                } else {
+                    task.exception?.let {
+
+                        Log.w("Tron","[${this::class.simpleName}] Error getting documents. ${it.message}")
+                        continuation.resume(AppResult.Error(it))
+                        return@addOnCompleteListener
+                    }
+                    continuation.resume(AppResult.Fail(FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)))
+                }
+            }
+    }
+
+    override fun getLiveEventByFamilyId(user: User): MutableLiveData<List<Event>> {
+        val liveData = MutableLiveData<List<Event>>()
+
+        FirebaseFirestore.getInstance()
+            .collection(EVENT)
+            .whereEqualTo("publisherFamilyId", user.familyId)
+            .addSnapshotListener { snapshot, exception ->
+
+                Log.i("Tron","addSnapshotListener detect")
+
+                exception?.let {
+                    Log.w("Tron","[${this::class.simpleName}] Error getting documents. ${it.message}")
+                }
+
+                val list = mutableListOf<Event>()
+                for (document in snapshot!!) {
+                    Log.d("Tron",document.id + " => " + document.data)
+
+                    val event = document.toObject(Event::class.java)
+                    list.add(event)
+                }
+                liveData.value = list
+            }
+        return liveData
     }
 
 

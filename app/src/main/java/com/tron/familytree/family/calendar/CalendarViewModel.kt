@@ -8,6 +8,7 @@ import com.tron.familytree.FamilyTreeApplication
 import com.tron.familytree.R
 import com.tron.familytree.data.AppResult
 import com.tron.familytree.data.Event
+import com.tron.familytree.data.User
 import com.tron.familytree.network.LoadApiStatus
 import com.tron.familytree.util.UserManager
 import kotlinx.coroutines.CoroutineScope
@@ -35,6 +36,11 @@ class CalendarViewModel(
 
     val selectedEvent : LiveData<List<Event>>
         get() = _selectedEvents
+
+    private var _user = MutableLiveData<User>()
+
+    val user : LiveData<User>
+        get() = _user
 
     val selectedLiveEvent = MutableLiveData<List<Event>>()
 
@@ -92,22 +98,55 @@ class CalendarViewModel(
 
 
     init {
-        if (FamilyTreeApplication.INSTANCE.isLiveDataDesign()) {
-            getLiveEventByUserId(UserManager.email.toString())
-        } else {
-            getEventByUserId(UserManager.email.toString())
-        }
+        getLiveEventByUserId(UserManager.email.toString())
+
+        findUserById(UserManager.email.toString())
 
         getEventByTime(SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().timeInMillis))
     }
 
-    fun getEventByUserId(id : String) {
+    fun findUserById(id : String) {
 
         coroutineScope.launch {
 
             _status.value = LoadApiStatus.LOADING
 
-            val result = repository.getEventByUserId(id)
+            val result = repository.findUserById(id)
+
+            when (result) {
+                is AppResult.Success -> {
+                    _error.value = null
+                    _status.value = LoadApiStatus.DONE
+                    _user.value = result.data
+                }
+                is AppResult.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                    null
+                }
+                is AppResult.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                    null
+                }
+                else -> {
+                    _error.value = FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)
+                    _status.value = LoadApiStatus.ERROR
+                    null
+                }
+            }
+            _refreshStatus.value = false
+        }
+    }
+
+
+    fun getEventByUserId(user: User) {
+
+        coroutineScope.launch {
+
+            _status.value = LoadApiStatus.LOADING
+
+            val result = repository.getEventByUserId(user)
 
             _userEvent.value = when (result) {
                 is AppResult.Success -> {

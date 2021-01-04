@@ -13,8 +13,6 @@ import com.tron.familytree.R
 import com.tron.familytree.data.Event
 import com.tron.familytree.databinding.FragmentEventBinding
 import com.tron.familytree.ext.getVmFactory
-import java.sql.Timestamp
-import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -31,10 +29,6 @@ class EventFragment(val position: Int) : Fragment() {
 
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
-
-//        binding.imageView10.setOnClickListener {
-//            findNavController().navigate(R.id.action_global_eventDialog)
-//        }
 
         val adapter = EventAdapter(EventAdapter.EventOnItemClickListener {
             Log.e("EventCLick", it.toString())
@@ -71,7 +65,6 @@ class EventFragment(val position: Int) : Fragment() {
             }
         })
 
-//        binding.imageView8.setImageResource(R.drawable.sport)
 
 
 
