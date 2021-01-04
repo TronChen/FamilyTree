@@ -127,7 +127,6 @@ class MemberAdapter(private val itemClickListener: UserOnItemClickListener)
             Log.e("father", user.toString())
             if (user.name == "No father"){
                 user.name = "加入父親"
-                binding.textSee.visibility = View.GONE
             }
             binding.executePendingBindings()
         }
@@ -145,7 +144,6 @@ class MemberAdapter(private val itemClickListener: UserOnItemClickListener)
             binding.user = user
             if (user.name == "No mother"){
                 user.name = "加入母親"
-                binding.textSee.visibility = View.GONE
             }
             binding.executePendingBindings()
         }
@@ -163,7 +161,6 @@ class MemberAdapter(private val itemClickListener: UserOnItemClickListener)
             binding.user = user
             if (user.name == "No mate"){
                 user.name = "加入配偶"
-                binding.textSee.visibility = View.GONE
             }
             binding.executePendingBindings()
         }
@@ -181,7 +178,6 @@ class MemberAdapter(private val itemClickListener: UserOnItemClickListener)
             binding.user = user
             if (user.name == "No children"){
                 user.name = "加入孩子"
-                binding.textSee.visibility = View.GONE
             }
             binding.executePendingBindings()
         }
