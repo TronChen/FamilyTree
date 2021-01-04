@@ -263,11 +263,6 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
                 }
             }
         })
-//        if (p0 != null) {
-//
-//            if(p0.tag == UserManager.email.toString())
-//                Toast.makeText(requireContext(), "Hamdy", Toast.LENGTH_SHORT).show()
-//        }
 
         Log.e("MarkerClick", p0.toString())
 
