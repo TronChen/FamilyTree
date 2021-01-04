@@ -204,4 +204,8 @@
             app:argType="com.tron.familytree.check.CheckDialog$MessageType" />
     </dialog>
     <action android:id="@+id/action_global_checkDialog" app:destination="@id/checkDialog" />
+    <dialog
+        android:id="@+id/instructionDialog"
+        android:name="com.tron.familytree.instruction.InstructionDialog"
+        android:label="InstructionDialog" /><action android:id="@+id/action_global_instructionDialog" app:destination="@id/instructionDialog"/>
 </navigation>

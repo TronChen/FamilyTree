@@ -1,28 +1,27 @@
-package com.tron.familytree.login
+package com.tron.familytree.instruction
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import app.appworks.school.publisher.data.source.FamilyTreeRepository
-import com.google.firebase.firestore.auth.User
 import com.tron.familytree.FamilyTreeApplication
 import com.tron.familytree.R
 import com.tron.familytree.data.AppResult
+import com.tron.familytree.data.User
 import com.tron.familytree.network.LoadApiStatus
+import com.tron.familytree.util.UserManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class LogInViewModel(
+class InstructionViewModel(
     private val repository: FamilyTreeRepository
 ) : ViewModel() {
 
-    val userAuth = MutableLiveData<Boolean>()
+    private val _user = MutableLiveData<User>()
 
-    private val _user = MutableLiveData<com.tron.familytree.data.User>()
-
-    val user: LiveData<com.tron.familytree.data.User>
+    val user: LiveData<User>
         get() = _user
 
     // status: The internal MutableLiveData that stores the status of the most recent request
@@ -67,37 +66,7 @@ class LogInViewModel(
 
 
     init {
-        userAuth.value = false
-    }
-
-
-
-    fun addUserToFirebase(user: com.tron.familytree.data.User){
-
-        coroutineScope.launch {
-
-            _status.value = LoadApiStatus.LOADING
-            when (val result = repository.addUserToFirebase(user)) {
-                is AppResult.Success -> {
-                    _error.value = null
-                    _status.value = LoadApiStatus.DONE
-                    userAuth.value = true
-                }
-                is AppResult.Fail -> {
-                    _error.value = result.error
-                    _status.value = LoadApiStatus.ERROR
-                }
-                is AppResult.Error -> {
-                    _error.value = result.exception.toString()
-                    _status.value = LoadApiStatus.ERROR
-                }
-                else -> {
-                    _error.value = FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)
-                    _status.value = LoadApiStatus.ERROR
-                }
-            }
-        }
-
+        findUserById(UserManager.email.toString())
     }
 
     fun findUserById(id : String){

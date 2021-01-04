@@ -21,6 +21,7 @@ import com.tron.familytree.R
 import com.tron.familytree.data.User
 import com.tron.familytree.databinding.FragmentLogInBinding
 import com.tron.familytree.ext.getVmFactory
+import com.tron.familytree.util.UserManager
 
 
 class LogInFragment : Fragment() {
@@ -54,7 +55,15 @@ class LogInFragment : Fragment() {
 
         viewModel.userAuth.observe(viewLifecycleOwner, Observer {
             if (it == true){
+                viewModel.findUserById(UserManager.email.toString())
+            }
+        })
+
+        viewModel.user.observe(viewLifecycleOwner, Observer {
+            if (it.name != "" && it.birth != null && it.gender != null && it.birthLocation != null && it.familyId != null){
                 findNavController().navigate(R.id.action_global_branchFragment)
+            }else{
+                findNavController().navigate(R.id.action_global_instructionDialog)
             }
         })
 
