@@ -13,14 +13,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.tron.familytree.MainActivity
+import com.tron.familytree.NavigationDirections
 import com.tron.familytree.R
+import com.tron.familytree.check.CheckDialog
 import com.tron.familytree.data.Episode
 import com.tron.familytree.databinding.FragmentEditUserBinding
 import com.tron.familytree.ext.getVmFactory
 import java.util.*
-
-
-const val EDIT_USER = 222
 
 class EditUserFragment : Fragment() {
 
@@ -84,20 +83,30 @@ class EditUserFragment : Fragment() {
 
         binding.conComplete.setOnClickListener {
             if (
-                viewModel.userName.value != null &&
-            viewModel.userBirth.value != null &&
-            viewModel.selectedProperty.value!!.id != null &&
-            viewModel.userDeath.value != null &&
-            viewModel.userBirthLocation.value != null &&
+                viewModel.userName.value != null && viewModel.userName.value != "" &&
+            viewModel.userBirth.value != null && viewModel.userBirth.value != "" &&
+            viewModel.selectedProperty.value!!.id != "" &&
+            viewModel.userDeath.value != null && viewModel.userDeath.value != "" &&
+            viewModel.userBirthLocation.value != null && viewModel.userBirthLocation.value != "" &&
             viewModel.userGender != ""
             ){
                 viewModel.updateMember(viewModel.setUser())
+                findNavController().navigate(
+                    NavigationDirections.actionGlobalCheckDialog(
+                        CheckDialog.MessageType.ADDED_SUCCESS))
                 Log.e("Tron", viewModel.setUser().toString())
             }
             if (viewModel.selectedProperty.value?.familyId == null){
                 Toast.makeText(requireContext(),"請選擇家族", Toast.LENGTH_SHORT).show()
             }
-            else{
+            if (
+                viewModel.userName.value == "" ||
+                viewModel.userBirth.value == "" ||
+                viewModel.selectedProperty.value!!.id == "" ||
+                viewModel.userDeath.value == "" ||
+                viewModel.userBirthLocation.value == "" ||
+                viewModel.userGender == ""
+            ){
                 Toast.makeText(requireContext(),"請輸入完整訊息", Toast.LENGTH_SHORT).show()
             }
         }
