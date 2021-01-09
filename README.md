@@ -3,9 +3,9 @@
 
 [<img width="200" height="90" src="https://firebasestorage.googleapis.com/v0/b/familytree-7b7ab.appspot.com/o/google-play-badge.png?alt=media&token=dac075ab-b725-47c5-b6af-71489a327ff2"/>](https://play.google.com/store/apps/details?id=com.tron.familytree)
 
-測試用 Google 帳號：
-(帳號) mytype520@gmail.com
-(密碼) ChiaCai99
+測試用 Google 帳號：<br/>
+(帳號) devtronchen@gmail.com <br/>
+(密碼) TronChen1993
 
 功能介紹
 ---
