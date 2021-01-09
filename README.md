@@ -71,6 +71,6 @@
 
 聯絡資訊
 ---
-Tron Chen
+Tron Chen <br/>
 dtp6284tj0@gmail.com
 
