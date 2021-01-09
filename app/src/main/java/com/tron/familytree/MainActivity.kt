@@ -29,7 +29,6 @@ import com.tron.familytree.util.UserManager
 const val ADD_USER = 111
 const val EDIT_USER = 222
 const val ADD_PHOTO = 333
-const val PLACE_API = 1111
 
 class MainActivity : AppCompatActivity() {
 
@@ -38,8 +37,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     private lateinit var binding: ActivityMainBinding
-    private var actionBarDrawerToggle: ActionBarDrawerToggle? = null
-    private lateinit var appBarConfiguration: AppBarConfiguration
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -140,50 +137,41 @@ class MainActivity : AppCompatActivity() {
                 Activity.RESULT_OK -> {
 
                     val filePath: String = ImagePicker.getFilePath(data) ?: ""
-                    when(requestCode and 0x0000ffff){
-                        ADD_USER ->{
+                    when(requestCode and 0x0000ffff) {
+                        ADD_USER -> {
                             if (data != null) {
                                 if (filePath.isNotEmpty()) {
                                     viewModel.addUserImgPath.value = filePath
                                     Log.e("data", data.toString())
                                     Log.e("reqCode", requestCode.toString())
                                     Log.e("rstCode", resultCode.toString())
-                                    Toast.makeText(this@MainActivity, viewModel.addUserImgPath.value, Toast.LENGTH_SHORT)
+                                    Toast.makeText(
+                                        this@MainActivity,
+                                        viewModel.addUserImgPath.value,
+                                        Toast.LENGTH_SHORT
+                                    )
                                         .show()
                                 }
                             }
                         }
-                        EDIT_USER ->{
+                        EDIT_USER -> {
                             if (data != null) {
                                 if (filePath.isNotEmpty()) {
                                     viewModel.editUserImgPath.value = filePath
                                     Log.e("data", data.toString())
                                     Log.e("reqCode", requestCode.toString())
                                     Log.e("rstCode", resultCode.toString())
-                                    Toast.makeText(this@MainActivity, viewModel.addUserImgPath.value, Toast.LENGTH_SHORT)
+                                    Toast.makeText(
+                                        this@MainActivity,
+                                        viewModel.addUserImgPath.value,
+                                        Toast.LENGTH_SHORT
+                                    )
                                         .show()
                                 }
                             }
 
                         }
-//                        ADD_PHOTO ->{
-//                            if (data != null) {
-//                                if (filePath.isNotEmpty()) {
-//                                    viewModel.addPhotoPath.value = filePath
-//                                    Log.e("data", data.toString())
-//                                    Log.e("reqCode", requestCode.toString())
-//                                    Log.e("rstCode", resultCode.toString())
-//                                    Toast.makeText(this@MainActivity, viewModel.addUserImgPath.value, Toast.LENGTH_SHORT)
-//                                        .show()
-//                                }
-//                            }
-//
-//                        }
                     }
-//                     else {
-//                        Toast.makeText(this@MainActivity, "load_img_fail", Toast.LENGTH_SHORT)
-//                            .show()
-//                    }
                 }
                 ImagePicker.RESULT_ERROR -> Toast.makeText(
                     this,

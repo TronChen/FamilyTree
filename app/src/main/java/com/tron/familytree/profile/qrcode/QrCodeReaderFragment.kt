@@ -8,24 +8,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.zxing.Result
 import com.tron.familytree.R
-import com.tron.familytree.branch.add_people_dialog.AddPeopleDialogArgs
 import com.tron.familytree.databinding.FragmentQrCodeReaderBinding
 import com.tron.familytree.ext.getVmFactory
-import com.tron.familytree.profile.member.MemberViewModel
 import me.dm7.barcodescanner.zxing.ZXingScannerView
-import java.util.jar.Manifest
 
 
 class QrCodeReaderFragment : Fragment(), ZXingScannerView.ResultHandler {
 
     lateinit var scannerView: ZXingScannerView
+
+    private var cameraPermission = false
+    var CAMERA_PERMISSION_ID = 1010
 
     private val viewModel by viewModels<QrCodeReaderViewModel> { getVmFactory(
         QrCodeReaderFragmentArgs.fromBundle(
@@ -44,6 +44,11 @@ class QrCodeReaderFragment : Fragment(), ZXingScannerView.ResultHandler {
         binding.viewModel = viewModel
 
         scannerView =  binding.zxScannerView
+
+        getCameraPermission()
+        if (!cameraPermission){
+            binding.conPermission.visibility = View.VISIBLE
+        }
 
         viewModel.scanResult.observe(viewLifecycleOwner, Observer {
             viewModel.findUserById(it)
@@ -119,6 +124,14 @@ class QrCodeReaderFragment : Fragment(), ZXingScannerView.ResultHandler {
     }
 
 
+    private fun getCameraPermission() {
+        if (ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            cameraPermission = false
+            ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.CAMERA), CAMERA_PERMISSION_ID)
+        } else {
+            cameraPermission = true
+        }
+    }
 
 //    private fun isCameraPermissionGranted(): Boolean {
 //        val selfPermission =
@@ -133,7 +146,7 @@ class QrCodeReaderFragment : Fragment(), ZXingScannerView.ResultHandler {
 //    ) {
 //        if (requestCode == REQUEST_CAMERA_PERMISSION) {
 //            if (isCameraPermissionGranted()) {
-//                textureView.post { startCamera() }
+////                textureView.post { startCamera() }
 //            } else {
 //                Toast.makeText(requireContext(), "Camera permission is required.", Toast.LENGTH_SHORT).show()
 ////                finish()

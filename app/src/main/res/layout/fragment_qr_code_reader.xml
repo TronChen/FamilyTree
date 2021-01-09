@@ -16,6 +16,37 @@
         tools:context=".profile.qrcode.QrCodeReaderFragment">
 
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/conPermission"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            app:layout_constraintBottom_toBottomOf="@+id/zxScannerView"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/imageView24"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/camera" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/noto_sans"
+                android:text="沒有相機權限"
+                android:textColor="@color/grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView24" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <me.dm7.barcodescanner.zxing.ZXingScannerView
             android:id="@+id/zxScannerView"
             android:layout_width="match_parent"
