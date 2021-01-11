@@ -82,10 +82,13 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
         })
 
         viewModel._userLocation.observe(viewLifecycleOwner, androidx.lifecycle.Observer { userLocationList ->
-            val familyMember = userLocationList.filter { it.familyId == viewModel.user.value?.familyId }
+            val familyMember = userLocationList.filter { viewModel.user.value?.familyId == it.familyId }
+
             myMap?.let { map ->
                 viewModel.drawUsersLocation(map,familyMember)
             }
+            Log.e("familyMemberMap",familyMember.toString())
+            Log.e("familyMemberMap",userLocationList.toString())
         })
 
         viewModel.userTag.observe(viewLifecycleOwner, Observer {

@@ -117,4 +117,6 @@ interface FamilyTreeRepository {
 
     suspend fun updateMapFamilyId(user: User): AppResult<Boolean>
 
+    suspend fun getEpisodeByFamilyId(familyId: String): AppResult<List<Episode>>
+
 }

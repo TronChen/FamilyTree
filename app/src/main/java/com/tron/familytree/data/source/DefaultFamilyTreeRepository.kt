@@ -225,4 +225,8 @@ class DefaultFamilyTreeRepository(private val remoteDataSource: FamilyTreeDataSo
         return remoteDataSource.updateMapFamilyId(user)
     }
 
+    override suspend fun getEpisodeByFamilyId(familyId: String): AppResult<List<Episode>>{
+        return remoteDataSource.getEpisodeByFamilyId(familyId)
+    }
+
 }

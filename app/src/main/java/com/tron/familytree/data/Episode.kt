@@ -8,6 +8,7 @@ import kotlinx.android.parcel.Parcelize
 data class Episode(
     var user: String = "",
     var userId: String = UserManager.email.toString(),
+    var familyId: String? = null,
     var id: String? = null,
     var content: String = "",
     var title: String = "",

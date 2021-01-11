@@ -1544,6 +1544,34 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
             }
     }
 
+    override suspend fun getEpisodeByFamilyId(familyId: String): AppResult<List<Episode>> = suspendCoroutine { continuation ->
+
+        FirebaseFirestore.getInstance()
+            .collection(EPISODE)
+            .whereEqualTo("familyId", familyId)
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val list = mutableListOf<Episode>()
+                    for (document in task.result!!) {
+                        Log.d("Tron",document.id + " => " + document.data)
+
+                        val episode = document.toObject(Episode::class.java)
+                        list.add(episode)
+                    }
+                    continuation.resume(AppResult.Success(list))
+                } else {
+                    task.exception?.let {
+                        Log.w("Tron","[${this::class.simpleName}] Error getting documents. ${it.message}")
+                        continuation.resume(AppResult.Error(it))
+                        return@addOnCompleteListener
+                    }
+                    continuation.resume(AppResult.Fail(FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)))
+                }
+            }
+
+    }
+
     override suspend fun getEpisode(user: User): AppResult<List<Episode>> = suspendCoroutine { continuation ->
 
             FirebaseFirestore.getInstance()
