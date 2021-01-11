@@ -20,6 +20,11 @@ class LogInViewModel(
 
     val userAuth = MutableLiveData<Boolean>()
 
+    private val _user = MutableLiveData<com.tron.familytree.data.User>()
+
+    val user: LiveData<com.tron.familytree.data.User>
+        get() = _user
+
     // status: The internal MutableLiveData that stores the status of the most recent request
     private val _status = MutableLiveData<LoadApiStatus>()
 
@@ -93,5 +98,31 @@ class LogInViewModel(
             }
         }
 
+    }
+
+    fun findUserById(id : String){
+        coroutineScope.launch {
+
+            _status.value = LoadApiStatus.LOADING
+            when (val result = repository.findUserById(id)) {
+                is AppResult.Success -> {
+                    _error.value = null
+                    _status.value = LoadApiStatus.DONE
+                    _user.value = result.data
+                }
+                is AppResult.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is AppResult.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                else -> {
+                    _error.value = FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)
+                    _status.value = LoadApiStatus.ERROR
+                }
+            }
+        }
     }
 }

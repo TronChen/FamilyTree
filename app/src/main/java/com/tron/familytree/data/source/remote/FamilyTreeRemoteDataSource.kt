@@ -6,10 +6,14 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
 import app.appworks.school.publisher.data.source.FamilyTreeDataSource
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageMetadata
 import com.tron.familytree.FamilyTreeApplication
 import com.tron.familytree.R
+import com.tron.familytree.branch.BranchViewModel
+import com.tron.familytree.branch.TreeItem
 import com.tron.familytree.data.*
 import com.tron.familytree.data.Map
 import com.tron.familytree.message.chatroom.MessageItem
@@ -21,8 +25,6 @@ import kotlin.coroutines.suspendCoroutine
 
 object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
 
-    private const val PATH_ARTICLES = "articles"
-    private const val KEY_CREATED_TIME = "createdTime"
     private const val PATH_USER = "User"
     private const val EPISODE = "Episode"
     private const val CHATROOM = "Chatroom"
@@ -32,6 +34,571 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
     private const val ATTENDER = "Attender"
     private const val ALBUM = "Album"
     private const val MAP = "Map"
+
+
+    override suspend fun searchBranchUser(id: String,viewModel: BranchViewModel): AppResult<List<TreeItem>> = suspendCoroutine{ continuation ->
+        val db = Firebase.firestore
+
+        val user = MutableLiveData<User>()
+
+        val mateId = MutableLiveData<User>()
+        val fatherId = MutableLiveData<User>()
+        val motherId = MutableLiveData<User>()
+        val mateFatherId = MutableLiveData<User>()
+        val mateMotherId = MutableLiveData<User>()
+
+        val TreeList = MutableLiveData<List<TreeItem>>()
+
+        val children = mutableListOf<TreeItem>()
+        val parents = mutableListOf<TreeItem>()
+        val meAndMate = mutableListOf<TreeItem>()
+        val onlyMate = mutableListOf<TreeItem>()
+
+        val treeFinalList = mutableListOf<TreeItem>()
+
+        fun getBranchView() {
+            viewModel.children.value = children.size
+            //Parent
+            for ((index, parent) in parents.withIndex()) {
+
+                if (parents.size == 2){
+//                    (parent as TreeItem.Parent).user.spanSize = 1
+                    treeFinalList.add(parent)
+                }
+
+                if (parents.size == 4) {
+
+                    if (children.size < 4 || children.size == 4) {
+//                        (parent as TreeItem.Parent).user.spanSize = 1
+                        if (index == 2) {
+                            treeFinalList.add(
+                                TreeItem.Empty(-1)
+                            )
+                        }
+                        treeFinalList.add(parent)
+                    }
+
+                    if (children.size > 4 ) {
+                        when(index){
+                            0,1 -> (parent as TreeItem.Parent).user.spanSize = (children.size+1) / 2 / 2
+                            2 -> {
+                                if (mateId.value?.fatherId != null) {
+                                    (parent as TreeItem.Parent).user.spanSize =
+                                        (children.size+1) / 2 / 2
+                                }else{
+                                    (parent as TreeItem.ParentAdd).user.spanSize =
+                                        (children.size+1) / 2 / 2
+                                }
+                            }
+                            3 ->{
+                                if (mateId.value?.motherId != null) {
+                                    (parent as TreeItem.Parent).user.spanSize =
+                                        (children.size+1) / 2 / 2
+                                }else{
+                                    (parent as TreeItem.ParentAdd).user.spanSize =
+                                        (children.size+1) / 2 / 2
+                                }
+                            }
+                        }
+
+                        if ((children.size+1) % 2 == 1 && parents.size > 2) {
+                            if (parents.size % (index + 1) == 1) {
+                                treeFinalList.add(
+                                    TreeItem.Empty(-1)
+                                )
+                            }
+                        }
+
+                        if (index % 2 == 1) {
+                            if ((children.size+1) % 4 == 2) {
+                                treeFinalList.add(
+                                    TreeItem.EmptyLineBot(-1)
+                                )
+                            }
+                            if ((children.size+1) % 4 == 3) {
+                                treeFinalList.add(
+                                    TreeItem.EmptyLineBot(-1)
+                                )
+                            }
+                        }
+
+                        treeFinalList.add(parent)
+
+                    }
+                }
+            }
+            if (parents.size == 2){
+                treeFinalList.add(TreeItem.Empty(-1))
+                treeFinalList.add(TreeItem.Empty(-1))
+            }
+
+
+            //MeAndMate
+            // 有配偶
+            if (mateId.value != null) {
+                for ((index, self) in meAndMate.withIndex()) {
+                    if (children.size < 4 || children.size == 4) {
+                        (self as TreeItem.Mate).user.spanSize = 2
+                        if (index == 1) {
+                            treeFinalList.add(
+                                TreeItem.Empty(-1)
+                            )
+                        }
+                        treeFinalList.add(self)
+                    }
+
+                    if (children.size > 4 ) {
+                        (self as TreeItem.Mate).user.spanSize = (children.size+1) / 2
+
+                        if ((children.size+1) % 2 == 1 && meAndMate.size > 2) {
+                            if (children.size % (index + 1) == 1) {
+                                treeFinalList.add(
+                                    TreeItem.Empty(-1)
+                                )
+                            }
+                        }
+                        if ((children.size+1) % 2 == 1 && meAndMate.size == 2) {
+                            if (index == 1) {
+                                treeFinalList.add(
+                                    TreeItem.Empty(-1)
+                                )
+                            }
+                        }
+
+                        treeFinalList.add(self)
+                    }
+                }
+            }
+            //沒配偶
+            if (mateId.value == null){
+                for (index in meAndMate){
+                    (index as TreeItem.Mate).user.spanSize = 2
+                    treeFinalList.add(index)
+                }
+                treeFinalList.add(
+                    TreeItem.Empty(-1)
+                )
+                for (index in onlyMate){
+                    (index as TreeItem.MateAdd).user.spanSize = 2
+                    treeFinalList.add(index)
+                }
+                treeFinalList.add(
+                    TreeItem.Empty(-1)
+                )
+                treeFinalList.add(
+                    TreeItem.EmptyLine(-1)
+                )
+                treeFinalList.add(
+                    TreeItem.EmptyLine(-1)
+                )
+                treeFinalList.add(
+                    TreeItem.EmptyLine(-1)
+                )
+                treeFinalList.add(
+                    TreeItem.Empty(-1)
+                )
+            }
+
+
+            //Children
+            Log.e("children",children.size.toString())
+            if (user.value?.mateId != null) {
+                if (children.isEmpty()) {
+                    treeFinalList.add(
+                        TreeItem.Empty(-1)
+                    )
+                    treeFinalList.add(
+                        TreeItem.EmptyLine(-1)
+                    )
+                    if (user.value?.gender == "male") {
+                        treeFinalList.add(
+                            TreeItem.ChildrenAdd(
+                                User(
+                                    name = "No child",
+                                    fatherId = user.value?.id,
+                                    motherId = mateId.value?.id,
+                                    gender = user.value?.gender
+                                ), 1
+                            )
+                        )
+                    }
+                    if (user.value?.gender == "female") {
+                        treeFinalList.add(
+                            TreeItem.ChildrenAdd(
+                                User(
+                                    name = "No child",
+                                    motherId = user.value?.id,
+                                    fatherId = mateId.value?.id,
+                                    gender = user.value?.gender
+                                ), 1
+                            )
+                        )
+                    }
+                    treeFinalList.add(
+                        TreeItem.EmptyLine(-1)
+                    )
+                }
+            }
+            for ((index, child) in children.withIndex()) {
+
+                if (children.size == 1) {
+                    when (index) {
+                        0 -> treeFinalList.add(
+                            TreeItem.Empty(-1)
+                        )
+                    }
+                    treeFinalList.add(child)
+                    treeFinalList.add(
+                        TreeItem.EmptyLine(-1)
+                    )
+                    if (user.value?.gender == "male"){
+                        treeFinalList.add(
+                            TreeItem.ChildrenAdd(User(name = "No child", fatherId = user.value?.id , motherId = mateId.value?.id , gender = user.value?.gender), 1)
+                        )
+                    }
+                    if (user.value?.gender == "female"){
+                        treeFinalList.add(
+                            TreeItem.ChildrenAdd(User(name = "No child", motherId = user.value?.id , fatherId = mateId.value?.id , gender = user.value?.gender), 1)
+                        )
+                    }
+                }
+            }
+            if (children.size == 2){
+                treeFinalList.add(TreeItem.Empty(-1))
+                for (child in children){
+                    treeFinalList.add(child)
+                }
+                if (user.value?.gender == "male"){
+                    treeFinalList.add(
+                        TreeItem.ChildrenAdd(User(name = "No child", fatherId = user.value?.id , motherId = mateId.value?.id , gender = user.value?.gender), 1)
+                    )
+                }
+                if (user.value?.gender == "female"){
+                    treeFinalList.add(
+                        TreeItem.ChildrenAdd(User(name = "No child", motherId = user.value?.id , fatherId = mateId.value?.id , gender = user.value?.gender), 1)
+                    )
+                }
+
+            }
+
+            if (children.size == 3) {
+                for (child in children) {
+                    treeFinalList.add(child)
+                }
+                if (user.value?.gender == "male"){
+                    treeFinalList.add(
+                        TreeItem.ChildrenAdd(User(name = "No child", fatherId = user.value?.id , motherId = mateId.value?.id , gender = user.value?.gender), 3)
+                    )
+                }
+                if (user.value?.gender == "female"){
+                    treeFinalList.add(
+                        TreeItem.ChildrenAdd(User(name = "No child", motherId = user.value?.id , fatherId = mateId.value?.id , gender = user.value?.gender), 3)
+                    )
+                }
+            }
+
+            if (children.size > 4 || children.size == 4) {
+                for (child in children) {
+                    treeFinalList.add(child)
+                }
+                if (user.value?.gender == "male"){
+                    treeFinalList.add(
+                        TreeItem.ChildrenAdd(User(name = "No child", fatherId = user.value?.id , motherId = mateId.value?.id , gender = user.value?.gender), 10000)
+                    )
+                }
+                if (user.value?.gender == "female"){
+                    treeFinalList.add(
+                        TreeItem.ChildrenAdd(User(name = "No child", motherId = user.value?.id , fatherId = mateId.value?.id , gender = user.value?.gender), 10000)
+                    )
+                }
+            }
+
+            Log.e("treeFinalList", treeFinalList.toString())
+            TreeList.value = treeFinalList
+
+            continuation.resume(AppResult.Success(TreeList.value!!))
+        }
+
+
+        fun getUserChildren(){
+                if (user.value?.gender == "male") {
+                    db.collection("User")
+                        .whereEqualTo("familyId",user.value?.familyId)
+                        .whereEqualTo("fatherId", user.value?.id)
+                        .get()
+                        .addOnSuccessListener { result ->
+                            for ((index, document) in result.withIndex()) {
+                                val child = document.toObject(User::class.java)
+                                if (result.size() > 2) {
+                                    children.add(
+                                        TreeItem.Children(child, index)
+                                    )
+                                } else {
+                                    children.add(
+                                        TreeItem.ChildrenMid(child, index)
+                                    )
+                                }
+                            }
+                            if (result.isEmpty) {
+//                                children.add(
+//                                    TreeItem.ChildrenAdd(
+//                                        User(
+//                                            name = "No child",
+//                                            fatherId = user.value?.id, motherId = mateId.value?.id , gender = user.value?.gender
+//                                        ), 0
+//                                    )
+//                                )
+                            }
+                            Log.e("treeChildrenList", children.toString())
+                        }
+                }
+
+                if (user.value?.gender == "female") {
+                    db.collection("User")
+                        .whereEqualTo("familyId",user.value?.familyId)
+                        .whereEqualTo("motherId", user.value?.id)
+                        .get()
+                        .addOnSuccessListener { result ->
+                            for ((index, document) in result.withIndex()) {
+                                val child = document.toObject(User::class.java)
+                                if (result.size() > 2) {
+                                    children.add(
+                                        TreeItem.Children(child, index)
+                                    )
+                                } else {
+                                    children.add(
+                                        TreeItem.ChildrenMid(child, index)
+                                    )
+                                }
+                            }
+                            if (result.isEmpty) {
+//                                children.add(
+//                                    TreeItem.ChildrenAdd(
+//                                        User(
+//                                            name = "No child",
+//                                            motherId = user.value?.id, fatherId = mateId.value?.id , gender = user.value?.gender
+//                                        ), 0
+//                                    )
+//                                )
+                            }
+                            Log.e("treeChildrenList", children.toString())
+                        }
+                }
+            Log.e("treeChildrenList", children.toString())
+        }
+
+        fun getMateMother(){
+                db.collection("User")
+                    .whereEqualTo("familyId",user.value?.familyId)
+                    .whereEqualTo("id", mateId.value?.motherId)
+                    .whereEqualTo("gender", "female")
+                    .get()
+                    .addOnSuccessListener { result ->
+                        for (document in result) {
+
+                            mateMotherId.value = document.toObject(User::class.java)
+                            parents.add(
+                                TreeItem.Parent(mateMotherId.value!!, false, 3)
+                            )
+                            Log.e("MateMother", parents.toString())
+                            Log.e("MateMother", mateMotherId.value.toString())
+                            getBranchView()
+                        }
+                        if (result.isEmpty) {
+                            if (mateId.value != null) {
+                                parents.add(
+                                    TreeItem.ParentAdd(
+                                        User(
+                                            name = "No mateMother",
+                                            motherId = mateId.value?.id
+                                        ), false, 5
+                                    )
+                                )
+                            }
+                            getBranchView()
+                        }
+                    }
+        }
+
+        fun getMateFather(){
+            mateId.value?.let { Log.e("MateID", it.toString()) }
+            db.collection("User")
+                .whereEqualTo("familyId",user.value?.familyId)
+                .whereEqualTo("id", mateId.value?.fatherId)
+                .whereEqualTo("gender", "male")
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+
+                        mateFatherId.value = document.toObject(User::class.java)
+                        parents.add(
+                            TreeItem.Parent(mateFatherId.value!!, false, 2)
+                        )
+                        getMateMother()
+
+                    }
+                    if (result.isEmpty) {
+                        if (mateId.value != null) {
+                            parents.add(
+                                TreeItem.ParentAdd(
+                                    User(
+                                        name = "No mateFather",
+                                        fatherId = mateId.value?.id
+                                    ), false, 4
+                                )
+                            )
+                        }
+                        getMateMother()
+                    }
+                }
+        }
+
+        fun getUserMother(){
+            db.collection("User")
+                .whereEqualTo("familyId",user.value?.familyId)
+                .whereEqualTo("id", user.value?.motherId)
+                .whereEqualTo("gender", "female")
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        //有媽媽 有配偶
+                        if (user.value?.mateId != null) {
+                            motherId.value = document.toObject(User::class.java)
+                            parents.add(
+                                TreeItem.Parent(motherId.value!!, true, 1)
+                            )
+                            getMateFather()
+                            Log.e("Mother", parents.toString())
+                            //有媽媽 沒配偶
+                        } else {
+                            motherId.value = document.toObject(User::class.java)
+                            parents.add(
+                                TreeItem.Parent(motherId.value!!, true, 1)
+                            )
+                            onlyMate.add(
+                                TreeItem.MateAdd(
+                                    User(name = "No mate", mateId = user.value?.id),
+                                    false
+                                )
+                            )
+                            getBranchView()
+                        }
+                    }
+                    //沒媽媽 有配偶
+                    if (result.isEmpty && user.value?.mateId != null) {
+                        parents.add(
+                            TreeItem.ParentAdd(
+                                User(
+                                    name = "No mother",
+                                    motherId = user.value?.id
+                                ), true, 1
+                            )
+                        )
+                        getMateFather()
+                    }
+                    //有媽媽 沒配偶
+                    if (result.isEmpty && user.value?.mateId == null) {
+                        parents.add(
+                            TreeItem.ParentAdd(
+                                User(
+                                    name = "No mother",
+                                    motherId = user.value?.id
+                                ), true, 1
+                            )
+                        )
+
+                        onlyMate.add(
+                            TreeItem.MateAdd(
+                                User(name = "No mate", mateId = user.value?.id),
+                                false
+                            )
+                        )
+                        getBranchView()
+                    }
+                }
+        }
+
+        fun getUserFather(){
+            db.collection("User")
+                .whereEqualTo("familyId",user.value?.familyId)
+                .whereEqualTo("id", user.value?.fatherId)
+                .whereEqualTo("gender", "male")
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        fatherId.value = document.toObject(User::class.java)
+                        parents.add(
+                            TreeItem.Parent(fatherId.value!!, true, 0)
+                        )
+                        Log.e("Father", parents.toString())
+                        getUserMother()
+
+                    }
+                    if (result.isEmpty) {
+                        parents.add(
+                            TreeItem.ParentAdd(
+                                User(
+                                    name = "No father",
+                                    fatherId = user.value?.id
+                                ), true, 0
+                            )
+                        )
+                        getUserMother()
+                    }
+                }
+        }
+
+        fun getUserMate(){
+            Log.e("user.value?.mateId", user.value?.mateId.toString())
+            db.collection("User")
+                .whereEqualTo("familyId",user.value?.familyId)
+                .whereEqualTo("id", user.value?.mateId)
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        mateId.value = document.toObject(User::class.java)
+                        meAndMate.add(
+                            TreeItem.Mate((mateId.value!!), false)
+                        )
+                        Log.e("MMMMMMate", meAndMate.toString())
+                        getUserChildren()
+                    }
+                }
+                .addOnFailureListener {
+                    Log.e("MateFail", it.toString())
+                }
+        }
+
+        fun getUser(id: String) {
+            db.collection("User")
+                .whereEqualTo("id", id)
+                .get()
+                .addOnSuccessListener {
+                    for (index in it) {
+                        user.value = index.toObject(User::class.java)
+                        if (user.value!!.mateId != null) {
+                            getUserFather()
+                            getUserMate()
+                            meAndMate.add(
+                                TreeItem.Mate(user.value!!, true)
+                            )
+                            Log.e("UUUUUser",user.value!!.toString())
+                        } else {
+                            getUserFather()
+                            meAndMate.add(
+                                TreeItem.Mate(user.value!!, true)
+                            )
+                        }
+                    }
+                }
+                .addOnFailureListener {
+                    continuation.resume(AppResult.Error(it))
+                }
+        }
+
+        getUser(id)
+
+    }
 
     override suspend fun updateFamily(family : Family, user: User): AppResult<Boolean> = suspendCoroutine { continuation ->
         val familyCollection = FirebaseFirestore.getInstance().collection(FAMILY)
@@ -509,11 +1076,12 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
         return liveData
     }
 
-    override suspend fun getEventByUserId(id: String): AppResult<List<Event>> = suspendCoroutine { continuation ->
+    override suspend fun getEventByUserId(user: User): AppResult<List<Event>> = suspendCoroutine { continuation ->
         FirebaseFirestore.getInstance()
             .collection(PATH_USER)
-            .document(id)
+            .document(user.id)
             .collection(EVENT)
+            .whereEqualTo("familyId",user.familyId)
             .orderBy("eventTime",Query.Direction.DESCENDING)
             .get()
             .addOnCompleteListener { task ->
@@ -536,6 +1104,59 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
                     continuation.resume(AppResult.Fail(FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)))
                 }
             }
+    }
+
+    override suspend fun getEventByFamilyId(user: User): AppResult<List<Event>> = suspendCoroutine { continuation ->
+        FirebaseFirestore.getInstance()
+            .collection(EVENT)
+            .whereEqualTo("publisherFamilyId",user.familyId)
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val list = mutableListOf<Event>()
+                    for (document in task.result!!) {
+                        Log.d("Tron",document.id + " => " + document.data)
+
+                        val event = document.toObject(Event::class.java)
+                        list.add(event)
+                    }
+                    continuation.resume(AppResult.Success(list))
+                } else {
+                    task.exception?.let {
+
+                        Log.w("Tron","[${this::class.simpleName}] Error getting documents. ${it.message}")
+                        continuation.resume(AppResult.Error(it))
+                        return@addOnCompleteListener
+                    }
+                    continuation.resume(AppResult.Fail(FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)))
+                }
+            }
+    }
+
+    override fun getLiveEventByFamilyId(user: User): MutableLiveData<List<Event>> {
+        val liveData = MutableLiveData<List<Event>>()
+
+        FirebaseFirestore.getInstance()
+            .collection(EVENT)
+            .whereEqualTo("publisherFamilyId", user.familyId)
+            .addSnapshotListener { snapshot, exception ->
+
+                Log.i("Tron","addSnapshotListener detect")
+
+                exception?.let {
+                    Log.w("Tron","[${this::class.simpleName}] Error getting documents. ${it.message}")
+                }
+
+                val list = mutableListOf<Event>()
+                for (document in snapshot!!) {
+                    Log.d("Tron",document.id + " => " + document.data)
+
+                    val event = document.toObject(Event::class.java)
+                    list.add(event)
+                }
+                liveData.value = list
+            }
+        return liveData
     }
 
 
@@ -1044,10 +1665,44 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
             }
     }
 
-    override suspend fun findUser(name: String): AppResult<User> = suspendCoroutine { continuation ->
+    override suspend fun findFamilyById(id: String): AppResult<Family> = suspendCoroutine { continuation ->
+        val userCollection = FirebaseFirestore.getInstance().collection(FAMILY)
+        userCollection
+            .document(id)
+            .get()
+            .addOnSuccessListener {
+                if (it != null){
+                        val user = it.toObject(Family::class.java)
+                        continuation.resume(AppResult.Success(user!!))
+                }
+            }
+            .addOnFailureListener {
+                continuation.resume(AppResult.Error(it))
+            }
+    }
+
+    override suspend fun findUserByName(name: String): AppResult<User> = suspendCoroutine { continuation ->
         val userCollection = FirebaseFirestore.getInstance().collection(PATH_USER)
         userCollection
             .whereEqualTo("name", name)
+            .get()
+            .addOnSuccessListener {
+                if (it != null){
+                    for (index in it) {
+                        val user = index.toObject(User::class.java)
+                        continuation.resume(AppResult.Success(user))
+                    }
+                }
+            }
+            .addOnFailureListener {
+                continuation.resume(AppResult.Error(it))
+            }
+    }
+
+    override suspend fun findUser(id: String): AppResult<User> = suspendCoroutine { continuation ->
+        val userCollection = FirebaseFirestore.getInstance().collection(PATH_USER)
+        userCollection
+            .whereEqualTo("id", id)
             .get()
             .addOnSuccessListener {
                 if (it != null){
@@ -1124,15 +1779,49 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
     }
 
 
-    override suspend fun addMember(user: User): AppResult<Boolean> = suspendCoroutine { continuation ->
-        val User = FirebaseFirestore.getInstance().collection(PATH_USER)
-        val document = User.document()
+    override suspend fun addMemberReturnUser(user: User): AppResult<User> = suspendCoroutine { continuation ->
+
+        val userPath = FirebaseFirestore.getInstance().collection(PATH_USER)
+        val document = userPath.document()
         user.id = document.id
+
+        fun getUser(){
+            userPath.document(user.id)
+                .get()
+                .addOnSuccessListener {result ->
+                    val newMember : User
+                    if (result != null) {
+                        newMember = result.toObject(User::class.java)!!
+                        continuation.resume(AppResult.Success(newMember))
+                    }
+                }
+        }
+
         document
             .set(user)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    getUser()
+                } else {
+                    task.exception?.let {
+                        continuation.resume(AppResult.Error(it))
+                        return@addOnCompleteListener
+                    }
+                    continuation.resume(AppResult.Fail(FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)))
+                }
+            }
+    }
 
+    override suspend fun addMember(user: User): AppResult<Boolean> = suspendCoroutine { continuation ->
+
+        val userPath = FirebaseFirestore.getInstance().collection(PATH_USER)
+        val document = userPath.document()
+        user.id = document.id
+
+        document
+            .set(user)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
                     continuation.resume(AppResult.Success(true))
                 } else {
                     task.exception?.let {
@@ -1215,206 +1904,111 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
 
     override suspend fun updateMemberMateId(user: User, newMember : User): AppResult<Boolean> = suspendCoroutine { continuation ->
         val User = FirebaseFirestore.getInstance().collection(PATH_USER)
-        var path: String = ""
 
-        User.whereEqualTo("name",user.mateId)
-            .get()
+        User.document(user.id)
+            .update("mateId",newMember.id)
             .addOnSuccessListener {
-                for (index in it) {
-                    path = index.id
-                    Log.e("FindMate", index.id)
-                    //找到原先user
-                    val document = User.document(path)
-
-                    document
-                        .update("mateId",newMember.name)
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                continuation.resume(AppResult.Success(true))
-                            } else {
-                                task.exception?.let {
-                                    continuation.resume(AppResult.Error(it))
-                                    return@addOnCompleteListener
-                                }
-                                continuation.resume(AppResult.Fail(FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)))
-                            }
-                        }
-                }
+                continuation.resume(AppResult.Success(true))
+            }
+            .addOnFailureListener {
+                continuation.resume(AppResult.Error(it))
             }
     }
 
 
+
     override suspend fun updateMemberFatherId(user: User, newMember : User): AppResult<Boolean> = suspendCoroutine { continuation ->
-        val collectionReference = FirebaseFirestore.getInstance().collection(PATH_USER)
-        var path: String = ""
-        val originUser = MutableLiveData<User>()
-        collectionReference.whereEqualTo("name",user.fatherId)
-            .get()
-            .addOnSuccessListener {
-                for (index in it) {
-                    //找到原先user
-                    //確認原先的user有沒有媽媽
-                    originUser.value = index.toObject(User::class.java)
+        val User = FirebaseFirestore.getInstance().collection(PATH_USER)
+        val userFather = MutableLiveData<User>()
 
-                    path = index.id
-                    Log.e("FindFather", index.id)
-                    val document = collectionReference.document(path)
-                        //update找到的user
-                    document
-                        .update("fatherId",newMember.name)
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                continuation.resume(AppResult.Success(true))
-                            } else {
-                                task.exception?.let {
-                                    continuation.resume(AppResult.Error(it))
-                                    return@addOnCompleteListener
-                                }
-                                continuation.resume(AppResult.Fail(FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)))
-                            }
+        fun updateFather(){
+            User.document(user.id)
+                .update("fatherId",newMember.id)
+                .addOnSuccessListener {
+
+                }
+        }
+
+        fun updateFatherMate(){
+            User.document(newMember.id)
+                .update("mateId",user.motherId)
+                .addOnSuccessListener {
+
+                }
+        }
+
+        fun updateMotherMate(){
+            User.document(user.motherId!!)
+                .update("mateId",newMember.id)
+                .addOnSuccessListener {
+                    continuation.resume(AppResult.Success(true))
+                }
+        }
+
+        fun findFatherById(){
+            User.whereEqualTo("id",newMember.id)
+                .get()
+                .addOnSuccessListener {
+                    for (result in it){
+                        userFather.value = result.toObject(com.tron.familytree.data.User::class.java)
+                        if (user.motherId != null){
+                            updateFatherMate()
+                            updateMotherMate()
                         }
-                    if (originUser.value!!.motherId != null){
-                        collectionReference.whereEqualTo("name",newMember.name)
-                            .get().addOnSuccessListener {task ->
-                                for (fatherIndex in task){
-                                    val fatherPath = fatherIndex.id
-                                     collectionReference.document(fatherPath)
-                                         .update("mateId",originUser.value!!.motherId)
-                                         .addOnSuccessListener {
-//                                             Log.e("updateComplete", it.toString())
-                                         }
 
-                                }
-                            }
-                        collectionReference.whereEqualTo("name",originUser.value!!.motherId)
-                            .get().addOnSuccessListener {task ->
-                                for (fatherIndex in task){
-                                    val fatherPath = fatherIndex.id
-                                    collectionReference.document(fatherPath)
-                                        .update("mateId",originUser.value!!.motherId)
-                                        .addOnSuccessListener {
-//                                            Log.e("updateComplete", it.toString())
-                                        }
-
-                                }
-                            }
                     }
+                }
+        }
 
-                     }
-            }
+
+        updateFather()
+        findFatherById()
     }
 
     override suspend fun updateMemberMotherId(user: User, newMember : User): AppResult<Boolean> = suspendCoroutine { continuation ->
         val User = FirebaseFirestore.getInstance().collection(PATH_USER)
-        var path: String = ""
-        val originUser = MutableLiveData<User>()
-        User.whereEqualTo("name",user.motherId)
-            .get()
-            .addOnSuccessListener {
-                for (index in it) {
-                    path = index.id
-//                    Log.e("FindMother", index.id)
-                    originUser.value = index.toObject(com.tron.familytree.data.User::class.java)
-                    //找到原先user
-                    val document = User.document(path)
+        val userMother = MutableLiveData<User>()
 
-                    document
-                        .update("motherId",newMember.name)
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                continuation.resume(AppResult.Success(true))
-                            } else {
-                                task.exception?.let {
-                                    continuation.resume(AppResult.Error(it))
-                                    return@addOnCompleteListener
-                                }
-                                continuation.resume(AppResult.Fail(FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)))
-                            }
+        fun updateMother(){
+            User.document(user.id)
+                .update("motherId",newMember.id)
+                .addOnSuccessListener {
+
+                }
+        }
+
+        fun updateMotherMate(){
+            User.document(newMember.id)
+                .update("mateId",user.fatherId)
+                .addOnSuccessListener {
+
+                }
+        }
+
+        fun updateFatherMate(){
+            User.document(user.fatherId!!)
+                .update("mateId",newMember.id)
+                .addOnSuccessListener {
+                    continuation.resume(AppResult.Success(true))
+                }
+        }
+
+        fun findMotherById(){
+            User.whereEqualTo("id",newMember.id)
+                .get()
+                .addOnSuccessListener {
+                    for (result in it){
+                        userMother.value = result.toObject(com.tron.familytree.data.User::class.java)
+                        if (user.fatherId != null){
+                            updateMotherMate()
+                            updateFatherMate()
                         }
-                    if (originUser.value!!.fatherId != null){
-                        User.whereEqualTo("name",newMember.name)
-                            .get().addOnSuccessListener {task ->
-                                for (fatherIndex in task){
-                                    val fatherPath = fatherIndex.id
-                                    User.document(fatherPath)
-                                        .update("mateId",originUser.value!!.fatherId)
-                                        .addOnSuccessListener {
-//                                            Log.e("updateComplete", it.toString())
-                                        }
-
-                                }
-                            }
-                        User.whereEqualTo("name",originUser.value!!.motherId)
-                            .get().addOnSuccessListener {task ->
-                                for (fatherIndex in task){
-                                    val fatherPath = fatherIndex.id
-                                    User.document(fatherPath)
-                                        .update("mateId",originUser.value!!.motherId)
-                                        .addOnSuccessListener {
-//                                            Log.e("updateComplete", it.toString())
-                                        }
-
-                                }
-                            }
                     }
                 }
-            }
+        }
+
+
+        updateMother()
+        findMotherById()
     }
-
-
-    override suspend fun getArticles(): AppResult<List<User>> = suspendCoroutine { continuation ->
-        FirebaseFirestore.getInstance()
-            .collection(PATH_ARTICLES)
-            .orderBy(KEY_CREATED_TIME, Query.Direction.DESCENDING)
-            .get()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val list = mutableListOf<User>()
-                    for (document in task.result!!) {
-//                        Logger.d(document.id + " => " + document.data)
-
-                        val article = document.toObject(User::class.java)
-                        list.add(article)
-                    }
-                    continuation.resume(AppResult.Success(list))
-                } else {
-                    task.exception?.let {
-
-//                        Logger.w("[${this::class.simpleName}] Error getting documents. ${it.message}")
-                        continuation.resume(AppResult.Error(it))
-                        return@addOnCompleteListener
-                    }
-                    continuation.resume(AppResult.Fail(FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)))
-                }
-            }
-    }
-
-    override fun getLiveArticles(): MutableLiveData<List<User>> {
-
-        val liveData = MutableLiveData<List<User>>()
-
-        FirebaseFirestore.getInstance()
-            .collection(PATH_ARTICLES)
-            .orderBy(KEY_CREATED_TIME, Query.Direction.DESCENDING)
-            .addSnapshotListener { snapshot, exception ->
-
-//                Logger.i("addSnapshotListener detect")
-
-                exception?.let {
-//                    Logger.w("[${this::class.simpleName}] Error getting documents. ${it.message}")
-                }
-
-                val list = mutableListOf<User>()
-                for (document in snapshot!!) {
-//                    Logger.d(document.id + " => " + document.data)
-
-                    val article = document.toObject(User::class.java)
-                    list.add(article)
-                }
-
-                liveData.value = list
-            }
-        return liveData
-    }
-
 }

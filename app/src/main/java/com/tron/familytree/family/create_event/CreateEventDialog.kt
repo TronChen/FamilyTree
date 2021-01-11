@@ -145,7 +145,8 @@ class CreateEventDialog : DialogFragment() {
             location = viewModel.editLocation.value!!,
             eventType = viewModel.eventType.value,
             eventTime = eventTime.value,
-            eventMonth = viewModel.eventMonth.value!!
+            eventMonth = viewModel.eventMonth.value!!,
+            publisherFamilyId = viewModel.user.value?.familyId!!
         )
     }
 

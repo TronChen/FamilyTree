@@ -8,22 +8,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.github.dhaval2404.imagepicker.ImagePicker
-import com.tron.familytree.ADD_USER
 import com.tron.familytree.MainActivity
-import com.tron.familytree.R
 import com.tron.familytree.data.Photo
-import com.tron.familytree.databinding.DialogEventBinding
 import com.tron.familytree.databinding.FragmentAlbumDetailBinding
 import com.tron.familytree.ext.getVmFactory
-import com.tron.familytree.family.albumdetail.AlbumDetailFragmentArgs.Companion.fromBundle
-import com.tron.familytree.family.event_dialog.EventDialogArgs
-import com.tron.familytree.family.event_dialog.EventDialogViewModel
-import com.tron.familytree.profile.edituser.EDIT_USER
 import com.tron.familytree.util.UserManager
 
 var ADD_PHOTO = 333

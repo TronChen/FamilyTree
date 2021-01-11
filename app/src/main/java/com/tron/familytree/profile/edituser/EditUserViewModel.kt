@@ -26,6 +26,8 @@ class EditUserViewModel(
     val selectedProperty: LiveData<User>
         get() = _selectedProperty
 
+    var familyId = MutableLiveData<String>()
+
     var liveEpisodes = MutableLiveData<List<Episode>>()
 
     val _episodes = MutableLiveData<List<Episode>>()
@@ -81,6 +83,7 @@ class EditUserViewModel(
 
 
     init {
+        familyId.value = "選擇家族"
         _selectedProperty.value = user
         userName.value = user.name
         userImage.value = user.userImage
@@ -211,6 +214,29 @@ class EditUserViewModel(
         }
     }
 
-
+    fun updateMember (id: String){
+        coroutineScope.launch {
+            _status.value = LoadApiStatus.LOADING
+            when (val result = repository.findFamilyById(id)) {
+                is AppResult.Success -> {
+                    _error.value = null
+                    _status.value = LoadApiStatus.DONE
+                    familyId.value = result.data.title
+                }
+                is AppResult.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is AppResult.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                else -> {
+                    _error.value = FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)
+                    _status.value = LoadApiStatus.ERROR
+                }
+            }
+        }
+    }
 
 }

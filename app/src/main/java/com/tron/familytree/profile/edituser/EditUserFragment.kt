@@ -13,14 +13,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.tron.familytree.MainActivity
+import com.tron.familytree.NavigationDirections
 import com.tron.familytree.R
+import com.tron.familytree.check.CheckDialog
 import com.tron.familytree.data.Episode
 import com.tron.familytree.databinding.FragmentEditUserBinding
 import com.tron.familytree.ext.getVmFactory
 import java.util.*
-
-
-const val EDIT_USER = 222
 
 class EditUserFragment : Fragment() {
 
@@ -84,31 +83,33 @@ class EditUserFragment : Fragment() {
 
         binding.conComplete.setOnClickListener {
             if (
-                viewModel.userName.value != null &&
-            viewModel.userBirth.value != null &&
-            viewModel.selectedProperty.value!!.id != null &&
-            viewModel.userDeath.value != null &&
-            viewModel.userBirthLocation.value != null &&
+                viewModel.userName.value != null && viewModel.userName.value != "" &&
+            viewModel.userBirth.value != null && viewModel.userBirth.value != "" &&
+            viewModel.selectedProperty.value!!.id != "" &&
+            viewModel.userDeath.value != null && viewModel.userDeath.value != "" &&
+            viewModel.userBirthLocation.value != null && viewModel.userBirthLocation.value != "" &&
             viewModel.userGender != ""
             ){
                 viewModel.updateMember(viewModel.setUser())
+                findNavController().navigate(
+                    NavigationDirections.actionGlobalCheckDialog(
+                        CheckDialog.MessageType.ADDED_SUCCESS))
                 Log.e("Tron", viewModel.setUser().toString())
-            }else{
+            }
+            if (viewModel.selectedProperty.value?.familyId == null){
+                Toast.makeText(requireContext(),"請選擇家族", Toast.LENGTH_SHORT).show()
+            }
+            if (
+                viewModel.userName.value == "" ||
+                viewModel.userBirth.value == "" ||
+                viewModel.selectedProperty.value!!.id == "" ||
+                viewModel.userDeath.value == "" ||
+                viewModel.userBirthLocation.value == "" ||
+                viewModel.userGender == ""
+            ){
                 Toast.makeText(requireContext(),"請輸入完整訊息", Toast.LENGTH_SHORT).show()
             }
         }
-
-//        binding.conImage.setOnClickListener {
-//            getActivity()
-//                ImagePicker.with(this)
-//                    .crop()                    //Crop image(Optional), Check Customization for more option
-//                    .compress(1024)            //Final image size will be less than 1 MB(Optional)
-//                    .maxResultSize(
-//                        1080,
-//                        1080
-//                    ) //Final image resolution will be less than 1080 x 1080(Optional)
-//                    .start(EDIT_USER)
-//        }
 
         binding.conFamily.setOnClickListener {
             findNavController().navigate(R.id.action_global_editFamilyFragment)
@@ -116,7 +117,9 @@ class EditUserFragment : Fragment() {
 
         viewModel.selectedProperty.observe(viewLifecycleOwner, Observer {
             Log.e("User", it.toString())
-
+            if (it.familyId != null){
+                viewModel.updateMember(it.familyId!!)
+            }
             when(it.gender){
                 "male" -> (binding.radioGender.getChildAt(0) as RadioButton).isChecked = true
                 "female" -> (binding.radioGender.getChildAt(1) as RadioButton).isChecked = true

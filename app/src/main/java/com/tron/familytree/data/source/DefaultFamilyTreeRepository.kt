@@ -1,25 +1,24 @@
 package app.appworks.school.publisher.data.source
 
 import androidx.lifecycle.MutableLiveData
+import com.tron.familytree.branch.BranchViewModel
+import com.tron.familytree.branch.TreeItem
 import com.tron.familytree.data.*
 import com.tron.familytree.data.Map
 import com.tron.familytree.message.chatroom.MessageItem
+import kotlin.coroutines.suspendCoroutine
 
 
 class DefaultFamilyTreeRepository(private val remoteDataSource: FamilyTreeDataSource,
                                   private val localDataSource: FamilyTreeDataSource
 ) : FamilyTreeRepository {
 
-    override suspend fun getArticles(): AppResult<List<User>> {
-        return remoteDataSource.getArticles()
-    }
-
-    override fun getLiveArticles(): MutableLiveData<List<User>> {
-        return remoteDataSource.getLiveArticles()
-    }
-
     override suspend fun uploadImage(path: String) : AppResult<String> {
         return remoteDataSource.uploadImage(path)
+    }
+
+    override suspend fun addMemberReturnUser(user: User): AppResult<User>{
+        return remoteDataSource.addMemberReturnUser(user)
     }
 
     override suspend fun addMember(user: User): AppResult<Boolean>{
@@ -40,6 +39,10 @@ class DefaultFamilyTreeRepository(private val remoteDataSource: FamilyTreeDataSo
 
     override suspend fun findUserById(id: String): AppResult<User>{
         return remoteDataSource.findUserById(id)
+    }
+
+    override suspend fun findUserByName(name: String): AppResult<User>{
+        return remoteDataSource.findUserByName(name)
     }
 
     override suspend fun addUserToFirebase(user: User): AppResult<Boolean>{
@@ -134,8 +137,16 @@ class DefaultFamilyTreeRepository(private val remoteDataSource: FamilyTreeDataSo
         return remoteDataSource.getAttender(event)
     }
 
-    override suspend fun getEventByUserId(id: String): AppResult<List<Event>>{
-        return remoteDataSource.getEventByUserId(id)
+    override suspend fun getEventByUserId(user: User): AppResult<List<Event>>{
+        return remoteDataSource.getEventByUserId(user)
+    }
+
+    override suspend fun getEventByFamilyId(user: User): AppResult<List<Event>>{
+        return remoteDataSource.getEventByFamilyId(user)
+    }
+
+    override fun getLiveEventByFamilyId(user: User): MutableLiveData<List<Event>>{
+        return remoteDataSource.getLiveEventByFamilyId(user)
     }
 
     override fun getLiveEventByUserId(id: String): MutableLiveData<List<Event>>{
@@ -200,6 +211,14 @@ class DefaultFamilyTreeRepository(private val remoteDataSource: FamilyTreeDataSo
 
     override suspend fun updateFamily(family : Family, user: User): AppResult<Boolean>{
         return remoteDataSource.updateFamily(family,user)
+    }
+
+    override suspend fun searchBranchUser(id: String,viewModel: BranchViewModel): AppResult<List<TreeItem>>{
+        return remoteDataSource.searchBranchUser(id,viewModel)
+    }
+
+    override suspend fun findFamilyById(id: String): AppResult<Family>{
+        return remoteDataSource.findFamilyById(id)
     }
 
 }

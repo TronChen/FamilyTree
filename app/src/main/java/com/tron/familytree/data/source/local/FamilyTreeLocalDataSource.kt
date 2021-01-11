@@ -3,6 +3,8 @@ package app.appworks.school.publisher.data.source.local
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import app.appworks.school.publisher.data.source.FamilyTreeDataSource
+import com.tron.familytree.branch.BranchViewModel
+import com.tron.familytree.branch.TreeItem
 import com.tron.familytree.data.*
 import com.tron.familytree.data.Map
 import com.tron.familytree.message.chatroom.MessageItem
@@ -15,15 +17,11 @@ import com.tron.familytree.profile.member.MemberItem
  */
 class FamilyTreeLocalDataSource(val context: Context) : FamilyTreeDataSource {
 
-    override suspend fun getArticles(): AppResult<List<User>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun getLiveArticles(): MutableLiveData<List<User>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
     override suspend fun uploadImage(path: String): AppResult<String> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun addMemberReturnUser(user: User): AppResult<User> {
         TODO("Not yet implemented")
     }
 
@@ -68,6 +66,10 @@ class FamilyTreeLocalDataSource(val context: Context) : FamilyTreeDataSource {
     }
 
     override suspend fun findUserById(id: String): AppResult<User> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun findUserByName(name: String): AppResult<User> {
         TODO("Not yet implemented")
     }
 
@@ -139,7 +141,15 @@ class FamilyTreeLocalDataSource(val context: Context) : FamilyTreeDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getEventByUserId(id: String): AppResult<List<Event>> {
+    override suspend fun getEventByUserId(user: User): AppResult<List<Event>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getEventByFamilyId(user: User): AppResult<List<Event>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getLiveEventByFamilyId(user: User): MutableLiveData<List<Event>> {
         TODO("Not yet implemented")
     }
 
@@ -206,4 +216,13 @@ class FamilyTreeLocalDataSource(val context: Context) : FamilyTreeDataSource {
     override suspend fun updateFamily(family: Family, user: User): AppResult<Boolean> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun searchBranchUser(id: String,viewModel: BranchViewModel): AppResult<List<TreeItem>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun findFamilyById(id: String): AppResult<Family> {
+        TODO("Not yet implemented")
+    }
+
 }

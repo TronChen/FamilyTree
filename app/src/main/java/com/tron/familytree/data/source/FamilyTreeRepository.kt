@@ -2,6 +2,8 @@ package app.appworks.school.publisher.data.source
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.tron.familytree.branch.BranchViewModel
+import com.tron.familytree.branch.TreeItem
 import com.tron.familytree.data.*
 import com.tron.familytree.data.Map
 import com.tron.familytree.message.chatroom.MessageItem
@@ -9,13 +11,11 @@ import com.tron.familytree.profile.member.MemberItem
 
 interface FamilyTreeRepository {
 
-    suspend fun getArticles(): AppResult<List<User>>
-
-    fun getLiveArticles(): MutableLiveData<List<User>>
-
     suspend fun uploadImage(path: String) : AppResult<String>
 
-    suspend fun addMember(user: User) : AppResult<Boolean>
+    suspend fun addMemberReturnUser(user: User) : AppResult<User>
+
+    suspend fun addMember(user: User): AppResult<Boolean>
 
     suspend fun updateMemberMotherId(user: User, newMember : User): AppResult<Boolean>
 
@@ -36,6 +36,8 @@ interface FamilyTreeRepository {
     suspend fun getEpisode(user: User): AppResult<List<Episode>>
 
     suspend fun findUserById(id: String): AppResult<User>
+
+    suspend fun findUserByName(name: String): AppResult<User>
 
     suspend fun updateChild(user: User,newMember: User): AppResult<Boolean>
 
@@ -71,7 +73,11 @@ interface FamilyTreeRepository {
 
     suspend fun findChatroom(member: String, userId : String): AppResult<Boolean>
 
-    suspend fun getEventByUserId(id: String): AppResult<List<Event>>
+    suspend fun getEventByUserId(user: User): AppResult<List<Event>>
+
+    suspend fun getEventByFamilyId(user: User): AppResult<List<Event>>
+
+    fun getLiveEventByFamilyId(user: User): MutableLiveData<List<Event>>
 
     fun getLiveEventByUserId(id: String): MutableLiveData<List<Event>>
 
@@ -104,4 +110,9 @@ interface FamilyTreeRepository {
     fun getLiveFamilyMember(family: Family): MutableLiveData<List<User>>
 
     suspend fun updateFamily(family : Family, user: User): AppResult<Boolean>
+
+    suspend fun searchBranchUser(id: String,viewModel: BranchViewModel): AppResult<List<TreeItem>>
+
+    suspend fun findFamilyById(id: String): AppResult<Family>
+
 }

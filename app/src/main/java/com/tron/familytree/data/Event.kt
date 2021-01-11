@@ -9,6 +9,7 @@ import java.util.*
 data class Event(
     var id: String = "",
     var publisher: String = "",
+    var publisherFamilyId : String = "",
     var publisherId: String = "",
     var title: String = "",
     var time: String = "",

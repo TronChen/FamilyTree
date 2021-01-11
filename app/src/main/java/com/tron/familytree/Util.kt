@@ -1,27 +1,20 @@
 package com.tron.familytree
 
 import android.util.Log
-import android.util.TimeFormatException
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
-import com.airbnb.lottie.Lottie
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.github.dhaval2404.imagepicker.ImagePicker
 import com.tron.familytree.data.User
 import com.tron.familytree.network.LoadApiStatus
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.time.ExperimentalTime
-import kotlin.time.hours
 
 /**
  * According to [LoadApiStatus] to decide the visibility of [ProgressBar]
@@ -96,28 +89,26 @@ fun updateImage(imgView: ImageView, filePath: String?) {
     }
 }
 
-@BindingAdapter("AddMemberTitle")
-fun bindAddTitle(text : TextView, user: User) {
-    user?.let {
-        if (user.name == "No child"){
-            text.text =  "${user.fatherId} 與 ${user.motherId} 的 孩子"
+@BindingAdapter(value = ["selectProperties","user","mate"],requireAll = false)
+fun bindAddTitle(text : TextView,selectProperties: User?, user: String?, mate: String?) {
+        if (selectProperties?.name == "No child"){
+            text.text =  "$user 與 $mate 的 孩子"
         }
-        if (user.name == "No mate"){
-            text.text =  "${user.mateId} 的 配偶"
+        if (selectProperties?.name  == "No mate"){
+            text.text =  "$user 的 配偶"
         }
-        if (user.name == "No father"){
-            text.text = "${user.fatherId} 的 父親"
+        if (selectProperties?.name == "No father"){
+            text.text = "$user 的 父親"
         }
-        if (user.name == "No mother"){
-            text.text = "${user.motherId} 的 母親"
+        if (selectProperties?.name == "No mother"){
+            text.text = "$user 的 母親"
         }
-        if (user.name == "No mateFather"){
-            text.text = "${user.fatherId} 的 父親"
+        if (selectProperties?.name == "No mateFather"){
+            text.text = "$user 的 父親"
         }
-        if (user.name == "No mateMother"){
-            text.text = "${user.motherId} 的 母親"
+        if (selectProperties?.name == "No mateMother"){
+            text.text = "$user 的 母親"
         }
-    }
 }
 
 @ExperimentalTime

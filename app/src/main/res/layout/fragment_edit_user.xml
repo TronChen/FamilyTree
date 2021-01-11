@@ -386,7 +386,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/noto_sans"
                 android:letterSpacing="0.2"
-                android:text="選擇家族"
+                android:text="@{viewModel.familyId}"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"

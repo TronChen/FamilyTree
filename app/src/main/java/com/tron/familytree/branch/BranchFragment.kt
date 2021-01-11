@@ -6,18 +6,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.tron.familytree.branch.add_people_dialog.AddPeopleDialogArgs
+import com.tron.familytree.branch.add_people_dialog.AddPeopleViewModel
+import com.tron.familytree.data.User
 import com.tron.familytree.databinding.FragmentBranchBinding
+import com.tron.familytree.ext.getVmFactory
+import kotlin.math.sign
 
+const val DETAIL = 100
+const val QUERY = 200
+const val ADD_PEOPLE = 300
 
 class BranchFragment : Fragment() {
 
-    private val viewModel: BranchViewModel by lazy {
-        ViewModelProvider(this).get(BranchViewModel::class.java)
-    }
+    private val viewModel by viewModels<BranchViewModel> {getVmFactory()}
 
 
     override fun onCreateView(
@@ -46,12 +53,18 @@ class BranchFragment : Fragment() {
 
 
         viewModel.userId.observe(viewLifecycleOwner, Observer {
-            viewModel.getUser()
+            viewModel.searchBranchUser(it)
         })
 
+        viewModel.children.observe(viewLifecycleOwner, Observer {
+//            viewModel.searchBranchUser(viewModel.userId.value!!)
+            Log.e("childrenSize", it.toString())
+        })
 
         viewModel.TreeList.observe(viewLifecycleOwner, Observer {
-            val layoutManager = GridLayoutManager(requireContext(),viewModel.getSpanCount(viewModel.children.size))
+//            Log.e("TreeList.size", it.size.toString())
+
+            val layoutManager = GridLayoutManager(requireContext(),viewModel.getSpanCount(viewModel.children.value!!))
             binding.recyclerBranch.layoutManager = layoutManager
             layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
@@ -97,20 +110,20 @@ class BranchFragment : Fragment() {
 
         viewModel.itemClick.observe(viewLifecycleOwner, Observer {
 //            Log.e("itemClick", it.toString())
-            if (viewModel.itemClick.value == 100) {
+            if (viewModel.itemClick.value == DETAIL) {
                 findNavController().navigate(
                     BranchFragmentDirections.actionGlobalBranchUserDetailDialog(
                         viewModel.itemSelected.value!!
                     )
                 )
             }
-            if (viewModel.itemClick.value == 200){
+            if (viewModel.itemClick.value == QUERY){
                viewModel.reQuery()
                 viewModel.TreeList.value = null
                 Log.e("treeFinalList", viewModel.treeFinalList.toString())
-                viewModel.userId.value = viewModel.itemSelected.value!!.name
+                viewModel.userId.value = viewModel.itemSelected.value!!.id
             }
-            if (viewModel.itemClick.value == 300) {
+            if (viewModel.itemClick.value == ADD_PEOPLE) {
                 findNavController().navigate(
                     BranchFragmentDirections.actionGlobalAddPeopleDialog(
                         viewModel.itemSelected.value!!

@@ -129,53 +129,23 @@ class AddPeopleDialog : DialogFragment() {
                 when (viewModel.selectedProperty.value?.name) {
 
                     "No mate" -> {
-                        viewModel.updateMemberMateId(
-                            viewModel.selectedProperty.value!!,
-                            viewModel.setMate()
-                        )
-                        viewModel.addMember(viewModel.setMate())
-                        findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
-                        findNavController().navigate(R.id.action_global_branchFragment)
+                        viewModel.addMateReturnUser(viewModel.setMate())
                     }
-
                     "No father" -> {
-                        viewModel.updateMemberFatherId(
-                            viewModel.selectedProperty.value!!,
-                            viewModel.setParent()
-                        )
-                        viewModel.addMember(viewModel.setParent())
-                        findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
-                        findNavController().navigate(R.id.action_global_branchFragment)
+                        viewModel.addFatherReturnUser(viewModel.setParent())
                     }
                     "No mother" -> {
-                        viewModel.updateMemberMotherId(
-                            viewModel.selectedProperty.value!!,
-                            viewModel.setParent()
-                        )
-                        viewModel.addMember(viewModel.setParent())
-                        findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
-                        findNavController().navigate(R.id.action_global_branchFragment)
+                        viewModel.addMotherReturnUser(viewModel.setParent())
                     }
                     "No mateFather" -> {
-                        viewModel.updateMemberFatherId(
-                            viewModel.selectedProperty.value!!,
-                            viewModel.setParent()
-                        )
-                        viewModel.addMember(viewModel.setParent())
-                        findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
-                        findNavController().navigate(R.id.action_global_branchFragment)
+                        viewModel.addFatherReturnUser(viewModel.setParent())
                     }
                     "No mateMother" -> {
-                        viewModel.updateMemberMotherId(
-                            viewModel.selectedProperty.value!!,
-                            viewModel.setParent()
-                        )
-                        viewModel.addMember(viewModel.setParent())
-                        findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
-                        findNavController().navigate(R.id.action_global_branchFragment)
+                        viewModel.addMotherReturnUser(viewModel.setParent())
                     }
                     "No child" -> {
                         viewModel.addMember(viewModel.setChild())
+                        Log.e("setChild()",viewModel.setChild().toString())
                         findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
                         findNavController().navigate(R.id.action_global_branchFragment)
                     }
@@ -204,13 +174,27 @@ class AddPeopleDialog : DialogFragment() {
             }
         })
 
+        viewModel.newFather.observe(viewLifecycleOwner, Observer {
+            viewModel.updateMemberFatherId(viewModel.user.value!!, it)
+            findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
+            findNavController().navigate(R.id.action_global_branchFragment)
+        })
 
+        viewModel.newMother.observe(viewLifecycleOwner, Observer {
+            viewModel.updateMemberMotherId(viewModel.user.value!!, it)
+            findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
+            findNavController().navigate(R.id.action_global_branchFragment)
+        })
 
+        viewModel.newMate.observe(viewLifecycleOwner, Observer {
+            viewModel.updateMemberMateId(viewModel.user.value!!, it)
+            findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
+            findNavController().navigate(R.id.action_global_branchFragment)
+        })
 
-
-
-
-
+        viewModel.user.observe(viewLifecycleOwner, Observer {
+            Log.e("AddPeopleDialogUser", it.toString())
+        })
 
         return binding.root
     }
@@ -218,13 +202,4 @@ class AddPeopleDialog : DialogFragment() {
     private fun setDateFormat(year: Int, month: Int, day: Int): String {
         return "$year/${month + 1}/$day"
     }
-
-//    private fun downloadImg(ref: String) {
-//        FirebaseStorage.getInstance().reference.child(ref)
-//            .downloadUrl
-//            .addOnSuccessListener {
-//                viewModel._userImage.value = it.toString()
-//                Log.e("URL", it.toString())
-//            }
-//    }
 }

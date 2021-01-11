@@ -10,15 +10,36 @@ import com.tron.familytree.R
 import com.tron.familytree.data.AppResult
 import com.tron.familytree.data.User
 import com.tron.familytree.network.LoadApiStatus
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import com.tron.familytree.util.UserManager
+import kotlinx.coroutines.*
 
 class AddPeopleViewModel(
     private val repository: FamilyTreeRepository
-    , private val user: User
+    , private val userProperties: User
 ) : ViewModel() {
+
+    private val _user = MutableLiveData<User>()
+    // The external LiveData for the SelectedProperty
+    val user: LiveData<User>
+        get() = _user
+
+    var _mateName = MutableLiveData<String>()
+    var _userName = MutableLiveData<String>()
+
+    private val _newFather = MutableLiveData<User>()
+    // The external LiveData for the SelectedProperty
+    val newFather: LiveData<User>
+        get() = _newFather
+
+    private val _newMother = MutableLiveData<User>()
+    // The external LiveData for the SelectedProperty
+    val newMother: LiveData<User>
+        get() = _newMother
+
+    private val _newMate = MutableLiveData<User>()
+    // The external LiveData for the SelectedProperty
+    val newMate: LiveData<User>
+        get() = _newMate
 
     private val _selectedProperty = MutableLiveData<User>()
     // The external LiveData for the SelectedProperty
@@ -94,7 +115,81 @@ class AddPeopleViewModel(
 
 
     init {
-        _selectedProperty.value = user
+        _selectedProperty.value = userProperties
+        when (userProperties.name){
+            "No father" -> findUserById(userProperties.fatherId!!)
+            "No mother" -> findUserById(userProperties.motherId!!)
+            "No mateFather" -> findUserById(userProperties.fatherId!!)
+            "No mateMother" -> findUserById(userProperties.motherId!!)
+            "No mate" -> findUserById(userProperties.mateId!!)
+            "No child" -> {
+                if (userProperties.gender == "male") {
+                    findUserById(userProperties.fatherId!!)
+                    findMateById(userProperties.motherId!!)
+                }
+                if (userProperties.gender == "female") {
+                    findUserById(userProperties.motherId!!)
+                    findMateById(userProperties.fatherId!!)
+                }
+            }
+        }
+    }
+
+    fun findMateById(id : String){
+
+        coroutineScope.launch {
+
+            _status.value = LoadApiStatus.LOADING
+
+            when (val result = repository.findUserById(id)) {
+                is AppResult.Success -> {
+                    _error.value = null
+                    _status.value = LoadApiStatus.DONE
+                    _mateName.value = result.data.name
+                }
+                is AppResult.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is AppResult.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                else -> {
+                    _error.value = FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)
+                    _status.value = LoadApiStatus.ERROR
+                }
+            }
+        }
+    }
+
+    fun findUserById(id : String){
+
+        coroutineScope.launch {
+
+            _status.value = LoadApiStatus.LOADING
+
+            when (val result = repository.findUserById(id)) {
+                is AppResult.Success -> {
+                    _error.value = null
+                    _status.value = LoadApiStatus.DONE
+                    _user.value = result.data
+                    _userName.value = result.data.name
+                }
+                is AppResult.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is AppResult.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                else -> {
+                    _error.value = FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)
+                    _status.value = LoadApiStatus.ERROR
+                }
+            }
+        }
     }
 
     fun uploadImage(path: String) {
@@ -123,6 +218,89 @@ class AddPeopleViewModel(
         }
     }
 
+    fun addFatherReturnUser(user:User){
+        coroutineScope.launch {
+
+            _status.value = LoadApiStatus.LOADING
+
+            when (val result = repository.addMemberReturnUser(user)) {
+                is AppResult.Success -> {
+                    _error.value = null
+                    _status.value = LoadApiStatus.DONE
+                    _newFather.value = result.data
+                    Log.e("newMember",_newFather.value!!.toString())
+
+                }
+                is AppResult.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is AppResult.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                else -> {
+                    _error.value = FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)
+                    _status.value = LoadApiStatus.ERROR
+                }
+            }
+        }
+    }
+
+    fun addMotherReturnUser(user:User){
+        coroutineScope.launch {
+
+            _status.value = LoadApiStatus.LOADING
+
+            when (val result = repository.addMemberReturnUser(user)) {
+                is AppResult.Success -> {
+                    _error.value = null
+                    _status.value = LoadApiStatus.DONE
+                    _newMother.value = result.data
+                }
+                is AppResult.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is AppResult.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                else -> {
+                    _error.value = FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)
+                    _status.value = LoadApiStatus.ERROR
+                }
+            }
+        }
+    }
+
+    fun addMateReturnUser(user:User){
+        coroutineScope.launch {
+
+            _status.value = LoadApiStatus.LOADING
+
+            when (val result = repository.addMemberReturnUser(user)) {
+                is AppResult.Success -> {
+                    _error.value = null
+                    _status.value = LoadApiStatus.DONE
+                    _newMate.value = result.data
+                }
+                is AppResult.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is AppResult.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                else -> {
+                    _error.value = FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)
+                    _status.value = LoadApiStatus.ERROR
+                }
+            }
+        }
+    }
+
     fun addMember(user: User){
         coroutineScope.launch {
 
@@ -133,6 +311,7 @@ class AddPeopleViewModel(
                     _error.value = null
                     _status.value = LoadApiStatus.DONE
                     leave(true)
+
                 }
                 is AppResult.Fail -> {
                     _error.value = result.error
@@ -243,15 +422,16 @@ class AddPeopleViewModel(
 
     fun setChild() : User{
             val user = User(
-            name = userEditName,
-            birth = birthDate,
-            id = "",
-            userImage = userImage.value,
-            gender = gender,
-            deathDate = deathDate,
-            birthLocation = userBirthLocation,
+                name = userEditName,
+                birth = birthDate,
+                id = "",
+                userImage = userImage.value,
+                gender = gender,
+                deathDate = deathDate,
+                birthLocation = userBirthLocation,
                 fatherId = selectedProperty.value?.fatherId,
-                motherId = selectedProperty.value?.motherId
+                motherId = selectedProperty.value?.motherId,
+                familyId = _user.value?.familyId
         )
         Log.e("Add user", user.toString())
         return user
@@ -265,7 +445,8 @@ class AddPeopleViewModel(
             userImage = userImage.value,
             gender = gender,
             deathDate = deathDate,
-            birthLocation = userBirthLocation
+            birthLocation = userBirthLocation,
+            familyId = _user.value?.familyId
         )
         Log.e("Add user", user.toString())
         return user
@@ -280,7 +461,8 @@ class AddPeopleViewModel(
             gender = gender,
             deathDate = deathDate,
             birthLocation = userBirthLocation,
-            mateId = selectedProperty.value?.mateId
+            mateId = _user.value?.id,
+            familyId = _user.value?.familyId
         )
         Log.e("Add user", user.toString())
         return user

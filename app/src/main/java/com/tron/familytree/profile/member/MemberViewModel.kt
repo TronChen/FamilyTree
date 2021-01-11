@@ -1,6 +1,5 @@
 package com.tron.familytree.profile.member
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,7 +15,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlin.coroutines.resume
 
 class MemberViewModel(
     private val repository: FamilyTreeRepository
@@ -88,15 +86,15 @@ class MemberViewModel(
 
 
     init {
-        UserManager.name?.let { findUser(it) }
+        UserManager.email?.let { findUserById(it) }
     }
 
 
-    fun findUser(name : String){
+    fun findUserById(id : String){
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
 
-            when (val result = repository.findUser(name)) {
+            when (val result = repository.findUser(id)) {
                 is AppResult.Success -> {
                     _error.value = null
                     _status.value = LoadApiStatus.DONE
@@ -108,7 +106,7 @@ class MemberViewModel(
                     if (_user.value!!.fatherId == null) {
                         userMemberList.add(
                             MemberItem.FatherAdd(
-                                User(name = "No father", fatherId = _user.value!!.name)
+                                User(name = "No father", fatherId = _user.value!!.id)
                                 , true, 0
                             )
                         )
@@ -118,7 +116,7 @@ class MemberViewModel(
                         if (_user.value!!.motherId == null) {
                             userMemberList.add(
                             MemberItem.MotherAdd(
-                                User(name = "No mother", motherId = _user.value!!.name)
+                                User(name = "No mother", motherId = _user.value!!.id)
                                 , true, 1
                             )
                             )
@@ -128,7 +126,7 @@ class MemberViewModel(
                             if (_user.value!!.mateId == null){
                                 userMemberList.add(
                                 MemberItem.MateAdd(
-                                    User(name = "No mate",mateId = _user.value!!.name),false
+                                    User(name = "No mate",mateId = _user.value!!.id),false
                                 )
                                 )
                                 getMemberList()
@@ -153,11 +151,11 @@ class MemberViewModel(
         }
     }
 
-    fun findFather(name : String){
+    fun findFather(id : String){
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
 
-            when (val result = repository.findUser(name)) {
+            when (val result = repository.findUser(id)) {
                 is AppResult.Success -> {
                     _error.value = null
                     _status.value = LoadApiStatus.DONE
@@ -173,7 +171,7 @@ class MemberViewModel(
                     if (_user.value!!.motherId == null) {
 
                         userMemberList.add(MemberItem.MotherAdd(
-                            User(name = "No mother",motherId = _user.value!!.name)
+                            User(name = "No mother",motherId = _user.value!!.id)
                             ,true,0))
 
                         if (_user.value!!.mateId != null) {
@@ -181,7 +179,7 @@ class MemberViewModel(
                         }
                         if (_user.value!!.mateId == null) {
                             userMemberList.add(MemberItem.MateAdd(
-                                User(name = "No mate",mateId = _user.value!!.name)
+                                User(name = "No mate",mateId = _user.value!!.id)
                                 ,true))
                             getMemberList()
                         }
@@ -204,11 +202,11 @@ class MemberViewModel(
         }
     }
 
-    fun findMother(name : String){
+    fun findMother(id : String){
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
 
-            when (val result = repository.findUser(name)) {
+            when (val result = repository.findUser(id)) {
                 is AppResult.Success -> {
                     _error.value = null
                     _status.value = LoadApiStatus.DONE
@@ -222,7 +220,7 @@ class MemberViewModel(
                     }
                     if (_user.value!!.mateId == null) {
                         userMemberList.add(MemberItem.MateAdd(
-                            User(name = "No mate",mateId = _user.value!!.name)
+                            User(name = "No mate",mateId = _user.value!!.id)
                             ,true))
                         getMemberList()
                     }
@@ -243,11 +241,11 @@ class MemberViewModel(
         }
     }
 
-    fun findMate(name : String){
+    fun findMate(id : String){
         coroutineScope.launch {
             _status.value = LoadApiStatus.LOADING
 
-            when (val result = repository.findUser(name)) {
+            when (val result = repository.findUser(id)) {
                 is AppResult.Success -> {
                     _error.value = null
                     _status.value = LoadApiStatus.DONE

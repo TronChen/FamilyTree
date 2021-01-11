@@ -4,24 +4,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import app.appworks.school.publisher.data.source.FamilyTreeRepository
 import com.tron.familytree.MainActivityViewModel
+import com.tron.familytree.branch.BranchViewModel
 import com.tron.familytree.family.FamilyViewModel
 import com.tron.familytree.family.album.AlbumViewModel
 import com.tron.familytree.family.calendar.CalendarViewModel
-import com.tron.familytree.family.create_album.CreateAlbumViewModel
 import com.tron.familytree.family.create_event.CreateEventViewModel
 import com.tron.familytree.family.event.EventViewModel
+import com.tron.familytree.instruction.InstructionViewModel
 import com.tron.familytree.login.LogInViewModel
-import com.tron.familytree.map.MapViewModel
 import com.tron.familytree.map.MapsViewModel
-import com.tron.familytree.message.MessageViewModel
 import com.tron.familytree.profile.ProfileViewModel
 import com.tron.familytree.profile.edit_family.EditFamilyViewModel
 import com.tron.familytree.profile.edit_family.create_family.CreateFamilyViewModel
-import com.tron.familytree.profile.editepisode.EditEpisodeViewModel
-import com.tron.familytree.profile.edituser.EditUserViewModel
 import com.tron.familytree.profile.episode.EpisodeViewModel
 import com.tron.familytree.profile.member.MemberViewModel
-import com.tron.familytree.profile.qrcode.QrCodeReaderViewModel
 import com.tron.familytree.profile.qrcode.QrCodeViewModel
 
 @Suppress("UNCHECKED_CAST")
@@ -46,9 +42,6 @@ class ViewModelFactory constructor(
 
                 isAssignableFrom(CreateEventViewModel::class.java) ->
                     CreateEventViewModel(repository)
-
-                isAssignableFrom(CreateAlbumViewModel::class.java) ->
-                    CreateAlbumViewModel(repository)
 
                 isAssignableFrom(EventViewModel::class.java) ->
                     EventViewModel(repository)
@@ -76,6 +69,12 @@ class ViewModelFactory constructor(
 
                 isAssignableFrom(CreateFamilyViewModel::class.java) ->
                     CreateFamilyViewModel(repository)
+
+                isAssignableFrom(BranchViewModel::class.java) ->
+                    BranchViewModel(repository)
+
+                isAssignableFrom(InstructionViewModel::class.java) ->
+                    InstructionViewModel(repository)
 
 
                 else ->

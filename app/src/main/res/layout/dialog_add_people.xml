@@ -72,7 +72,9 @@
 
             <TextView
                 android:id="@+id/textAddMember"
-                AddMemberTitle="@{viewModel.selectedProperty}"
+                app:user="@{viewModel._userName}"
+                app:mate="@{viewModel._mateName}"
+                app:selectProperties="@{viewModel.selectedProperty}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
