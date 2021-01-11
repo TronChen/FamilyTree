@@ -141,12 +141,12 @@ class DefaultFamilyTreeRepository(private val remoteDataSource: FamilyTreeDataSo
         return remoteDataSource.getEventByUserId(user)
     }
 
-    override suspend fun getEventByFamilyId(user: User): AppResult<List<Event>>{
-        return remoteDataSource.getEventByFamilyId(user)
+    override suspend fun getEventByFamilyId(id: String): AppResult<List<Event>>{
+        return remoteDataSource.getEventByFamilyId(id)
     }
 
-    override fun getLiveEventByFamilyId(user: User): MutableLiveData<List<Event>>{
-        return remoteDataSource.getLiveEventByFamilyId(user)
+    override fun getLiveEventByFamilyId(id: String): MutableLiveData<List<Event>>{
+        return remoteDataSource.getLiveEventByFamilyId(id)
     }
 
     override fun getLiveEventByUserId(id: String): MutableLiveData<List<Event>>{
