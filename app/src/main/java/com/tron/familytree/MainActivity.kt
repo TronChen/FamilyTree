@@ -3,6 +3,7 @@ package com.tron.familytree
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -182,5 +183,9 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
+        super.onSaveInstanceState(outState, outPersistentState)
+        Log.e("onSaveInstanceState",viewModel.addUserImgPath.value.toString())
+    }
 }
 

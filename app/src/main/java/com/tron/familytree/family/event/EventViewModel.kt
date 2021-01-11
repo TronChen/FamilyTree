@@ -22,16 +22,7 @@ class EventViewModel(
 ) : ViewModel() {
 
 
-    var liveEvent = MutableLiveData<List<Event>>()
-
-    val _event = MutableLiveData<List<Event>>()
-    val event: LiveData<List<Event>>
-        get() = _event
-
-    private var _user = MutableLiveData<User>()
-
-    val user : LiveData<User>
-        get() = _user
+    var liveEventByFamilyId = MutableLiveData<List<Event>>()
 
     val _userEvent = MutableLiveData<List<Event>>()
     val userEvent: LiveData<List<Event>>
@@ -81,19 +72,19 @@ class EventViewModel(
 
     init {
         if (FamilyTreeApplication.INSTANCE.isLiveDataDesign()) {
-            getLiveEvent()
+            getLiveEventByFamilyId(UserManager.email.toString())
         } else {
-            getEvent()
+        getEventByFamilyId(UserManager.email.toString())
         }
     }
 
-    fun getEventByFamilyId(user: User) {
+    fun getEventByFamilyId(id: String) {
 
         coroutineScope.launch {
 
             _status.value = LoadApiStatus.LOADING
 
-            val result = repository.getEventByFamilyId(user)
+            val result = repository.getEventByFamilyId(id)
 
             _userEvent.value = when (result) {
                 is AppResult.Success -> {
@@ -121,49 +112,15 @@ class EventViewModel(
         }
     }
 
-    fun getEvent() {
-
-        coroutineScope.launch {
-
-            _status.value = LoadApiStatus.LOADING
-
-            val result = repository.getEvent()
-
-            _event.value = when (result) {
-                is AppResult.Success -> {
-                    _error.value = null
-                    _status.value = LoadApiStatus.DONE
-                    result.data
-                }
-                is AppResult.Fail -> {
-                    _error.value = result.error
-                    _status.value = LoadApiStatus.ERROR
-                    null
-                }
-                is AppResult.Error -> {
-                    _error.value = result.exception.toString()
-                    _status.value = LoadApiStatus.ERROR
-                    null
-                }
-                else -> {
-                    _error.value = FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)
-                    _status.value = LoadApiStatus.ERROR
-                    null
-                }
-            }
-            _refreshStatus.value = false
-        }
-    }
-
-    fun getLiveEvent() {
-        liveEvent = repository.getLiveEvent()
+    fun getLiveEventByFamilyId(id: String) {
+        liveEventByFamilyId = repository.getLiveEventByFamilyId(id)
         _status.value = LoadApiStatus.DONE
         _refreshStatus.value = false
     }
 
     fun refresh() {
         if (status.value != LoadApiStatus.LOADING) {
-            getEvent()
+            getEventByFamilyId(UserManager.email.toString())
         }
     }
 }

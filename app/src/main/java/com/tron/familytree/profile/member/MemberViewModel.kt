@@ -275,7 +275,7 @@ class MemberViewModel(
 
             if (user.gender == "male") {
                 FirebaseFirestore.getInstance().collection("User")
-                    .whereEqualTo("fatherId", user.name)
+                    .whereEqualTo("fatherId", user.id)
                     .get()
                     .addOnSuccessListener { result ->
                         for ((index, document) in result.withIndex()) {
@@ -302,7 +302,7 @@ class MemberViewModel(
             }
             if (user.gender == "female") {
                 FirebaseFirestore.getInstance().collection("User")
-                    .whereEqualTo("motherId", user.name)
+                    .whereEqualTo("motherId", user.id)
                     .get()
                     .addOnSuccessListener { result ->
                         for ((index, document) in result.withIndex()) {

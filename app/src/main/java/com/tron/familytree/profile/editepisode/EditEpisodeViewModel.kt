@@ -8,6 +8,7 @@ import com.tron.familytree.FamilyTreeApplication
 import com.tron.familytree.R
 import com.tron.familytree.data.AppResult
 import com.tron.familytree.data.Episode
+import com.tron.familytree.data.User
 import com.tron.familytree.network.LoadApiStatus
 import com.tron.familytree.util.UserManager
 import kotlinx.coroutines.CoroutineScope
@@ -24,6 +25,10 @@ class EditEpisodeViewModel(
     // The external LiveData for the SelectedProperty
     val selectedProperty: LiveData<Episode>
         get() = _selectedProperty
+
+    val _user = MutableLiveData<User>()
+    val user: LiveData<User>
+        get() = _user
 
     val editTitle = MutableLiveData<String>()
     val editLocation = MutableLiveData<String>()
@@ -81,6 +86,8 @@ class EditEpisodeViewModel(
         editTitle.value = episode.title
         editLocation.value = "請選擇位址"
         editContent.value = episode.content
+
+        findUserById(UserManager.email.toString())
     }
 
 
@@ -92,8 +99,35 @@ class EditEpisodeViewModel(
             content = editContent.value!!,
             location = editLocation.value!!,
             latitude = latitude.value,
-            longitude = longitude.value
+            longitude = longitude.value,
+            familyId = user.value?.familyId
         )
+    }
+
+    fun findUserById(id : String){
+        coroutineScope.launch {
+            _status.value = LoadApiStatus.LOADING
+
+            when (val result = repository.findUserById(id)) {
+                is AppResult.Success -> {
+                    _error.value = null
+                    _status.value = LoadApiStatus.DONE
+                    _user.value = result.data
+                }
+                is AppResult.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is AppResult.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                else -> {
+                    _error.value = FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)
+                    _status.value = LoadApiStatus.ERROR
+                }
+            }
+        }
     }
 
     fun addUserEpisode (episode: Episode){

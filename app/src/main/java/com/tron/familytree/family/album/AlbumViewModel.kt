@@ -9,6 +9,7 @@ import com.tron.familytree.R
 import com.tron.familytree.data.AppResult
 import com.tron.familytree.data.Event
 import com.tron.familytree.network.LoadApiStatus
+import com.tron.familytree.util.UserManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -68,19 +69,19 @@ class AlbumViewModel(
 
     init {
         if (FamilyTreeApplication.INSTANCE.isLiveDataDesign()) {
-            getLiveEvent()
+            getLiveEventByFamilyId(UserManager.email.toString())
         } else {
-            getEvent()
+            getEventByFamilyId(UserManager.email.toString())
         }
     }
 
-    fun getEvent() {
+    fun getEventByFamilyId(id: String) {
 
         coroutineScope.launch {
 
             _status.value = LoadApiStatus.LOADING
 
-            val result = repository.getEvent()
+            val result = repository.getEventByFamilyId(id)
 
             _event.value = when (result) {
                 is AppResult.Success -> {
@@ -108,15 +109,15 @@ class AlbumViewModel(
         }
     }
 
-    fun getLiveEvent() {
-        liveEvent = repository.getLiveEvent()
+    fun getLiveEventByFamilyId(id: String) {
+        liveEvent = repository.getLiveEventByFamilyId(id)
         _status.value = LoadApiStatus.DONE
         _refreshStatus.value = false
     }
 
     fun refresh() {
         if (status.value != LoadApiStatus.LOADING) {
-            getEvent()
+            getEventByFamilyId(UserManager.email.toString())
         }
     }
 

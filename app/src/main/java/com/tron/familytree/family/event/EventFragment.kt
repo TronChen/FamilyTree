@@ -40,7 +40,8 @@ class EventFragment(val position: Int) : Fragment() {
             findNavController().navigate(R.id.action_global_createEventDialog)
         }
 
-        viewModel.liveEvent.observe(viewLifecycleOwner, Observer {
+        viewModel.liveEventByFamilyId.observe(viewLifecycleOwner, Observer {
+            Log.e("liveEventByFamilyId",it.toString())
             it?.let {
                 val afterEvent = mutableListOf<Event>()
                 it.forEach { event ->
@@ -55,6 +56,7 @@ class EventFragment(val position: Int) : Fragment() {
             }
         })
 
+
         binding.layoutSwipeRefreshHome.setOnRefreshListener {
             viewModel.refresh()
         }
@@ -64,9 +66,6 @@ class EventFragment(val position: Int) : Fragment() {
                 binding.layoutSwipeRefreshHome.isRefreshing = it
             }
         })
-
-
-
 
         return binding.root
     }

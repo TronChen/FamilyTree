@@ -27,6 +27,7 @@ import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
 import com.tron.familytree.R
 import com.tron.familytree.data.Map
+import com.tron.familytree.data.User
 import com.tron.familytree.databinding.FragmentMapsBinding
 import com.tron.familytree.databinding.ItemMapPinBinding
 import com.tron.familytree.ext.getVmFactory
@@ -81,9 +82,13 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
         })
 
         viewModel._userLocation.observe(viewLifecycleOwner, androidx.lifecycle.Observer { userLocationList ->
+            val familyMember = userLocationList.filter { viewModel.user.value?.familyId == it.familyId }
+
             myMap?.let { map ->
-                viewModel.drawUsersLocation(map,userLocationList)
+                viewModel.drawUsersLocation(map,familyMember)
             }
+            Log.e("familyMemberMap",familyMember.toString())
+            Log.e("familyMemberMap",userLocationList.toString())
         })
 
         viewModel.userTag.observe(viewLifecycleOwner, Observer {
@@ -266,16 +271,6 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
         Log.e("MarkerClick", p0.toString())
 
         return false
-    }
-
-    fun getBitmapFromView(view: View): Bitmap? {
-        val returnedBitmap =
-            Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(returnedBitmap)
-        val bgDrawable = view.background
-        if (bgDrawable != null) bgDrawable.draw(canvas) else canvas.drawColor(Color.WHITE)
-        view.draw(canvas)
-        return returnedBitmap
     }
 
     fun createDrawableFromView(context: Context, view: View): Bitmap? {

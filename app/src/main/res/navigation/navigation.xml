@@ -16,11 +16,6 @@
         android:label="fragment_family"
         tools:layout="@layout/fragment_family" />
     <fragment
-        android:id="@+id/mapFragment"
-        android:name="com.tron.familytree.map.MapFragment"
-        android:label="fragment_map"
-        tools:layout="@layout/fragment_map" />
-    <fragment
         android:id="@+id/messageFragment"
         android:name="com.tron.familytree.message.MessageFragment"
         android:label="fragment_message"
@@ -35,7 +30,8 @@
         android:id="@+id/profileFragment"
         android:name="com.tron.familytree.profile.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" /><action android:id="@+id/action_global_branchFragment" app:destination="@id/branchFragment"/><action android:id="@+id/action_global_familyFragment" app:destination="@id/familyFragment"/><action android:id="@+id/action_global_mapFragment" app:destination="@id/mapFragment"/><action android:id="@+id/action_global_messageFragment" app:destination="@id/messageFragment"/><action android:id="@+id/action_global_profileFragment" app:destination="@id/profileFragment"/>
+        tools:layout="@layout/fragment_profile" /><action android:id="@+id/action_global_branchFragment" app:destination="@id/branchFragment"/><action android:id="@+id/action_global_familyFragment" app:destination="@id/familyFragment"/>
+    <action android:id="@+id/action_global_messageFragment" app:destination="@id/messageFragment"/><action android:id="@+id/action_global_profileFragment" app:destination="@id/profileFragment"/>
     <dialog
         android:id="@+id/branchUserDetailDialog"
         android:name="com.tron.familytree.branch.dialog.BranchUserDetailDialog"
@@ -68,11 +64,6 @@
         android:name="com.tron.familytree.family.create_event.CreateEventDialog"
         android:label="CreateEventDialog" />
     <action android:id="@+id/action_global_createEventDialog" app:destination="@id/createEventDialog" />
-    <dialog
-        android:id="@+id/createAlbumDialog"
-        android:name="com.tron.familytree.family.create_album.CreateAlbumDialog"
-        android:label="CreateAlbumDialog" />
-    <action android:id="@+id/action_global_createAlbumDialog" app:destination="@id/createAlbumDialog" />
     <fragment
         android:id="@+id/mapsFragment"
         android:name="com.tron.familytree.map.MapsFragment"
@@ -167,15 +158,6 @@
         android:id="@+id/eventFragment"
         android:name="com.tron.familytree.family.event.EventFragment"
         android:label="EventFragment" /><action android:id="@+id/action_global_eventFragment" app:destination="@id/eventFragment"/>
-    <fragment
-        android:id="@+id/albumSinglePicFragment"
-        android:name="com.tron.familytree.family.album_single_pic.AlbumSinglePicFragment"
-        android:label="AlbumSinglePicFragment" >
-        <argument
-            android:name="photoProperties"
-            app:argType="com.tron.familytree.data.Photo" />
-    </fragment>
-    <action android:id="@+id/action_global_albumSinglePicFragment" app:destination="@id/albumSinglePicFragment" />
     <dialog
         android:id="@+id/episodeDetailDialog"
         android:name="com.tron.familytree.profile.episode.episode_dialog.EpisodeDetailDialog"

@@ -47,7 +47,7 @@
             android:background="@color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:visibility="@{viewModel.liveEvent == null ? View.GONE : viewModel.liveEvent.size == 0 ? View.VISIBLE : View.GONE}">
+            android:visibility="@{viewModel.liveEventByFamilyId == null ? View.GONE : viewModel.liveEventByFamilyId.size == 0 ? View.VISIBLE : View.GONE}">
 
             <ImageView
                 android:id="@+id/imageView33"

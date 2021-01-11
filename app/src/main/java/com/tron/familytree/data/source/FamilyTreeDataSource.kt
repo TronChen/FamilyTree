@@ -77,9 +77,9 @@ interface FamilyTreeDataSource {
 
     suspend fun getEventByUserId(user: User): AppResult<List<Event>>
 
-    suspend fun getEventByFamilyId(user: User): AppResult<List<Event>>
+    suspend fun getEventByFamilyId(id: String): AppResult<List<Event>>
 
-    fun getLiveEventByFamilyId(user: User): MutableLiveData<List<Event>>
+    fun getLiveEventByFamilyId(id: String): MutableLiveData<List<Event>>
 
     fun getLiveEventByUserId(id: String): MutableLiveData<List<Event>>
 
@@ -116,5 +116,9 @@ interface FamilyTreeDataSource {
     suspend fun searchBranchUser(id: String,viewModel: BranchViewModel): AppResult<List<TreeItem>>
 
     suspend fun findFamilyById(id: String): AppResult<Family>
+
+    suspend fun updateMapFamilyId(user: User): AppResult<Boolean>
+
+    suspend fun getEpisodeByFamilyId(familyId: String): AppResult<List<Episode>>
 
 }

@@ -40,30 +40,85 @@
                     tools:context=".MainActivity">
 
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/constraintLayout10"
+                    <androidx.appcompat.widget.Toolbar
+                        android:id="@+id/toolbar"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="55dp"
+                        android:background="?attr/colorPrimary"
+                        android:elevation="4dp"
+                        android:minHeight="?attr/actionBarSize"
+                        android:theme="?attr/actionBarTheme"
+                        android:visibility="@{viewModel.currentFragmentType == CurrentFragmentType.LOGIN ? View.GONE : View.VISIBLE}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:contentInsetStart="0dp">
 
-                        <androidx.appcompat.widget.Toolbar
-                            android:id="@+id/toolbar"
+                        <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
-                            android:layout_height="55dp"
-                            android:background="?attr/colorPrimary"
-                            android:elevation="4dp"
-                            android:minHeight="?attr/actionBarSize"
-                            android:theme="?attr/actionBarTheme"
-                            android:visibility="@{viewModel.currentFragmentType == CurrentFragmentType.LOGIN ? View.GONE : View.VISIBLE}"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            android:layout_height="match_parent">
 
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                        <ImageView
+                            android:id="@+id/imageBack"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            android:visibility="@{viewModel.currentFragmentType == CurrentFragmentType.PROFILE_USER_EDIT || viewModel.currentFragmentType == CurrentFragmentType.QR_CODE_SCAN || viewModel.currentFragmentType == CurrentFragmentType.FAMILY_ALBUM || viewModel.currentFragmentType == CurrentFragmentType.CALENDAR || viewModel.currentFragmentType == CurrentFragmentType.CHAT_ROOM ? View.VISIBLE : View.GONE}"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/back_white" />
+
+                        <ImageView
+                            android:id="@+id/imageEdit"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:visibility="@{viewModel.currentFragmentType == CurrentFragmentType.PROFILE ? View.VISIBLE : View.GONE}"
+                            app:layout_constraintEnd_toStartOf="@+id/imageScan"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/edit_white" />
+
+                        <ImageView
+                            android:id="@+id/imageCalendar"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:visibility="@{viewModel.currentFragmentType == CurrentFragmentType.FAMILY || viewModel.currentFragmentType == CurrentFragmentType.FAMILY_ALBUM || viewModel.currentFragmentType == CurrentFragmentType.FAMILY_EVENT ? View.VISIBLE : View.GONE}"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/calendar_white" />
+
+                        <ImageView
+                            android:id="@+id/imageScan"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:visibility="@{viewModel.currentFragmentType == CurrentFragmentType.PROFILE ? View.VISIBLE : View.GONE}"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="16dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/ic_qr_code" />
+
+                            <TextView
+                                android:id="@+id/textView54"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/roboto_bold"
+                                android:text="@{viewModel.currentFragmentType.value}"
+                                android:textColor="@color/white"
+                                android:textSize="24sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    </androidx.appcompat.widget.Toolbar>
 
                     <fragment
                         android:id="@+id/myNavHostFragment"
@@ -74,65 +129,9 @@
                         app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/constraintLayout10"
+                        app:layout_constraintTop_toBottomOf="@+id/toolbar"
                         app:navGraph="@navigation/navigation" />
 
-                    <TextView
-                        android:id="@+id/textView54"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@{viewModel.currentFragmentType.value}"
-                        android:fontFamily="@font/roboto_bold"
-                        android:textColor="@color/white"
-                        android:textSize="24sp"
-                        app:layout_constraintBottom_toBottomOf="@+id/constraintLayout10"
-                        app:layout_constraintEnd_toEndOf="@+id/constraintLayout10"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageView
-                        android:id="@+id/imageBack"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
-                        android:visibility="@{viewModel.currentFragmentType == CurrentFragmentType.PROFILE_USER_EDIT || viewModel.currentFragmentType == CurrentFragmentType.QR_CODE_SCAN || viewModel.currentFragmentType == CurrentFragmentType.FAMILY_ALBUM || viewModel.currentFragmentType == CurrentFragmentType.CALENDAR || viewModel.currentFragmentType == CurrentFragmentType.CHAT_ROOM ? View.VISIBLE : View.GONE}"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/back_white" />
-
-                    <ImageView
-                        android:id="@+id/imageEdit"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="16dp"
-                        android:visibility="@{viewModel.currentFragmentType == CurrentFragmentType.PROFILE ? View.VISIBLE : View.GONE}"
-                        app:layout_constraintEnd_toStartOf="@+id/imageScan"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/edit_white" />
-
-                    <ImageView
-                        android:id="@+id/imageCalendar"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="16dp"
-                        android:visibility="@{viewModel.currentFragmentType == CurrentFragmentType.FAMILY || viewModel.currentFragmentType == CurrentFragmentType.FAMILY_ALBUM || viewModel.currentFragmentType == CurrentFragmentType.FAMILY_EVENT ? View.VISIBLE : View.GONE}"
-                        app:layout_constraintEnd_toEndOf="@+id/constraintLayout10"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/calendar_white" />
-
-                    <ImageView
-                        android:id="@+id/imageScan"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:visibility="@{viewModel.currentFragmentType == CurrentFragmentType.PROFILE ? View.VISIBLE : View.GONE}"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="16dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_qr_code" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/constraintLayout"

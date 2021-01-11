@@ -145,11 +145,11 @@ class FamilyTreeLocalDataSource(val context: Context) : FamilyTreeDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getEventByFamilyId(user: User): AppResult<List<Event>> {
+    override suspend fun getEventByFamilyId(id: String): AppResult<List<Event>> {
         TODO("Not yet implemented")
     }
 
-    override fun getLiveEventByFamilyId(user: User): MutableLiveData<List<Event>> {
+    override fun getLiveEventByFamilyId(id: String): MutableLiveData<List<Event>> {
         TODO("Not yet implemented")
     }
 
@@ -222,6 +222,14 @@ class FamilyTreeLocalDataSource(val context: Context) : FamilyTreeDataSource {
     }
 
     override suspend fun findFamilyById(id: String): AppResult<Family> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun updateMapFamilyId(user: User): AppResult<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getEpisodeByFamilyId(familyId: String): AppResult<List<Episode>> {
         TODO("Not yet implemented")
     }
 
