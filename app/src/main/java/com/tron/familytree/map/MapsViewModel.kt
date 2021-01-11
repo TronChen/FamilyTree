@@ -43,6 +43,10 @@ class MapsViewModel(
     val user: LiveData<User>
         get() = _user
 
+    val _member = MutableLiveData<User>()
+    val member: LiveData<User>
+        get() = _member
+
     val _episodeTag = MutableLiveData<Episode>()
     val episodeTag: LiveData<Episode>
         get() = _episodeTag
@@ -148,6 +152,7 @@ class MapsViewModel(
                     _error.value = null
                     _status.value = LoadApiStatus.DONE
                     _user.value = result.data
+                    updateMapFamilyId(result.data)
                 }
                 is AppResult.Fail -> {
                     _error.value = result.error
@@ -164,6 +169,57 @@ class MapsViewModel(
             }
         }
     }
+
+    fun updateMapFamilyId(user: User){
+        coroutineScope.launch {
+            _status.value = LoadApiStatus.LOADING
+
+            when (val result = repository.updateMapFamilyId(user)) {
+                is AppResult.Success -> {
+                    _error.value = null
+                    _status.value = LoadApiStatus.DONE
+                }
+                is AppResult.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is AppResult.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                else -> {
+                    _error.value = FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)
+                    _status.value = LoadApiStatus.ERROR
+                }
+            }
+        }
+    }
+
+//    fun findMemberById(id : String){
+//        coroutineScope.launch {
+//            _status.value = LoadApiStatus.LOADING
+//
+//            when (val result = repository.findUserById(id)) {
+//                is AppResult.Success -> {
+//                    _error.value = null
+//                    _status.value = LoadApiStatus.DONE
+//                    _member.value = result.data
+//                }
+//                is AppResult.Fail -> {
+//                    _error.value = result.error
+//                    _status.value = LoadApiStatus.ERROR
+//                }
+//                is AppResult.Error -> {
+//                    _error.value = result.exception.toString()
+//                    _status.value = LoadApiStatus.ERROR
+//                }
+//                else -> {
+//                    _error.value = FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)
+//                    _status.value = LoadApiStatus.ERROR
+//                }
+//            }
+//        }
+//    }
 
     fun findUserByIdTag(tag : String){
         coroutineScope.launch {

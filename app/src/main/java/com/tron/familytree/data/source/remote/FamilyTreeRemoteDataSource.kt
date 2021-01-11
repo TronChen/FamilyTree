@@ -805,10 +805,23 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
             }
     }
 
-    override suspend fun addLocation(map: Map): AppResult<Boolean> = suspendCoroutine { continuation ->
-        val userCollection = FirebaseFirestore.getInstance().collection(MAP).document(UserManager.email.toString())
+    override suspend fun updateMapFamilyId(user: User): AppResult<Boolean> = suspendCoroutine { continuation ->
+        val mapCollection = FirebaseFirestore.getInstance().collection(MAP).document(UserManager.email.toString())
 
-        userCollection
+        mapCollection
+            .update("familyId",user.familyId)
+            .addOnSuccessListener {
+                continuation.resume(AppResult.Success(true))
+            }
+            .addOnFailureListener {
+                continuation.resume(AppResult.Error(it))
+            }
+    }
+
+    override suspend fun addLocation(map: Map): AppResult<Boolean> = suspendCoroutine { continuation ->
+        val mapCollection = FirebaseFirestore.getInstance().collection(MAP).document(UserManager.email.toString())
+
+        mapCollection
             .set(map).addOnSuccessListener {
                 continuation.resume(AppResult.Success(true))
             }

@@ -117,4 +117,6 @@ interface FamilyTreeDataSource {
 
     suspend fun findFamilyById(id: String): AppResult<Family>
 
+    suspend fun updateMapFamilyId(user: User): AppResult<Boolean>
+
 }
