@@ -54,7 +54,7 @@ class AlbumDetailFragment : Fragment() {
                     .start(ADD_PHOTO)
             }else{
                 viewModel.photoPath.value = null
-                findNavController().navigate(AlbumDetailFragmentDirections.actionGlobalAlbumSinglePicFragment(it))
+//                findNavController().navigate(AlbumDetailFragmentDirections.actionGlobalAlbumSinglePicFragment(it))
             }
         })
         binding.recPhoto.adapter = adapter
