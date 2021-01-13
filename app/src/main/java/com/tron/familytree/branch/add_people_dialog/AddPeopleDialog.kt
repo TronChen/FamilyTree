@@ -108,9 +108,9 @@ class AddPeopleDialog : DialogFragment() {
             findNavController().navigate(AddPeopleDialogDirections.actionGlobalQrCodeReaderFragment(viewModel.selectedProperty.value!!))
         }
 
-        binding.conSelectMember.setOnClickListener {
-            findNavController().navigate(AddPeopleDialogDirections.actionGlobalSelectMemberFragment(viewModel.selectedProperty.value!!))
-        }
+//        binding.conSelectMember.setOnClickListener {
+//            findNavController().navigate(AddPeopleDialogDirections.actionGlobalSelectMemberFragment(viewModel.selectedProperty.value!!))
+//        }
 
 
         viewModel.userEditName = binding.editName.text.toString()
@@ -148,6 +148,7 @@ class AddPeopleDialog : DialogFragment() {
                         Log.e("setChild()",viewModel.setChild().toString())
                         findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
                         findNavController().navigate(R.id.action_global_branchFragment)
+                        imagePathCompleted()
                     }
                 }
             }else{
@@ -158,14 +159,17 @@ class AddPeopleDialog : DialogFragment() {
 
         binding.imageCancel.setOnClickListener {
             findNavController().navigateUp()
+            imagePathCompleted()
         }
 
 
         //得到選擇圖片的路徑upload到fire storage
         activity.viewModel.addUserImgPath.observe(viewLifecycleOwner, Observer {
-            viewModel._updateImg.value = it
-            Log.e("filePath", it)
-            viewModel.uploadImage(it)
+            if(it != "") {
+                viewModel._updateImg.value = it
+                Log.e("filePath", it)
+                viewModel.uploadImage(viewModel._updateImg.value.toString())
+            }
         })
 
         viewModel._userImage.observe(viewLifecycleOwner, Observer {
@@ -178,18 +182,21 @@ class AddPeopleDialog : DialogFragment() {
             viewModel.updateMemberFatherId(viewModel.user.value!!, it)
             findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
             findNavController().navigate(R.id.action_global_branchFragment)
+            imagePathCompleted()
         })
 
         viewModel.newMother.observe(viewLifecycleOwner, Observer {
             viewModel.updateMemberMotherId(viewModel.user.value!!, it)
             findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
             findNavController().navigate(R.id.action_global_branchFragment)
+            imagePathCompleted()
         })
 
         viewModel.newMate.observe(viewLifecycleOwner, Observer {
             viewModel.updateMemberMateId(viewModel.user.value!!, it)
             findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
             findNavController().navigate(R.id.action_global_branchFragment)
+            imagePathCompleted()
         })
 
         viewModel.user.observe(viewLifecycleOwner, Observer {
@@ -199,7 +206,17 @@ class AddPeopleDialog : DialogFragment() {
         return binding.root
     }
 
+    override fun onPause() {
+        super.onPause()
+        viewModel._updateImg.value = ""
+    }
+
     private fun setDateFormat(year: Int, month: Int, day: Int): String {
         return "$year/${month + 1}/$day"
+    }
+
+    private fun imagePathCompleted(){
+        val activity = activity as MainActivity
+        activity.viewModel.addUserImgPath.value = ""
     }
 }
