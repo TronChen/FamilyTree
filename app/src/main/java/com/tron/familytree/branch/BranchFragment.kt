@@ -8,15 +8,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.tron.familytree.branch.add_people_dialog.AddPeopleDialogArgs
-import com.tron.familytree.branch.add_people_dialog.AddPeopleViewModel
-import com.tron.familytree.data.User
+import com.tron.familytree.R
 import com.tron.familytree.databinding.FragmentBranchBinding
 import com.tron.familytree.ext.getVmFactory
-import kotlin.math.sign
 
 const val DETAIL = 100
 const val QUERY = 200
@@ -134,10 +130,14 @@ class BranchFragment : Fragment() {
             }
         })
 
-
-
-
-
+        viewModel.findUser.observe(viewLifecycleOwner, Observer {
+            if (it.familyId == null || it.familyId == "" ||
+                        it.gender == null || it.gender == "" ||
+                        it.name == ""
+            ){
+                findNavController().navigate(R.id.action_global_instructionDialog)
+            }
+        })
 
 
         return binding.root

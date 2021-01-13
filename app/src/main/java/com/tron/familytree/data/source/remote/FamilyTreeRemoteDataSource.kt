@@ -1756,10 +1756,9 @@ object FamilyTreeRemoteDataSource : FamilyTreeDataSource {
             .document(id)
             .get()
             .addOnSuccessListener {
-                if (it != null){
                         val user = it.toObject(Family::class.java)
                         continuation.resume(AppResult.Success(user!!))
-                }
+                Log.e("findFamilyById", user.toString())
             }
             .addOnFailureListener {
                 continuation.resume(AppResult.Error(it))
