@@ -49,13 +49,16 @@ class ProfileFragment : Fragment() {
 
 
         viewModel.user.observe(viewLifecycleOwner, Observer {
-            Log.e("User", it.toString())
         requireActivity().findViewById<ImageView>(R.id.imageEdit).setOnClickListener {
             findNavController().navigate(ProfileFragmentDirections.actionGlobalEditUserFragment(
                 viewModel.user.value!!
             ))
         }
+        })
 
+        viewModel._family.observe(viewLifecycleOwner, Observer {
+            Log.e("family", it.toString())
+             viewModel.familyName = it.title
         })
 
         return binding.root

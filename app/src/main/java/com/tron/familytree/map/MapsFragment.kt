@@ -132,6 +132,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
         binding.cardMember.setOnClickListener {
 //            if (viewModel.userLocation.value?.isEmpty()!!){
                 viewModel.getUserLocation()
+            getDeviceLocation()
 //            }
             viewModel._episodeMarkerList.value?.forEach { it.remove() }
         }

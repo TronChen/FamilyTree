@@ -10,6 +10,7 @@ import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.tron.familytree.data.Family
 import com.tron.familytree.data.User
 import com.tron.familytree.network.LoadApiStatus
 import java.text.SimpleDateFormat
@@ -109,6 +110,13 @@ fun bindAddTitle(text : TextView,selectProperties: User?, user: String?, mate: S
         if (selectProperties?.name == "No mateMother"){
             text.text = "$user 的 母親"
         }
+}
+
+@BindingAdapter("familyName")
+fun familyName(text : TextView, family: Family?) {
+   family?.let {
+           text.text = family.title
+   }
 }
 
 @ExperimentalTime

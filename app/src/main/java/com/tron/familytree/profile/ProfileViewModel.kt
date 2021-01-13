@@ -1,5 +1,6 @@
 package com.tron.familytree.profile
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,6 +8,7 @@ import app.appworks.school.publisher.data.source.FamilyTreeRepository
 import com.tron.familytree.FamilyTreeApplication
 import com.tron.familytree.R
 import com.tron.familytree.data.AppResult
+import com.tron.familytree.data.Family
 import com.tron.familytree.data.User
 import com.tron.familytree.network.LoadApiStatus
 import com.tron.familytree.util.UserManager
@@ -23,6 +25,12 @@ class ProfileViewModel(
     val _user = MutableLiveData<User>()
     val user : LiveData<User>
     get() = _user
+
+    val _family = MutableLiveData<Family>()
+    val family : LiveData<Family>
+        get() = _family
+
+    var familyName : String = "還沒選擇家族喔"
 
 
     // status: The internal MutableLiveData that stores the status of the most recent request
@@ -68,6 +76,7 @@ class ProfileViewModel(
 
     init {
         UserManager.email?.let { findUser(it) }
+        _family.value = Family(title = "還沒選擇家族喔")
     }
 
 
@@ -80,6 +89,33 @@ class ProfileViewModel(
                     _error.value = null
                     _status.value = LoadApiStatus.DONE
                     _user.value = result.data
+                    result.data.familyId?.let { findFamilyById(it) }
+                }
+                is AppResult.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is AppResult.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                else -> {
+                    _error.value = FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)
+                    _status.value = LoadApiStatus.ERROR
+                }
+            }
+        }
+    }
+
+    fun findFamilyById(id : String){
+        coroutineScope.launch {
+            _status.value = LoadApiStatus.LOADING
+
+            when (val result = repository.findFamilyById(id)) {
+                is AppResult.Success -> {
+                    _error.value = null
+                    _status.value = LoadApiStatus.DONE
+                    _family.value = result.data
                 }
                 is AppResult.Fail -> {
                     _error.value = result.error

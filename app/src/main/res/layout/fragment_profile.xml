@@ -95,7 +95,7 @@
                     android:background="@drawable/rounded_light_grey_radius_24"
                     android:fontFamily="@font/noto_sans"
                     android:gravity="center"
-                    android:text="陳氏宗親"
+                    familyName="@{viewModel.family}"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"

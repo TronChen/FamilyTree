@@ -26,6 +26,11 @@ class BranchViewModel(
     var user = MutableLiveData<User>()
     val userId = MutableLiveData<String>()
 
+    private val _findUser = MutableLiveData<User>()
+    // The external LiveData for the SelectedProperty
+    val findUser: LiveData<User>
+        get() = _findUser
+
     var mateId = MutableLiveData<User>()
     var fatherId = MutableLiveData<User>()
     var motherId = MutableLiveData<User>()
@@ -85,7 +90,7 @@ class BranchViewModel(
     init {
         userId.value = UserManager.email
         searchBranchUser(userId.value!!)
-//        searchBranchUserChildren(userId.value!!)
+        findUserById(UserManager.email.toString())
     }
 
     fun searchBranchUser(id : String){
@@ -117,35 +122,33 @@ class BranchViewModel(
         }
     }
 
+    fun findUserById(id : String){
 
-//    fun searchBranchUserChildren(id: String){
-//
-//        coroutineScope.launch {
-//
-//            _status.value = LoadApiStatus.LOADING
-//
-//            when (val result = repository.searchBranchUserChildren(id)) {
-//                is AppResult.Success -> {
-//                    _error.value = null
-//                    _status.value = LoadApiStatus.DONE
-//                    children.value = result.data
-//                    Log.e("TreeList",result.data.toString())
-//                }
-//                is AppResult.Fail -> {
-//                    _error.value = result.error
-//                    _status.value = LoadApiStatus.ERROR
-//                }
-//                is AppResult.Error -> {
-//                    _error.value = result.exception.toString()
-//                    _status.value = LoadApiStatus.ERROR
-//                }
-//                else -> {
-//                    _error.value = FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)
-//                    _status.value = LoadApiStatus.ERROR
-//                }
-//            }
-//        }
-//    }
+        coroutineScope.launch {
+
+            _status.value = LoadApiStatus.LOADING
+
+            when (val result = repository.findUserById(id)) {
+                is AppResult.Success -> {
+                    _error.value = null
+                    _status.value = LoadApiStatus.DONE
+                    _findUser.value = result.data
+                }
+                is AppResult.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is AppResult.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                else -> {
+                    _error.value = FamilyTreeApplication.INSTANCE.getString(R.string.you_know_nothing)
+                    _status.value = LoadApiStatus.ERROR
+                }
+            }
+        }
+    }
 
 
     fun getSpanCount(size: Int): Int{
