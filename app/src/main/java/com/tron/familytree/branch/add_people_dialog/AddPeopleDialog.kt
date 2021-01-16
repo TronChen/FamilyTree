@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioButton
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
@@ -50,7 +51,6 @@ class AddPeopleDialog : DialogFragment() {
 
             binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
-
 
 
         viewModel.selectedProperty.observe(viewLifecycleOwner, Observer {
@@ -201,6 +201,23 @@ class AddPeopleDialog : DialogFragment() {
 
         viewModel.user.observe(viewLifecycleOwner, Observer {
             Log.e("AddPeopleDialogUser", it.toString())
+            when(it.name){
+                "No father" -> binding.radioMale.visibility = View.GONE
+            }
+        })
+
+        viewModel.selectedProperty.observe(viewLifecycleOwner, Observer {
+            Log.e("AddPeopleDialogUser", it.toString())
+            when(it.name){
+                "No father", "No mateFather" -> {
+                    (binding.radioGender.getChildAt(0) as RadioButton).isChecked = true
+                    binding.radioFemale.visibility = View.GONE
+                }
+                "No mother", "No mateMother" -> {
+                    (binding.radioGender.getChildAt(1) as RadioButton).isChecked = true
+                    binding.radioMale.visibility = View.GONE
+                }
+            }
         })
 
         return binding.root

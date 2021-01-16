@@ -7,7 +7,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Map(
     var userId: String = "",
-    var familyId: String = "",
+    var familyId: String? = null,
     var userImage: String? = null,
     var latitude: Double? = null,
     var longitude: Double? = null

@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
 import android.util.DisplayMetrics
@@ -27,7 +26,6 @@ import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
 import com.tron.familytree.R
 import com.tron.familytree.data.Map
-import com.tron.familytree.data.User
 import com.tron.familytree.databinding.FragmentMapsBinding
 import com.tron.familytree.databinding.ItemMapPinBinding
 import com.tron.familytree.ext.getVmFactory
@@ -82,13 +80,17 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
         })
 
         viewModel._userLocation.observe(viewLifecycleOwner, androidx.lifecycle.Observer { userLocationList ->
-            val familyMember = userLocationList.filter { viewModel.user.value?.familyId == it.familyId }
+
+            val familyMember = userLocationList.filter {
+                it.familyId == viewModel.user.value?.familyId
+                        && it.familyId != null
+            }
 
             myMap?.let { map ->
                 viewModel.drawUsersLocation(map,familyMember)
             }
             Log.e("familyMemberMap",familyMember.toString())
-            Log.e("familyMemberMap",userLocationList.toString())
+            Log.e("userLocationList",userLocationList.toString())
         })
 
         viewModel.userTag.observe(viewLifecycleOwner, Observer {
