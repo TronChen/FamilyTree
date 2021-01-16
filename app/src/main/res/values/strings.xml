@@ -89,6 +89,13 @@
     <string name="pleaseAddChatRoom">新增家族成員聊天吧</string>
     <string name="identify_qr_code">Identify QR code</string>
     <string name="noCameraPermission">沒有相機權限</string>
+    <string name="checkAlbum">查看相簿</string>
+    <string name="choose">選擇</string>
+    <string name="edit">編輯</string>
+    <string name="child">孩子</string>
+    <string name="father">父親</string>
+    <string name="mate">配偶</string>
+    <string name="mother">母親</string>
     <string-array name="spn_list">
         <item>聚餐</item>
         <item>休閒活動</item>
