@@ -56,7 +56,7 @@
                     android:text="@={viewModel.textSend}"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
-                    android:hint="Enter message"
+                    android:hint="@string/enter_message"
                     android:maxLines="6" />
 
                 <Button
@@ -68,7 +68,7 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center"
-                    android:text="SEND"
+                    android:text="@string/send"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
             </LinearLayout>

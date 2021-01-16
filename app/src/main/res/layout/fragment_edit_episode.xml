@@ -36,7 +36,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:fontFamily="@font/noto_sans_bold"
-                    android:text="創建事蹟"
+                    android:text="@string/addEpisode"
                     android:textColor="@color/black"
                     android:textSize="24sp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -58,7 +58,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
                     android:fontFamily="@font/noto_sans"
-                    android:text="事蹟主題"
+                    android:text="@string/episodeTitle"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="@+id/textView7"
@@ -75,7 +75,7 @@
                     android:ems="10"
                     android:fontFamily="@font/noto_sans"
                     android:gravity="top"
-                    android:hint="輸入主題"
+                    android:hint="@string/editEpisodeTitle"
                     android:inputType="textPersonName"
                     android:lines="5"
                     android:paddingStart="12dp"
@@ -104,7 +104,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:fontFamily="@font/noto_sans"
-                    android:text="發生時間"
+                    android:text="@string/episodeTime"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="@+id/imageClock"
@@ -126,7 +126,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:fontFamily="@font/noto_sans"
-                    android:text="地點"
+                    android:text="@string/episodeLocation"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView9"
@@ -162,17 +162,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
                     android:fontFamily="@font/noto_sans"
-                    android:text="事蹟內容"
+                    android:text="@string/episodeContent"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="@+id/textLocation"
                     app:layout_constraintTop_toBottomOf="@+id/textLocation" />
-
-                <!--                <com.google.android.material.textfield.TextInputLayout-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="wrap_content">-->
-
-                <!--                </com.google.android.material.textfield.TextInputLayout>-->
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/conConfirm"
@@ -191,7 +185,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/noto_sans_bold"
-                        android:text="發佈"
+                        android:text="@string/post"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -234,7 +228,7 @@
                     android:layout_marginBottom="8dp"
                     android:background="@drawable/rounded_light_grey_radius_24"
                     android:gravity="top"
-                    android:hint="輸入事蹟內容"
+                    android:hint="@string/editEpisodeContent"
                     android:text="@={viewModel.editContent}"
                     android:lines="5"
                     android:paddingStart="12dp"

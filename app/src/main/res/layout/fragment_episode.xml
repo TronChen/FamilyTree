@@ -70,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="100dp"
                 android:fontFamily="@font/noto_sans"
-                android:text="尚未新增事蹟"
+                android:text="@string/noEpisode"
                 android:textColor="@color/grey"
                 android:textSize="18sp"
                 android:visibility="@{viewModel.liveEpisodes == null ? View.GONE : viewModel.liveEpisodes.size == 0 ? View.VISIBLE : View.GONE}"
