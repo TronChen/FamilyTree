@@ -179,30 +179,37 @@ class AddPeopleDialog : DialogFragment() {
         })
 
         viewModel.newFather.observe(viewLifecycleOwner, Observer {
-            viewModel.updateMemberFatherId(viewModel.user.value!!, it)
+            viewModel.updateMemberFatherId(viewModel.addUser.value!!, it)
             findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
             findNavController().navigate(R.id.action_global_branchFragment)
             imagePathCompleted()
         })
 
         viewModel.newMother.observe(viewLifecycleOwner, Observer {
-            viewModel.updateMemberMotherId(viewModel.user.value!!, it)
+            viewModel.updateMemberMotherId(viewModel.addUser.value!!, it)
             findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
             findNavController().navigate(R.id.action_global_branchFragment)
             imagePathCompleted()
         })
 
         viewModel.newMate.observe(viewLifecycleOwner, Observer {
-            viewModel.updateMemberMateId(viewModel.user.value!!, it)
+            viewModel.updateMemberMateId(viewModel.addUser.value!!, it)
             findNavController().navigate(NavigationDirections.actionGlobalCheckDialog(CheckDialog.MessageType.ADDED_SUCCESS))
             findNavController().navigate(R.id.action_global_branchFragment)
             imagePathCompleted()
         })
 
-        viewModel.user.observe(viewLifecycleOwner, Observer {
+        viewModel.addUser.observe(viewLifecycleOwner, Observer {
             Log.e("AddPeopleDialogUser", it.toString())
-            when(it.name){
-                "No father" -> binding.radioMale.visibility = View.GONE
+            if (viewModel.selectedProperty.value?.name == "No mate"){
+                if (it.gender == "male"){
+                    (binding.radioGender.getChildAt(1) as RadioButton).isChecked = true
+                    binding.radioMale.visibility = View.GONE
+                }
+                if (it.gender == "female"){
+                    (binding.radioGender.getChildAt(0) as RadioButton).isChecked = true
+                    binding.radioFemale.visibility = View.GONE
+                }
             }
         })
 
