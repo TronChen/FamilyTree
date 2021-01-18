@@ -18,10 +18,10 @@ class AddPeopleViewModel(
     , private val userProperties: User
 ) : ViewModel() {
 
-    private val _user = MutableLiveData<User>()
+    private val _addUser = MutableLiveData<User>()
     // The external LiveData for the SelectedProperty
-    val user: LiveData<User>
-        get() = _user
+    val addUser: LiveData<User>
+        get() = _addUser
 
     var _mateName = MutableLiveData<String>()
     var _userName = MutableLiveData<String>()
@@ -173,7 +173,7 @@ class AddPeopleViewModel(
                 is AppResult.Success -> {
                     _error.value = null
                     _status.value = LoadApiStatus.DONE
-                    _user.value = result.data
+                    _addUser.value = result.data
                     _userName.value = result.data.name
                 }
                 is AppResult.Fail -> {
@@ -431,7 +431,7 @@ class AddPeopleViewModel(
                 birthLocation = userBirthLocation,
                 fatherId = selectedProperty.value?.fatherId,
                 motherId = selectedProperty.value?.motherId,
-                familyId = _user.value?.familyId
+                familyId = _addUser.value?.familyId
         )
         Log.e("Add user", user.toString())
         return user
@@ -446,7 +446,7 @@ class AddPeopleViewModel(
             gender = gender,
             deathDate = deathDate,
             birthLocation = userBirthLocation,
-            familyId = _user.value?.familyId
+            familyId = _addUser.value?.familyId
         )
         Log.e("Add user", user.toString())
         return user
@@ -461,8 +461,8 @@ class AddPeopleViewModel(
             gender = gender,
             deathDate = deathDate,
             birthLocation = userBirthLocation,
-            mateId = _user.value?.id,
-            familyId = _user.value?.familyId
+            mateId = _addUser.value?.id,
+            familyId = _addUser.value?.familyId
         )
         Log.e("Add user", user.toString())
         return user

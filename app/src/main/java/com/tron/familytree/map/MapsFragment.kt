@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
 import android.util.DisplayMetrics
@@ -14,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.graphics.scale
 import androidx.fragment.app.Fragment
@@ -27,7 +27,6 @@ import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
 import com.tron.familytree.R
 import com.tron.familytree.data.Map
-import com.tron.familytree.data.User
 import com.tron.familytree.databinding.FragmentMapsBinding
 import com.tron.familytree.databinding.ItemMapPinBinding
 import com.tron.familytree.ext.getVmFactory
@@ -82,13 +81,17 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
         })
 
         viewModel._userLocation.observe(viewLifecycleOwner, androidx.lifecycle.Observer { userLocationList ->
-            val familyMember = userLocationList.filter { viewModel.user.value?.familyId == it.familyId }
+
+            val familyMember = userLocationList.filter {
+                it.familyId == viewModel.user.value?.familyId
+                        && it.familyId != null
+            }
 
             myMap?.let { map ->
                 viewModel.drawUsersLocation(map,familyMember)
             }
             Log.e("familyMemberMap",familyMember.toString())
-            Log.e("familyMemberMap",userLocationList.toString())
+            Log.e("userLocationList",userLocationList.toString())
         })
 
         viewModel.userTag.observe(viewLifecycleOwner, Observer {
@@ -102,39 +105,52 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
         })
 
         binding.cardMyLocation.setOnClickListener {
-            myMap?.apply {
-                moveCamera(
-                    CameraUpdateFactory.newLatLngZoom(
-                        LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude), 15f))
+            if (locationPermission){
+                myMap?.apply {
+                    moveCamera(
+                        CameraUpdateFactory.newLatLngZoom(
+                            LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude), 15f))
+                }
+            }
+            if (!locationPermission){
+                Toast.makeText(context,getString(R.string.noLocationPermission),Toast.LENGTH_SHORT).show()
             }
         }
 
         binding.cardEpisode.setOnClickListener {
-            val markerList = mutableListOf<Marker>()
-            val bindingMapPin = ItemMapPinBinding.inflate(inflater)
-            val map_pin = createDrawableFromView(requireContext(),bindingMapPin.imageView23)
-            for (episode in viewModel.episode.value!!) {
-                myMap?.apply {
-                    val marker = addMarker(
-                        MarkerOptions()
-//                            .title(episode.title)
-                            .position(LatLng(episode.latitude!!, episode.longitude!!))
-                            .icon(BitmapDescriptorFactory.fromBitmap(map_pin)))
-                    marker.tag = episode.id
-                    markerList.add(marker)
-                    Log.e("MarkerTag", marker.tag as String)
+            if (locationPermission) {
+                val markerList = mutableListOf<Marker>()
+                val bindingMapPin = ItemMapPinBinding.inflate(inflater)
+                val map_pin = createDrawableFromView(requireContext(), bindingMapPin.imageView23)
+                for (episode in viewModel.episode.value!!) {
+                    myMap?.apply {
+                        val marker = addMarker(
+                            MarkerOptions()
+                                .position(LatLng(episode.latitude!!, episode.longitude!!))
+                                .icon(BitmapDescriptorFactory.fromBitmap(map_pin))
+                        )
+                        marker.tag = episode.id
+                        markerList.add(marker)
+                        Log.e("MarkerTag", marker.tag as String)
+                    }
                 }
+                viewModel._episodeMarkerList.value = markerList
+                viewModel._userMarkerList.value?.forEach { it.remove() }
             }
-            viewModel._episodeMarkerList.value = markerList
-            viewModel._userMarkerList.value?.forEach { it.remove() }
+            if (!locationPermission){
+                Toast.makeText(context,getString(R.string.noLocationPermission),Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding.cardMember.setOnClickListener {
-//            if (viewModel.userLocation.value?.isEmpty()!!){
+            if (locationPermission) {
                 viewModel.getUserLocation()
-            getDeviceLocation()
-//            }
-            viewModel._episodeMarkerList.value?.forEach { it.remove() }
+                getDeviceLocation()
+                viewModel._episodeMarkerList.value?.forEach { it.remove() }
+            }
+            if (!locationPermission){
+                Toast.makeText(context,getString(R.string.noLocationPermission),Toast.LENGTH_SHORT).show()
+            }
         }
 
         return binding.root

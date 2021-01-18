@@ -38,7 +38,7 @@
                     android:drawablePadding="4dp"
                     android:fontFamily="@font/noto_sans"
                     android:paddingEnd="16dp"
-                    android:text="男性"
+                    android:text="@string/male"
                     android:textColor="@color/black"
                     android:textSize="14sp" />
 
@@ -51,7 +51,7 @@
                     android:drawablePadding="4dp"
                     android:fontFamily="@font/noto_sans"
                     android:paddingEnd="16dp"
-                    android:text="女性"
+                    android:text="@string/female"
                     android:textColor="@color/black"
                     android:textSize="14sp" />
 
@@ -64,7 +64,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/noto_sans_bold"
-                android:text="新增"
+                android:text="@string/addPeople"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -95,12 +95,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/textView7" />
 
-            <!--                <com.google.android.material.textfield.TextInputLayout-->
-            <!--                    android:layout_width="match_parent"-->
-            <!--                    android:layout_height="wrap_content">-->
-
-            <!--                </com.google.android.material.textfield.TextInputLayout>-->
-
             <EditText
                 android:id="@+id/editName"
                 android:layout_width="0dp"
@@ -109,7 +103,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:ems="10"
-                android:hint="請輸入姓名"
+                android:hint="@string/pleaseEditName"
                 android:inputType="textPersonName"
                 android:text="@={viewModel._userEditName}"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -147,7 +141,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:fontFamily="@font/noto_sans"
-                    android:text="掃描QR code 新增"
+                    android:text="@string/addByScanQRcode"
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -177,7 +171,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/noto_sans"
-                    android:text="新增完成"
+                    android:text="@string/addComplete"
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -208,7 +202,7 @@
                 android:paddingTop="8dp"
                 android:paddingEnd="24dp"
                 android:paddingBottom="8dp"
-                android:text="選擇頭貼"
+                android:text="@string/choosePic"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="@+id/imageMember"
@@ -220,7 +214,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/noto_sans"
-                android:text="姓名"
+                android:text="@string/name"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="@+id/editName"
@@ -233,7 +227,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/noto_sans"
-                android:text="Birth"
+                android:text="@string/birth"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -254,7 +248,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:fontFamily="@font/noto_sans"
-                android:text="日期"
+                android:text="@string/birthDate"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView20"
@@ -278,7 +272,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/noto_sans"
-                    android:text="選擇年月"
+                    android:text="@string/chooseDate"
                     android:textColor="@color/black"
                     android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -292,7 +286,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/noto_sans"
-                android:text="~"
+                android:text="@string/wave"
                 android:textColor="@color/black"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="@+id/conBirth"
@@ -317,7 +311,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/noto_sans"
-                    android:text="現在"
+                    android:text="@string/now"
                     android:textColor="@color/black"
                     android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -341,7 +335,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:fontFamily="@font/noto_sans"
-                android:text="地點"
+                android:text="@string/birthLocation"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView21"
@@ -356,7 +350,7 @@
                 android:layout_marginEnd="16dp"
                 android:ems="10"
                 android:fontFamily="@font/noto_sans"
-                android:hint="輸入出生地點"
+                android:hint="@string/editBirthLocation"
                 android:inputType="textPersonName"
                 android:text="@={viewModel._userBirthLocation}"
                 android:textColor="@color/black"

@@ -24,10 +24,7 @@ import com.tron.familytree.data.Map
 import com.tron.familytree.data.User
 import com.tron.familytree.network.LoadApiStatus
 import com.tron.familytree.util.UserManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class MapsViewModel(
     private val repository: FamilyTreeRepository
@@ -111,7 +108,7 @@ class MapsViewModel(
         findUserById(UserManager.email.toString())
 
 
-        getUserLocation()
+
         getLiveUserLocation()
 
     }
@@ -177,6 +174,7 @@ class MapsViewModel(
                     _error.value = null
                     _status.value = LoadApiStatus.DONE
                     _user.value = result.data
+                    getUserLocation()
                     updateMapFamilyId(result.data)
                     result.data.familyId?.let { getEpisodeByFamilyId(it) }
                 }
@@ -251,6 +249,7 @@ class MapsViewModel(
 
         coroutineScope.launch {
 
+//            delay(2000)
             _status.value = LoadApiStatus.LOADING
 
             val result = repository.getUserLocation()

@@ -86,8 +86,9 @@ class EditEpisodeDialog : DialogFragment() {
         if (!Places.isInitialized()) {
             activity?.let { Places.initialize(it,"AIzaSyCiCPmbflbA9FlcM46aRJ4istK6GfAA2GQ") }
         }
-// Create a new Places client instance.
-// Create a new Places client instance.
+
+        // Create a new Places client instance.
+
         val placesClient = activity?.let { Places.createClient(it) }
 
         binding.textLocation.setOnClickListener {
@@ -121,7 +122,8 @@ class EditEpisodeDialog : DialogFragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-//    如果是的話 取得帳號資訊
+
+        // Get account info if true
         if (requestCode == PLACE_API) {
 
                 Log.e("reqCode", requestCode.toString())
@@ -137,14 +139,6 @@ class EditEpisodeDialog : DialogFragment() {
                         "Place: " + place.name + ", " + place.id + ", " + place.address
                     )
                 }
-                if (place != null) {
-                    Toast.makeText(
-                        requireContext(),
-                        "ID: " + place.id + "address:" + place.address + "Name:" + place.name + " latlong: " + place.latLng,
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-                val address = place?.address
             if (place != null) {
                 Log.e("latLng", place.latLng?.latitude.toString())
             }
