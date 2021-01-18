@@ -96,6 +96,7 @@
     <string name="father">父親</string>
     <string name="mate">配偶</string>
     <string name="mother">母親</string>
+    <string name="noLocationPermission">沒有允許地圖權限唷</string>
     <string-array name="spn_list">
         <item>聚餐</item>
         <item>休閒活動</item>
